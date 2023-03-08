@@ -25,13 +25,13 @@ SECRET_KEY = 'django-insecure-=i_mz3$rmg6m^kffz!5s@$)!2acu@#$5b5m-!h1$18@(fx9i!&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["0.0.0.0"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    "hydra_learning_management_system",
+    "hydra_learning_management_system.apps.HydraLearningManagementSystemConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -81,12 +81,6 @@ DATABASES = {
     }
 }
 
-CACHES = {
-    "default":{
-
-    }
-}
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -121,8 +115,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_ROOT = os.path.join()
-STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "../static")
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
