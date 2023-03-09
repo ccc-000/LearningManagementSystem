@@ -9,7 +9,7 @@ def main_page(request):
 
 
 def log_in(request):
-    return render(request, "")
+    return render(request, "log_in.html")
 
 
 def register_up(request):
