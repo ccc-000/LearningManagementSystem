@@ -9,7 +9,8 @@ def main_page(request):
 
 
 def log_in(request):
-    return render(request, "log_in.html")
+    if request == "hello":
+        return HttpResponse("fine")
 
 
 def register_up(request):
