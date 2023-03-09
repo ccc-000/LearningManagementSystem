@@ -9,15 +9,19 @@ def main_page(request):
 
 
 def log_in(request):
+<<<<<<< HEAD
     return render(request, "log_in.html")
+=======
+    if request == "hello":
+        return HttpResponse("fine")
+>>>>>>> a3badb707558b1e15bde7a7709441a53851f377e
 
 
 def register_up(request):
-    return HttpResponse()
-
+    return render(request, "register_up.html")
 
 def forget_pwd_send_link(request):
-    return HttpResponse()
+    return render(request, "")
 
 
 def forget_pwd_reset(request):
