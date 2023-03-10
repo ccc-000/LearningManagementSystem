@@ -10,11 +10,11 @@ def main_page(request):
     return JsonResponse({"message": "Hello, world!"})
 
 
-def log_in(request):
+def login(request):
     return render(request, "log_in.html")
 
 
-def register_up(request):
+def register(request):
     return render(request, "register_up.html")
 
 def forget_pwd_send_link(request):
