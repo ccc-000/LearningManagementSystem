@@ -1,20 +1,17 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 
 # Create your views here.
 from django.shortcuts import render, HttpResponse
 
 
 def main_page(request):
-    return render(request, "main_page.html")
+    # return render(request, "main_page.html")
+    return JsonResponse({"message": "Hello, world!"})
 
 
 def log_in(request):
-<<<<<<< HEAD
     return render(request, "log_in.html")
-=======
-    if request == "hello":
-        return HttpResponse("fine")
->>>>>>> a3badb707558b1e15bde7a7709441a53851f377e
 
 
 def register_up(request):
