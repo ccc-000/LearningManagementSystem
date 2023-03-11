@@ -1,0 +1,25 @@
+.loginpage {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.logincard {
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    max-width: 300px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.welcomemsg {
+    text-align: center;
+    font-size: 2em;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
