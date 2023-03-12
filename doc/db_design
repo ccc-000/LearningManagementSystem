@@ -1,0 +1,27 @@
+Uid PK
+user_name
+Email
+role enum student/lecturer
+password
+phone
+address
+preferred language enum
+enrolment history
+
+login needed
+Eamil + password
+
+course
+Cid PK
+course_name
+course_description
+students_list (each is Uid)
+lecturer_id FK
+
+material
+Cid FK
+uploader_id FK
+material_name
+time
+type enum video/ppt/pdf
+url
