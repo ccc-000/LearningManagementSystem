@@ -7,7 +7,8 @@ from django.shortcuts import render, HttpResponse
 
 def main_page(request):
     # return render(request, "main_page.html")
-    return JsonResponse({"message": "Hello, world!"})
+    print(request.GET)
+    return JsonResponse({"user_id": "z12345", "user_name": "zhangsan", "user_type": "student"})
 
 
 def login(request):
