@@ -3,13 +3,15 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import Loginpage from './pages/Loginpage';
 import Sidebarpage from './pages/Sidebarpage';
+import Registrationpage from './pages/Registrationpage';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Sidebarpage role = {'lecturer'}>
-      <Loginpage />
+      {/* <Loginpage /> */}
+      <Registrationpage />
     </Sidebarpage>
   </React.StrictMode>
 );

@@ -61,7 +61,7 @@ const Sidebarpage = (props) => {
                         background: 'rgba(255, 255, 255, 0.2)',
                     }}
                 />
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
+                <Menu theme="dark" mode="inline" items={items} />
             </Sider>
             <Layout
                 className="site-layout"
