@@ -1,21 +1,16 @@
 import './App.css';
-import { Button } from 'antd';
+import Loginpage from './pages/Loginpage';
+import Registrationpage from './pages/Registrationpage';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
 
-  function connect() {
-    fetch('http://localhost:8000')
-      .then(response => response.json())
-      .then(data => console.log(data))
-      .catch(error => console.log(error));
-  }
-
-  connect();
-
   return (
     <>
-      <h1>Hydra</h1>
-      <Button type="primary">Primary Button</Button>
+      <Routes>
+        <Route path="/" element={<Loginpage />} />
+        <Route path="/register" element={<Registrationpage />} />
+      </Routes>
     </>
   );
 }

@@ -1,18 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Loginpage from './pages/Loginpage';
-import Sidebarpage from './pages/Sidebarpage';
-import Registrationpage from './pages/Registrationpage';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Sidebarpage role = {'lecturer'}>
-      {/* <Loginpage /> */}
-      <Registrationpage />
-    </Sidebarpage>
+    <BrowserRouter>
+      <App/>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

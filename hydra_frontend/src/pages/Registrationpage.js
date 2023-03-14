@@ -17,15 +17,9 @@ import { useState } from 'react';
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const FormDisabledDemo = () => {
-  const [componentDisabled, setComponentDisabled] = useState(true);
+  const [componentDisabled, setComponentDisabled] = useState(false);
   return (
     <>
-      <Checkbox
-        checked={componentDisabled}
-        onChange={(e) => setComponentDisabled(e.target.checked)}
-      >
-        Form disabled
-      </Checkbox>
       <Form
         labelCol={{
           span: 4,
@@ -34,77 +28,40 @@ const FormDisabledDemo = () => {
           span: 14,
         }}
         layout="horizontal"
-        disabled={componentDisabled}
         style={{
-          maxWidth: 600,
+          maxWidth: 1000,
+        }}
+        onFinish={(values) => {
+          console.log(values);
         }}
       >
-        <Form.Item label="Checkbox" name="disabled" valuePropName="checked">
-          <Checkbox>Checkbox</Checkbox>
-        </Form.Item>
-        <Form.Item label="Radio">
-          <Radio.Group>
-            <Radio value="apple"> Apple </Radio>
-            <Radio value="pear"> Pear </Radio>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item label="Input">
+        <Form.Item label="User name" name="username">
           <Input />
         </Form.Item>
-        <Form.Item label="Select">
-          <Select>
-            <Select.Option value="demo">Demo</Select.Option>
-          </Select>
+        <Form.Item label="Email address" name="email">
+          <Input />
         </Form.Item>
-        <Form.Item label="TreeSelect">
-          <TreeSelect
-            treeData={[
-              {
-                title: 'Light',
-                value: 'light',
-                children: [
-                  {
-                    title: 'Bamboo',
-                    value: 'bamboo',
-                  },
-                ],
-              },
-            ]}
-          />
+        <Form.Item label="Password" name="password">
+          <Input.Password />
         </Form.Item>
-        <Form.Item label="Cascader">
-          <Cascader
-            options={[
-              {
-                value: 'zhejiang',
-                label: 'Zhejiang',
-                children: [
-                  {
-                    value: 'hangzhou',
-                    label: 'Hangzhou',
-                  },
-                ],
-              },
-            ]}
-          />
+        <Form.Item label="Confirm password">
+          <Input.Password />
         </Form.Item>
-        <Form.Item label="DatePicker">
+        <Form.Item label="Date of birth: " name="birthday">
           <DatePicker />
         </Form.Item>
-        <Form.Item label="RangePicker">
-          <RangePicker />
+        <Form.Item label="Preferred language: " name="preferred_lan">
+          <Select>
+            <Select.Option value="english">English</Select.Option>
+            <Select.Option value="chinese">Chinese</Select.Option>
+            <Select.Option value="german">German</Select.Option>
+          </Select>
         </Form.Item>
-        <Form.Item label="InputNumber">
-          <InputNumber />
-        </Form.Item>
-        <Form.Item label="TextArea">
+        <Form.Item label="Self introduction: " name="intro">
           <TextArea rows={4} />
         </Form.Item>
-        <Form.Item label="Switch" valuePropName="checked">
-          <Switch />
-        </Form.Item>
-        <Form.Item label="Upload" valuePropName="fileList">
-          <Upload action="/upload.do" listType="picture-card">
+        <Form.Item label="Avatar" name="avatar">
+          <Upload action="action/do" listType="picture-circle" maxCount={1}>
             <div>
               <PlusOutlined />
               <div
@@ -117,8 +74,8 @@ const FormDisabledDemo = () => {
             </div>
           </Upload>
         </Form.Item>
-        <Form.Item label="Button">
-          <Button>Button</Button>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">Submit</Button>
         </Form.Item>
       </Form>
     </>
