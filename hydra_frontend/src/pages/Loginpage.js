@@ -1,19 +1,28 @@
 import '../styles/loginpage.css';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { stringify } from 'rc-field-form/es/useWatch';
 
 export default function Loginpage() {
 
     let navigate = useNavigate();
-    const routeChange = () =>{ 
+    const routeChange = () => {
         navigate("/register");
-      }
+    }
 
     const onFinish = (values) => {
-        if (values.username === 'admin' && values.password === 'admin') {
-            window.location.href = '/dashboard';
-        }
-        console.log('Success:', values);
+        fetch('http://localhost:8000', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: JSON.stringify({
+                username: stringify(values.username),
+                password: stringify(values.password),
+            }),
+        })
+            .then(response => response.json())
+            .then(data => console.log(data));
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -21,7 +30,7 @@ export default function Loginpage() {
     };
 
     function connect() {
-        fetch('http://localhost:8000', {
+        fetch('http://localhost:8000/login', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -44,12 +53,6 @@ export default function Loginpage() {
                     <h1 className='welcomemsg'>Welcome to the Hydra learning management system!</h1>
                     <Form
                         name="basic"
-                        labelCol={{
-                            span: 8,
-                        }}
-                        wrapperCol={{
-                            span: 16,
-                        }}
                         style={{
                             maxWidth: 600,
                         }}
@@ -98,17 +101,20 @@ export default function Loginpage() {
                         </Form.Item>
 
                         <Form.Item
-                            wrapperCol={{
-                                offset: 8,
-                                span: 16,
-                            }}
+                        style={{
+                            width: '100%',
+                            display:'flex',
+                            justifyContent:'space-between',
+                        }}
                         >
+                            <div>
                             <Button type="primary" htmlType="submit">
                                 Submit
                             </Button>
+                            <Button onClick={routeChange}>Register</Button>
+                            </div>
                         </Form.Item>
                     </Form>
-                    <Button onClick={routeChange}>Register</Button>
                 </div>
             </div>
         </>
