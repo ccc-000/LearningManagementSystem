@@ -30,8 +30,8 @@ export default function Loginpage() {
     };
 
     function connect() {
-        fetch('http://localhost:8000/login', {
-            method: 'GET',
+        fetch('http://localhost:8000/register/', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
