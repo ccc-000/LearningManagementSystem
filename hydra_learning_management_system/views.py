@@ -5,9 +5,10 @@ from django.views.decorators.csrf import csrf_exempt;
 # Create your views here.
 from django.shortcuts import render, HttpResponse
 
+# Note: The decorator must be included because we don't
+# have CSRF token in the header
 @csrf_exempt
 def main_page(request):
-    # return render(request, "main_page.html")
     print(request.GET)
     return JsonResponse({"user_id": "z12345", "user_name": "zhangsan", "user_type": "student"})
 

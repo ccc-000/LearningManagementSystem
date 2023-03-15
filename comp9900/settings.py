@@ -88,10 +88,10 @@ WSGI_APPLICATION = 'comp9900.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'user_info',
+        'NAME': 'users',
         'USER': 'django_admin',
-        'PASSWORD': '12345678',
-        'HOST': 'localhost',
+        'PASSWORD': 'Zshh0724',
+        'HOST': 'rm-t4n0tu80671s505h73o.rwlb.singapore.rds.aliyuncs.com',
         "PORT": '3306',
     }
 }

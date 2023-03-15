@@ -101,13 +101,8 @@ export default function Loginpage() {
                         </Form.Item>
 
                         <Form.Item
-                        style={{
-                            width: '100%',
-                            display:'flex',
-                            justifyContent:'space-between',
-                        }}
                         >
-                            <div>
+                            <div style={{display:'flex', justifyContent: 'space-evenly'}}>
                             <Button type="primary" htmlType="submit">
                                 Submit
                             </Button>
