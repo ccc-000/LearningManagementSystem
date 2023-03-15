@@ -21,7 +21,6 @@ def log_in(request):
         username = data["username"]
         password = data["password"]
         user = authenticate(request, username = username, password = password)
-        print(user)
         if user is None:
             return JsonResponse({'status': True, 'msg': 'Log in Success'})
         else:
@@ -37,7 +36,7 @@ def register(request):
         email = data['email']
         role = data['role']
         user = users.objects.create(username = username, password= password, email = email, role = role)
-        return JsonResponse({'status': 200, 'msg': 'Register Success'})
+        return JsonResponse({'status': True, 'msg': 'Register Success'})
 
 @csrf_exempt
 def forget_pwd_send_link(request):

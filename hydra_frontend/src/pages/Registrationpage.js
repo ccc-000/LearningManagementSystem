@@ -1,4 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import '../styles/registrationpage.css';
 import {
   Button,
@@ -10,11 +11,11 @@ import {
 } from 'antd';
 const { TextArea } = Input;
 
-
 const RegistraionFrom = () => {
+  let navigate = useNavigate();
 
   const onFinish = (values) => {
-    console.log(values);
+    console.log(values)
     fetch('http://localhost:8000/register/', {
       method: 'POST',
       headers: {
@@ -28,7 +29,12 @@ const RegistraionFrom = () => {
       }),
     })
       .then(response => response.json())
-      .then(data => console.log(data));
+      .then(data => {
+        console.log(data)
+        if (data.status === true) {
+          navigate("/");
+        }
+      });
   };
 
   return (

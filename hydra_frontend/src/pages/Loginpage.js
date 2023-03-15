@@ -21,29 +21,16 @@ export default function Loginpage() {
             }),
         })
             .then(response => response.json())
-            .then(data => console.log(data));
+            .then(data => {
+                if (data.status === true) {
+                    navigate("/dashboard");
+                }
+            });
     };
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
-
-    function connect() {
-        fetch('http://localhost:8000/register/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: JSON.stringify({
-                username: 'admin',
-                password: 'admin',
-            }),
-        })
-            .then(response => response.json())
-            .then(data => console.log(data));
-    }
-
-    connect();
 
     return (
         <>
