@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
-from .models import Users_info
+from .models import users
 import json
 
 
@@ -12,17 +12,17 @@ from django.shortcuts import render, HttpResponse
 # have CSRF token in the header
 @csrf_exempt
 def main_page(request):
-    print(request.GET)
-    return JsonResponse({"user_id": "z12345", "user_name": "zhangsan", "user_type": "student"})
+    return
 
 @csrf_exempt
-def login(request):
+def log_in(request):
     if request.method == "POST":
-        user_name = request.POST.get("user_name")
-        pwd = request.POST.get("pwd")
-        user = authenticate(request, user_name = user_name, pwd = pwd)
-        if user is not None:
-            login(request, user)
+        data = json.loads(request.body)
+        username = data["username"]
+        password = data["password"]
+        user = authenticate(request, username = username, password = password)
+        print(user)
+        if user is None:
             return JsonResponse({'status': True, 'msg': 'Log in Success'})
         else:
             return JsonResponse({'status': False, 'msg': 'Log in Fail'})
@@ -32,13 +32,12 @@ def login(request):
 def register(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        user_name = data['user_name']
-        pwd = data['pwd']
-        e_mail = data['e_mail']
+        username = data['username']
+        password = data['password']
+        email = data['email']
         role = data['role']
-        print(user_name, pwd, e_mail, role)
-        user = Users_info.objects.create(user_name = user_name, pwd= pwd, e_mail = e_mail, role = role)
-        return JsonResponse({'status': True, 'msg': 'Register Success'})
+        user = users.objects.create(username = username, password= password, email = email, role = role)
+        return JsonResponse({'status': 200, 'msg': 'Register Success'})
 
 @csrf_exempt
 def forget_pwd_send_link(request):

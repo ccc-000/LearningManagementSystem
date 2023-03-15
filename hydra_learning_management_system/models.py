@@ -2,8 +2,9 @@ from django.db import models
 
 # Create your models here.
 
-class Users_info(models.Model):
-    e_mail = models.CharField(max_length=50)
-    user_name = models.CharField(max_length=50)
-    pwd = models.CharField(max_length=50)
-    role = models.CharField(max_length=20)
+class users(models.Model):
+    uid = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=50)
+    password = models.CharField(max_length=50)
+    email = models.EmailField(max_length=50)
+    role = models.CharField(max_length=10)

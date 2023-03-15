@@ -21,9 +21,9 @@ const RegistraionFrom = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        user_name: values.username,
-        e_mail: values.email,
-        pwd: values.password,
+        username: values.username,
+        email: values.email,
+        password: values.password,
         role: values.role,
       }),
     })
