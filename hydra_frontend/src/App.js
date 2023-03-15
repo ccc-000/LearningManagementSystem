@@ -1,34 +1,27 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import ResetPassword1 from './ResetPassword1';
+import ResetPassword2 from './ResetPassword2';
+import Profile from './Profile';
+import EditProfile from './EditProfile';
+import EditAvatar from './EditAvatar';
+import CourseHistory from './CourseHistory';
+import { Route, Routes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 function App() {
 
-  function connect() {
-    fetch('http://localhost:8000')
-      .then(response => response.json())
-      .then(data => console.log(data));
-  }
-
-  connect();
-
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/Profile" element={<Profile />} />
+        <Route path="/ResetPassword1" element={<ResetPassword1 />} />
+        <Route path="/ResetPassword2" element={<ResetPassword2 />} />
+        <Route path="/Editprofile" element={<EditProfile />} />
+        <Route path="/EditAvatar" element={<EditAvatar />} />
+        <Route path="/CourseHistory" element={<CourseHistory />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
