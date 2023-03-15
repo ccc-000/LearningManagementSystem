@@ -1,7 +1,6 @@
 import '../styles/loginpage.css';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { stringify } from 'rc-field-form/es/useWatch';
 
 export default function Loginpage() {
 
@@ -11,14 +10,14 @@ export default function Loginpage() {
     }
 
     const onFinish = (values) => {
-        fetch('http://localhost:8000', {
+        fetch('http://localhost:8000/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            data: JSON.stringify({
-                username: stringify(values.username),
-                password: stringify(values.password),
+            body: JSON.stringify({
+                username: values.username,
+                password: values.password,
             }),
         })
             .then(response => response.json())

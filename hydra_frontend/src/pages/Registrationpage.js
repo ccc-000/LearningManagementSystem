@@ -11,7 +11,26 @@ import {
 const { TextArea } = Input;
 
 
-const FormDisabledDemo = () => {
+const RegistraionFrom = () => {
+
+  const onFinish = (values) => {
+    console.log(values);
+    fetch('http://localhost:8000/register/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_name: values.username,
+        e_mail: values.email,
+        pwd: values.password,
+        role: values.role,
+      }),
+    })
+      .then(response => response.json())
+      .then(data => console.log(data));
+  };
+
   return (
     <>
       <div className='pagelayout'>
@@ -27,11 +46,9 @@ const FormDisabledDemo = () => {
             style={{
               maxWidth: 1000,
             }}
-            onFinish={(values) => {
-              console.log(values);
-            }}
+            onFinish={onFinish}
           >
-            <Form.Item label="User name" name="username">
+            <Form.Item label="User name" name="username" >
               <Input />
             </Form.Item>
             <Form.Item label="Email address" name="email">
@@ -43,7 +60,13 @@ const FormDisabledDemo = () => {
             <Form.Item label="Confirm password">
               <Input.Password />
             </Form.Item>
-            <Form.Item label="Date of birth: " name="birthday">
+            <Form.Item label="Role: " name="role">
+              <Select>
+                <Select.Option value="student">Student</Select.Option>
+                <Select.Option value="lecturre">Lecturer</Select.Option>
+              </Select>
+            </Form.Item>
+            {/* <Form.Item label="Date of birth: " name="birthday">
               <DatePicker />
             </Form.Item>
             <Form.Item label="Preferred language: " name="preferred_lan">
@@ -69,7 +92,7 @@ const FormDisabledDemo = () => {
                   </div>
                 </div>
               </Upload>
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item>
               <Button type="primary" htmlType="submit">Submit</Button>
             </Form.Item>
@@ -79,4 +102,4 @@ const FormDisabledDemo = () => {
     </>
   );
 };
-export default () => <FormDisabledDemo />;
+export default () => <RegistraionFrom />;
