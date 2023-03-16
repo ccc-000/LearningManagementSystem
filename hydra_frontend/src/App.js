@@ -3,6 +3,7 @@ import Loginpage from './pages/Loginpage';
 import Registrationpage from './pages/Registrationpage';
 import {Route, Routes} from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
+import DashboardLecturer from './pages/DashboardLecturer';
 import Coursemainpage from "./pages/Coursemainpage";
 import CourseHistory from "./pages/CourseHistory";
 import EditAvatar from "./pages/EditAvatar";
@@ -20,6 +21,7 @@ function App() {
                 <Route path="/register" element={<Registrationpage/>}/>
 
                 <Route path="/dashboard" element={<Dashboard/>}/>
+                <Route path="/dashboardlecturer" element={<DashboardLecturer/>}/>
                 <Route path="/coursemainpage" element={<Coursemainpage/>}/>
 
                 <Route path="/editprofile" element={<EditProfile/>}/>
