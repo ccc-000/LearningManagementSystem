@@ -1,0 +1,13 @@
+course db
+
+0. course id  primary key
+1. course name (23t1 comp9900 it project)
+2. creator id foreign key
+3. enroll list(stu id)
+4. course description
+5. grade_distribution:{quiz:{quiz1: 5, quiz2: 5, quiz3: 5},ass:{ass1:20, ass2: 20,ass3: 20},final:25}
+
+cid-stuid table
+{c1:123,c2:123,c2:111}
+assessment table
+{q1:4,q2:3,q3:1}
