@@ -1,0 +1,71 @@
+default the size of enrolllist is 50
+quiz: 9
+ass: 15
+final: 28
+{
+    courseid:1,
+    coursename:23t1_COMP9900_ITProject,
+    creatorid: 5,
+    enrolllist:[1,2,3],
+    coursedescription:"It's the final course of your 8543",
+    gradedistribution:{
+        quiz:{quiz1: 9, quiz2: 9, quiz3: 9},
+        ass:{ass1:15, ass2: 15, ass3: 15},
+        final:{final exam: 28}
+        }
+}
+
+1.create course：
+send
+{
+    coursename:,
+    coursedescription:,
+    gradedistribution:
+}
+return suc or fail
+
+2. show course which u not enroll:
+get{
+
+}
+return 
+{
+    {
+    courseid:1,
+    coursename:23t1_COMP9900_ITProject,
+    creatorname:(string)(transfer from creator id)
+    avaible seat: 45(int),
+    coursedescription:"It's the final course of your 8543",
+    },
+    {...}
+}
+
+3. enroll course:
+send:{
+    course id :,
+    uid:
+}
+return(avaible > 0) suc or fail
+
+4. drop:
+send:{
+    courseid:,
+    uid:,
+}
+return suc or fail
+
+5. show course u enrolled:
+send:"GET"{
+
+}
+return 
+{
+    {
+    courseid:1,
+    coursename:23t1_COMP9900_ITProject,
+    creatorname:(string)(transfer from creator id)
+    avaible seat: 45(int),
+    coursedescription:"It's the final course of your 8543",
+    },
+    {...}
+}

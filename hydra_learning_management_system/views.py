@@ -20,7 +20,7 @@ def log_in(request):
         data = json.loads(request.body)
         username = data["username"]
         password = data["password"]
-        user = authenticate(request, username = username, password = password)
+        user = users.authenticate(request, username = username, password = password)
         if user is None:
             return JsonResponse({'status': True, 'msg': 'Log in Success'})
         else:

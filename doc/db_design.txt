@@ -1,13 +1,76 @@
+user_info:
+
+hash for index to search
+
 course db
 
-0. course id  primary key
-1. course name (23t1 comp9900 it project)
-2. creator id foreign key
-3. enroll list(stu id)
-4. course description
-5. grade_distribution:{quiz:{quiz1: 5, quiz2: 5, quiz3: 5},ass:{ass1:20, ass2: 20,ass3: 20},final:25}
+0. courseid  primary key
+1. coursename (23t1 comp9900 it project)
+2. creatorid foreign key
+3. enrolllist(stu id)
+4. coursedescription
+5. gradedistribution:{quiz:{quiz1: 5, quiz2: 5, quiz3: 5},ass:{ass1:20, ass2: 20,ass3: 20},final:25}
+
+{
+    courseid:1,
+    coursename:23t1_COMP9900_ITProject,
+    creatorid: 5,
+    enrolllist:[1,2,3],
+    coursedescription:"It's the final course of your 8543",
+    grade_distribution:{
+        quiz:{quiz1: 5, quiz2: 5, quiz3: 5},
+        ass:{ass1:20, ass2: 20,ass3: 20},
+        final:{final exam: 25}
+        }
+}
 
 cid-stuid table
-{c1:123,c2:123,c2:111}
-assessment table
-{q1:4,q2:3,q3:1}
+{
+    c1:stu1, 
+    c2:stu1, 
+    c2:stu2
+}
+
+assessment table(uid-json)
+{
+    1:{quiz:{quiz1: 3, quiz2: 3, quiz3: 3},
+        ass:{ass1:12, ass2: 12,ass3: 14},
+        final:{final exam: 20}
+        }
+    2:{...}
+}
+
+material 
+{
+    mid: int,
+    cid: int,
+    url: string,
+    type: string (用于filter)
+}
+
+post
+{
+    pid: 1,
+    creatorid: 1,
+    courseid: 1,
+    time: new Date(),
+    keyword: string,
+    title: string,
+    content: string,
+    multimedia: string,
+    likes: int,
+    reply:{
+        123:good, 
+        345: bad
+        },
+    editted: true(bool),
+    pinned:[]()
+    privacy:
+}
+
+reply(for delete)
+{
+    postid:, 
+    creator:
+    content:
+}

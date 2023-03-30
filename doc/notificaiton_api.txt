@@ -1,0 +1,16 @@
+notification:
+
+1.send email when i want:
+send:{
+    title:
+    content:
+}
+return suc or fail 
+
+2. send email when live is on:
+send email to studens "live is on"
+
+3. send email when teachers submit material:
+send email to studens "sth new is uploaded"
+
+###把老师id放在enrollment list
