@@ -1,7 +1,7 @@
 import '../styles/loginpage.css';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
-
+import * as React from 'react'
 export default function Loginpage() {
 
     let navigate = useNavigate();

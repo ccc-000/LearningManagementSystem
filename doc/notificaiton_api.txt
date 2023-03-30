@@ -1,6 +1,6 @@
 notification:
 
-1.send email when i want:
+1.send email when i click the button on the navi bar:
 send:{
     title:
     content:

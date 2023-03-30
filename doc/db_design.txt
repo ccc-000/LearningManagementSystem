@@ -1,17 +1,20 @@
-user_info:
+user_info{
+    uid,
+    username,
+    password,
+    email,
+    role
+}
 
-hash for index to search
-
-course db
-
-0. courseid  primary key
-1. coursename (23t1 comp9900 it project)
-2. creatorid foreign key
-3. enrolllist(stu id)
-4. coursedescription
-5. gradedistribution:{quiz:{quiz1: 5, quiz2: 5, quiz3: 5},ass:{ass1:20, ass2: 20,ass3: 20},final:25}
-
-{
+course db{
+    cid:,
+    coursename:,
+    creatorid:,
+    enrolllist:,
+    coursedescription:,
+    grade_distribution:
+}
+For example:{
     courseid:1,
     coursename:23t1_COMP9900_ITProject,
     creatorid: 5,
@@ -24,16 +27,22 @@ course db
         }
 }
 
-cid-stuid table
-{
+cid-stuid table{
+    cid: uid
+}
+For example:{
     c1:stu1, 
     c2:stu1, 
     c2:stu2
 }
 
-assessment table(uid-json)
-{
-    1:{quiz:{quiz1: 3, quiz2: 3, quiz3: 3},
+assessment table{
+    uid,
+    pid,
+    grade(json)
+}
+For example{
+    1:{quiz:{quiz1: 6, quiz2: 6, quiz3: 6},
         ass:{ass1:12, ass2: 12,ass3: 14},
         final:{final exam: 20}
         }

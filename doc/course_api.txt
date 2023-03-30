@@ -24,10 +24,8 @@ send
 }
 return suc or fail
 
-2. show course which u not enroll:
-get{
-
-}
+2. show course which u have not enrolled:
+send: "GET"{}
 return 
 {
     {
@@ -42,8 +40,8 @@ return
 
 3. enroll course:
 send:{
-    course id :,
-    uid:
+    course id,
+    uid
 }
 return(avaible > 0) suc or fail
 
@@ -55,9 +53,7 @@ send:{
 return suc or fail
 
 5. show course u enrolled:
-send:"GET"{
-
-}
+send: "GET"{}
 return 
 {
     {

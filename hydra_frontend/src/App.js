@@ -11,7 +11,7 @@ import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
 import ResetPassword1 from "./pages/ResetPassword1";
 import ResetPassword2 from "./pages/ResetPassword2";
-
+import * as React from 'react'
 function App() {
 
     return (
