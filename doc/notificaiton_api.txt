@@ -1,16 +1,22 @@
 notification:
 
 1.send email when i click the button on the navi bar:
+fetch(/sendemail)
 send:{
-    title:
-    content:
+    title: json
+    content: json
 }
-return suc or fail 
+from  creatorid send email
+return 200 or 500
 
 2. send email when live is on:
+fetch(/livesenemail)
+"GET"
 send email to studens "live is on"
 
 3. send email when teachers submit material:
-send email to studens "sth new is uploaded"
+fetch(/material)
+"GET"
+send email to students "sth new is uploaded"
 
 ###把老师id放在enrollment list

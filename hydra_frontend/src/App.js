@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import ResetPassword1 from "./pages/ResetPassword1";
 import ResetPassword2 from "./pages/ResetPassword2";
 import * as React from 'react'
+
 function App() {
 
     return (
@@ -19,11 +20,9 @@ function App() {
             <Routes>
                 <Route path="/" element={<Loginpage/>}/>
                 <Route path="/register" element={<Registrationpage/>}/>
-
                 <Route path="/dashboard" element={<Dashboard/>}/>
                 <Route path="/dashboardlecturer" element={<DashboardLecturer/>}/>
                 <Route path="/coursemainpage" element={<Coursemainpage/>}/>
-
                 <Route path="/editprofile" element={<EditProfile/>}/>
                 <Route path="/enrolmenthistory" element={<CourseHistory/>}/>
                 <Route path="/profile" element={<Profile/>}/>

@@ -4,12 +4,14 @@ material table{
     cid,
     filepath
 }
+
 1. upload material
+fetch(/uploadmaterial)
+"POST"
 send{
     type,
     filepath,
 }
-return suc or fail
+return 200 or 500
+
 2. download
-链接 直接点进去
-不是button 是ahref

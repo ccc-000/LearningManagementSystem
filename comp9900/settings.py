@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ["0.0.0.0", "localhost"]
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     "hydra_learning_management_system.apps.HydraLearningManagementSystemConfig",
     'django.contrib.admin',
     'django.contrib.auth',
@@ -36,24 +37,30 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # This line is to allow CORS
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # This line is to allow CORS
-    'corsheaders.middleware.CorsMiddleware'
 ]
 
-# This line is to allow CORS from all origins
-CORS_ORIGIN_ALLOW_ALL = True
+# This line is to allow CORS from frontend
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
 
 ROOT_URLCONF = 'comp9900.urls'
 
@@ -81,10 +88,10 @@ WSGI_APPLICATION = 'comp9900.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'user_info',
+        'NAME': 'users',
         'USER': 'django_admin',
-        'PASSWORD': '12345678',
-        'HOST': 'localhost',
+        'PASSWORD': 'Zshh0724',
+        'HOST': 'rm-t4n0tu80671s505h73o.rwlb.singapore.rds.aliyuncs.com',
         "PORT": '3306',
     }
 }
