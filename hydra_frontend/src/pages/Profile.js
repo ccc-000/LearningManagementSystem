@@ -6,9 +6,13 @@ import 'antd/dist/reset.css';
 import '../styles/Profile.css';
 const { Option } = Select;
 
+//通过uid获取用户信息并显示
+//将修改后的prefer language提交到数据库
 
 function Profile() {
     const [messageApi, contextHolder] = message.useMessage();
+
+    //update language
     function handleChange() {
       messageApi.open({
         type: 'loading',
@@ -23,11 +27,11 @@ function Profile() {
         });
       }, 2100);
     }
-    //时间轴
+
     return (
       <div className="ProfileDetail">
         <div id="ProfileDetail-Avatar">
-          <Link to="/EditAvatar">
+          <Link to="/editavatar">
             <Avatar shape="square" size={110} icon={<UserOutlined />} />
           </Link>
         </div>
@@ -58,7 +62,7 @@ function Profile() {
                 <Button id="ProfileDetail-Update" type="primary" onClick={handleChange}>Update</Button>
               </div>
             </div>
-            <Link to="/EditProfile">
+            <Link to="/editprofile">
               <div id="ProfileDetail-Button">
                 <Button type="primary" size="large" style={{width:100}}>
                   Edit
@@ -89,7 +93,7 @@ function Profile() {
                 },
                 ]}
             />
-            <Link to="/CourseHistory">
+            <Link to="/enrolmenthistory">
               <div id="ProfileDetail-Button">
                 <Button type="primary" size="large" style={{width:100}}>
                   Detail

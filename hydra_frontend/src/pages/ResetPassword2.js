@@ -1,7 +1,10 @@
 import React from 'react';
 import { Card, Input, Button, Form } from 'antd';
 import 'antd/dist/reset.css';
-import '../styles/ResetPassword2.css';
+import './styles/ResetPassword2.css';
+import { useNavigate } from 'react-router-dom';
+
+//将修改的密码提交到数据库，并跳转到登录页面
 
 const formItemLayout = {
   labelCol: {
@@ -24,8 +27,10 @@ const formItemLayout = {
 
 function ResetPassword2() {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   const onFinish = (values) => {
       console.log('Received values of form: ', values);
+      navigate('/');
   };
   return (
     <div className="ResetPassword">
@@ -43,7 +48,6 @@ function ResetPassword2() {
             {...formItemLayout}
             form={form}
             name="edit"
-            onFinish={onFinish}
             initialValues={{
                 language: 'English',
             }}
@@ -90,7 +94,7 @@ function ResetPassword2() {
             </Form.Item>
           </Form>
         </div>
-        <div id="ResetPassword-Submit"><Button type="primary" htmlType="submit" size="large" style={{width: 100}}>Submit</Button></div>
+        <div id="ResetPassword-Submit"><Button type="primary" htmlType="submit" size="large" style={{width: 100}} onClick={onFinish}>Submit</Button></div>
       </Card>
     </div>
   );
