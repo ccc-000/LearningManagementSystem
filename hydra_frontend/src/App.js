@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Loginpage from './pages/Loginpage';
 import Registrationpage from './pages/Registrationpage';
@@ -13,36 +12,27 @@ import Profile from "./pages/Profile";
 import ResetPassword1 from "./pages/ResetPassword1";
 import ResetPassword2 from "./pages/ResetPassword2";
 import * as React from 'react'
->>>>>>> 916934f49eb0e0b01945c2641190bb942f7d2312
 function App() {
 
-  function connect() {
-    fetch('http://localhost:8000')
-      .then(response => response.json())
-      .then(data => console.log(data));
-  }
+    return (
+        <>
+            <Routes>
+                <Route path="/" element={<Loginpage/>}/>
+                <Route path="/register" element={<Registrationpage/>}/>
 
-  connect();
+                <Route path="/dashboard" element={<Dashboard/>}/>
+                <Route path="/dashboardlecturer" element={<DashboardLecturer/>}/>
+                <Route path="/coursemainpage" element={<Coursemainpage/>}/>
 
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+                <Route path="/editprofile" element={<EditProfile/>}/>
+                <Route path="/enrolmenthistory" element={<CourseHistory/>}/>
+                <Route path="/profile" element={<Profile/>}/>
+                <Route path="/editavatar" element={<EditAvatar/>}/>
+                <Route path="/resetpassword/1" element={<ResetPassword1/>}/>
+                <Route path="/resetpassword/2" element={<ResetPassword2/>}/>
+            </Routes>
+        </>
+    );
 }
 
 export default App;
