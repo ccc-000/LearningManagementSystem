@@ -1,4 +1,3 @@
-import React from 'react';
 import './App.css';
 import ResetPassword1 from './ResetPassword1';
 import ResetPassword2 from './ResetPassword2';
@@ -8,21 +7,39 @@ import EditAvatar from './EditAvatar';
 import CourseHistory from './CourseHistory';
 import { Route, Routes } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
+import Loginpage from './pages/Loginpage';
+import Registrationpage from './pages/Registrationpage';
+import {Route, Routes} from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import DashboardLecturer from './pages/DashboardLecturer';
+import Coursemainpage from "./pages/Coursemainpage";
+import CourseHistory from "./pages/CourseHistory";
+import EditAvatar from "./pages/EditAvatar";
+import EditProfile from "./pages/EditProfile";
+import Profile from "./pages/Profile";
+import ResetPassword1 from "./pages/ResetPassword1";
+import ResetPassword2 from "./pages/ResetPassword2";
+import * as React from 'react'
 
 function App() {
 
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/Profile" element={<Profile />} />
-        <Route path="/ResetPassword1" element={<ResetPassword1 />} />
-        <Route path="/ResetPassword2" element={<ResetPassword2 />} />
-        <Route path="/Editprofile" element={<EditProfile />} />
-        <Route path="/EditAvatar" element={<EditAvatar />} />
-        <Route path="/CourseHistory" element={<CourseHistory />} />
-      </Routes>
-    </BrowserRouter>
-  );
+    return (
+        <>
+            <Routes>
+                <Route path="/" element={<Loginpage/>}/>
+                <Route path="/register" element={<Registrationpage/>}/>
+                <Route path="/dashboard" element={<Dashboard/>}/>
+                <Route path="/dashboardlecturer" element={<DashboardLecturer/>}/>
+                <Route path="/coursemainpage" element={<Coursemainpage/>}/>
+                <Route path="/editprofile" element={<EditProfile/>}/>
+                <Route path="/enrolmenthistory" element={<CourseHistory/>}/>
+                <Route path="/profile" element={<Profile/>}/>
+                <Route path="/editavatar" element={<EditAvatar/>}/>
+                <Route path="/resetpassword/1" element={<ResetPassword1/>}/>
+                <Route path="/resetpassword/2" element={<ResetPassword2/>}/>
+            </Routes>
+        </>
+    );
 }
 
 export default App;

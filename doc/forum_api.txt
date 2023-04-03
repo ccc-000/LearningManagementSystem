@@ -1,0 +1,64 @@
+posts{
+    pid(primary key),
+    creatorid,
+    courseid,
+    title,
+    keyword,
+    createtime,
+    content,
+    mutlimediapath,
+    reply {123:good,234:bad},
+    likes{[uid]},
+    editted(true),
+    flagged{[uid]},
+    privacy{[uid]}(length = 1, 给所有人, blocked 老师的id加进去)
+}
+
+1. When click the forum
+fetch(/forum)
+    "POST"
+    send{
+    head:
+    json
+    tokens
+    body:
+    cid
+    }
+    return {
+    all posts
+    }
+    Receive: metadata of all forum of the course (post_id, title, keyword, type, creator, time, num_of_likes, pin[list of user id])
+
+2. When click a specific post
+fetch(/posts)
+    Send: post_id
+    Receive: All reply of the post (reply_id, content, creator, reply_time, num_of_likes, file)
+
+3. Create a new post
+fetch(/createposts)
+    Send: title, keyword, type, content, time, creator, course_id, file
+    Receive: success / error
+
+4. Reply a post
+fetch(/replyposts)
+    Send: post_id, content, time, creator
+    Receive: success / error
+
+5. Like a post
+fetch(/likeposts)
+    Send: post_id, creator
+    Receive: success / error
+
+6. Set private (can only done by creator or lecturer)
+fetch(/setprivate)
+
+8. Delete a post (can only done by creator or lecturer)
+fetch(/deleteposts)
+    Send: post_id
+    Receive: success / error
+
+9. Delete a reply
+fetch(/deletereply)
+    Send: reply_id
+    Receive: success / error
+

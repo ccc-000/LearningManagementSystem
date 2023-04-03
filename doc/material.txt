@@ -1,0 +1,17 @@
+material table{
+    mid,
+    type,
+    cid,
+    filepath
+}
+
+1. upload material
+fetch(/uploadmaterial)
+"POST"
+send{
+    type,
+    filepath,
+}
+return 200 or 500
+
+2. download

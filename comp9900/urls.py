@@ -21,7 +21,8 @@ from hydra_learning_management_system import views
 urlpatterns = [
     path("", views.main_page),
     path('admin/', admin.site.urls),
-    path('login/', views.login, name ="login"),
-    path("register/", views.register, name ="register")
-
+    path('login/', views.log_in),
+    path("register/", views.register),
+    path("createcourses/", views.createcourses),
+    path("enrollcourses/", views.enrollcourses),
 ]
