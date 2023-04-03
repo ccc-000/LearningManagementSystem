@@ -1,0 +1,45 @@
+post table{
+    pid(primary key),
+    creatorid,
+    courseid,
+    title,
+    keyword,
+    createtime,
+    content,
+    mutlimediapath,
+    reply {123:good,234:bad},
+    likes(int),
+    editted(true),
+    flagged[123,234]
+}
+
+1. When click the forum
+    Send: courseID
+    Receive: metadata of all forum of the course (post_id, title, keyword, type, creator, time, num_of_likes, pin[list of user id])
+
+2. When click a specific post
+    Send: post_id
+    Receive: All reply of the post (reply_id, content, creator, reply_time, num_of_likes, file)
+
+3. Create a new post
+    Send: title, keyword, type, content, time, creator, course_id, file
+    Receive: success / error
+
+4. Reply a post
+    Send: post_id, content, time, creator
+    Receive: success / error
+
+5. Like a post
+    Send: post_id, creator
+    Receive: success / error
+
+6. Set private (can only done by creator or lecturer)
+
+8. Delete a post (can only done by creator or lecturer)
+    Send: post_id
+    Receive: success / error
+
+9. Delete a reply
+    Send: reply_id
+    Receive: success / error
+

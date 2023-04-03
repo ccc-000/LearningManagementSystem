@@ -1,0 +1,92 @@
+quiz table {
+    quizid:
+    ddl: ,
+    q1:{description:1+1=?, A: 1, B:2，C:3, D:4, ans:B}},
+    q2:{...},
+    q3:{...}
+}
+
+1. create quiz: ->db
+json:
+{
+    ddl: new Date() 之后你就 disable the button
+    1:{description:1+1=?, A: 1, B:2, C:3, D:4, ans:B}},
+    2:{...}
+    3:{...}
+}
+
+2. stu attend quiz(ddl:time time limit:10 min):
+send{
+    1: A,
+    2: A，
+    3：A
+}
+return suc or fail
+
+3. mark quiz:
+send{
+    1:A,
+    2:A,
+    3:A
+}
+只要有fetch,reset score
+let score = 0;
+For each, score++
+
+
+3. review quiz（ddl enable review button）:
+
+{1:{description:1+1=?, A: 1, B:2，C:3, D:4, ans:B}}
+2
+3
+}
++
+stu.score
+
+ass:
+
+ass table{
+    assid:,
+    creatorid:,
+    title:,
+    assdescription(url):,
+    ddl:
+}
+
+1. Create ass:
+send:
+ass table{
+    assid:,
+    creatorid:,
+    title:,
+    assdescription(url):,
+    ddl:
+}
+return seccess or failed.
+
+2. stu submit:
+{
+    uid:;
+    file
+}
+return suc or fail
+
+3. mark:
+score:
+{
+    uid:,
+    score:
+}
+return suc or fail
+
+grade:
+get{
+    q1:
+    q2:
+    q3:
+    a1:
+    a2:
+    a3:
+    final exam:
+}
+return suc or fail

@@ -8,12 +8,28 @@ from .form import UserForm
 
 
 def main_page(request):
+<<<<<<< HEAD
     # return render(request, "main_page.html")
     return JsonResponse({"message": "Hello, world!"})
 
 
 def login(request):
     return render(request, "log_in.html")
+=======
+    return
+
+@csrf_exempt
+def log_in(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        username = data["username"]
+        password = data["password"]
+        user = users.authenticate(request, username = username, password = password)
+        if user is None:
+            return JsonResponse({'status': True, 'msg': 'Log in Success'})
+        else:
+            return JsonResponse({'status': False, 'msg': 'Log in Fail'})
+>>>>>>> 916934f49eb0e0b01945c2641190bb942f7d2312
 
 
 def register(request):

@@ -1,0 +1,21 @@
+{
+      "courseID": "comp9900",
+      "materialId":"1",
+      "materialType":"recording",
+      "filePath": "/courses/comp9900/preview.mp4"
+}
+
+{
+      "courseID": "comp9900",
+      "postId":"comp9900-1",
+      "postTitle":"React and Djanjo",
+      "keyword":"React",
+      "userID":"z5370000",
+      "postTime":"30/3/2023 2:40AM",
+      "postDetail":"React is front-end and Djanjo is back-end",
+      "filePath": "/courses/comp9900/structure.jpg",
+      "replys":"[z5370001: right!, z5370002: yes!]",
+      "pin":"[z5370001,z5370002]",
+      "likeNumber":"15",
+      "ifEdited":"0"
+}

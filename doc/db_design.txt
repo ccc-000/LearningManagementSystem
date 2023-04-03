@@ -1,0 +1,85 @@
+user_info{
+    uid,
+    username,
+    password,
+    email,
+    role
+}
+
+course db{
+    cid:,
+    coursename:,
+    creatorid:,
+    enrolllist:,
+    coursedescription:,
+    grade_distribution:
+}
+For example:{
+    courseid:1,
+    coursename:23t1_COMP9900_ITProject,
+    creatorid: 5,
+    enrolllist:[1,2,3],
+    coursedescription:"It's the final course of your 8543",
+    grade_distribution:{
+        quiz:{quiz1: 5, quiz2: 5, quiz3: 5},
+        ass:{ass1:20, ass2: 20,ass3: 20},
+        final:{final exam: 25}
+        }
+}
+
+cid-stuid table{
+    cid: uid
+}
+For example:{
+    c1:stu1, 
+    c2:stu1, 
+    c2:stu2
+}
+
+assessment table{
+    uid,
+    pid,
+    grade(json)
+}
+For example{
+    1:{quiz:{quiz1: 6, quiz2: 6, quiz3: 6},
+        ass:{ass1:12, ass2: 12,ass3: 14},
+        final:{final exam: 20}
+        }
+    2:{...}
+}
+
+material 
+{
+    mid: int,
+    cid: int,
+    url: string,
+    type: string (用于filter)
+}
+
+post
+{
+    pid: 1,
+    creatorid: 1,
+    courseid: 1,
+    time: new Date(),
+    keyword: string,
+    title: string,
+    content: string,
+    multimedia: string,
+    likes: int,
+    reply:{
+        123:good, 
+        345: bad
+        },
+    editted: true(bool),
+    pinned:[]()
+    privacy:
+}
+
+reply(for delete)
+{
+    postid:, 
+    creator:
+    content:
+}

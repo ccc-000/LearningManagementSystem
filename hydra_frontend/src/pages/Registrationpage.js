@@ -9,7 +9,10 @@ import {
   Select,
   Upload,
 } from 'antd';
+import React from 'react';
+
 const { TextArea } = Input;
+
 
 const RegistraionFrom = () => {
   let navigate = useNavigate();
