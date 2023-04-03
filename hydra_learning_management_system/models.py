@@ -1,7 +1,28 @@
+import uuid
+
 from django.db import models
 
 # Create your models here.
 
+<<<<<<< HEAD
+class User_info(models.Model):
+    uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    e_mail = models.CharField(max_length=20)
+    user_name = models.CharField(max_length=20)
+    pwd = models.CharField(max_length=20)
+    role = models.CharField(max_length=10)
+    phone = models.IntegerField()
+    address = models.CharField(max_length=50)
+    #preferred_language = models.CharField(max_length=10)
+    #rolment_history =
+    def __str__(self):
+        return self.user_name
+
+class Course_db(models.Model):
+    cid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    course_name = models.CharField(max_length=20)
+    description = models.CharField(max_length=50)
+=======
 class users(models.Model):
     uid = models.AutoField(primary_key=True)
     username = models.CharField(max_length=50)
@@ -62,3 +83,4 @@ class replyment(models.Model):
     pid = models.ForeignKey(posts,on_delete=models.CASCADE)
     creator_id = models.ForeignKey(users, on_delete=models.CASCADE)
     content = models.CharField(max_length=100)
+>>>>>>> 916934f49eb0e0b01945c2641190bb942f7d2312
