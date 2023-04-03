@@ -1,10 +1,10 @@
 import './App.css';
-import ResetPassword1 from './ResetPassword1';
-import ResetPassword2 from './ResetPassword2';
-import Profile from './Profile';
-import EditProfile from './EditProfile';
-import EditAvatar from './EditAvatar';
-import CourseHistory from './CourseHistory';
+import ResetPassword1 from './pages/ResetPassword1';
+import ResetPassword2 from './pages/ResetPassword2';
+import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
+import EditAvatar from './pages/EditAvatar';
+import CourseHistory from './pages/CourseHistory';
 import { Route, Routes } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
 import Loginpage from './pages/Loginpage';

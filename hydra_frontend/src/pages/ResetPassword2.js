@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Input, Button, Form } from 'antd';
 import 'antd/dist/reset.css';
-import './styles/ResetPassword2.css';
+import '../styles/ResetPassword2.css';
 import { useNavigate } from 'react-router-dom';
 
 //将修改的密码提交到数据库，并跳转到登录页面
