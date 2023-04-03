@@ -1,4 +1,4 @@
-user_info{
+users{
     uid,
     username,
     password,
@@ -6,7 +6,7 @@ user_info{
     role
 }
 
-course db{
+courses{
     cid:,
     coursename:,
     creatorid:,
@@ -79,6 +79,7 @@ post
 
 reply(for delete)
 {
+    rid:
     postid:, 
     creator:
     content:

@@ -7,6 +7,7 @@ quiz table {
 }
 
 1. create quiz: ->db
+fetch(/createquiz)
 json:
 {
     ddl: new Date() 之后你就 disable the button
@@ -16,14 +17,16 @@ json:
 }
 
 2. stu attend quiz(ddl:time time limit:10 min):
+fetch(/attendquiz)
 send{
     1: A,
     2: A，
-    3：A
+    3: A,
 }
 return suc or fail
 
 3. mark quiz:
+fetch(/markquiz)
 send{
     1:A,
     2:A,
@@ -35,13 +38,15 @@ For each, score++
 
 
 3. review quiz（ddl enable review button）:
-
+fetch(/reviewquiz)
 {1:{description:1+1=?, A: 1, B:2，C:3, D:4, ans:B}}
 2
 3
 }
 +
 stu.score
+
+
 
 ass:
 
@@ -54,6 +59,7 @@ ass table{
 }
 
 1. Create ass:
+fetch(/createass)
 send:
 ass table{
     assid:,
@@ -65,6 +71,7 @@ ass table{
 return seccess or failed.
 
 2. stu submit:
+fetch(/submitass)
 {
     uid:;
     file
@@ -72,15 +79,18 @@ return seccess or failed.
 return suc or fail
 
 3. mark:
+fetch(/markass)
 score:
 {
     uid:,
     score:
 }
-return suc or fail
+return 200 or 500
 
 grade:
-get{
+fetch(/getgrade)
+"GET"
+send{
     q1:
     q2:
     q3:
@@ -90,3 +100,6 @@ get{
     final exam:
 }
 return suc or fail
+
+JWT
+context
