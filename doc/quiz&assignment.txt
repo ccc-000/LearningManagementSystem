@@ -20,7 +20,7 @@ json:
 fetch(/attendquiz)
 send{
     1: A,
-    2: A，
+    2: A,
     3: A,
 }
 return suc or fail

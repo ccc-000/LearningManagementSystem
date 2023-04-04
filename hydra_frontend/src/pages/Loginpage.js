@@ -23,6 +23,9 @@ export default function Loginpage() {
             .then(response => response.json())
             .then(data => {
                 if (data.status === true) {
+                    localStorage.setItem('uid',data.uid);
+                    console.log(data.uid)
+                    //console.log('123')
                     navigate("/dashboard");
                 }
             });
