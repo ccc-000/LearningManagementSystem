@@ -18,10 +18,6 @@ posts{
 fetch(/forum)
     "POST"
     send{
-    head:
-    json
-    tokens
-    body:
     cid
     }
     return {

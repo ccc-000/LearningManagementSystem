@@ -1,14 +1,13 @@
 import json
 
 from django.http import JsonResponse
-# Create your views here.
 from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
 
-uid = 0
 
+# Create your views here.
 
 # Note: The decorator must be included because we don't
 # have CSRF token in the header
@@ -168,13 +167,22 @@ def grade(request):
 
 
 @csrf_exempt
-def forum(request):
-    return HttpResponse()
+def posts(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        pid = data['pid']
+        reply = replyment.objects.get(pid=pid)
+        return JsonResponse({"reply":reply})
 
 
 @csrf_exempt
-def posts(request):
-    return HttpResponse()
+def forum(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        cid = data['cid']
+        uid = data['uid']
+        post = posts.objects.get(cid=cid)
+    return JsonResponse({"posts":post})
 
 
 @csrf_exempt
