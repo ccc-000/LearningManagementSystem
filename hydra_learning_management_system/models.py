@@ -33,24 +33,24 @@ class assesments(models.Model):
 
 class quizzes(models.Model):
     qid = models.AutoField(primary_key=True)
-    ddl = models.CharField(max_length=100)
+    ddl = models.TextField()
     q1 = models.JSONField(default=dict)
     q2 = models.JSONField(default=dict)
     q3 = models.JSONField(default=dict)
-    ans = models.CharField(max_length=50)
+    ans = models.TextField()
 
 
 class assignments(models.Model):
     aid = models.AutoField(primary_key=True)
-    ddl = models.CharField(max_length=50)
-    url = models.CharField(max_length=50)
+    ddl = models.TextField()
+    url = models.TextField()
 
 
 class material(models.Model):
     mid = models.AutoField(primary_key=True)
-    type = models.CharField(max_length=10)
+    type = models.TextField()
     cid = models.ForeignKey(courses, on_delete=models.CASCADE)
-    fileapath = models.CharField(max_length=50)
+    fileapath = models.TextField()
 
 
 class posts(models.Model):
@@ -71,4 +71,4 @@ class posts(models.Model):
 class replyment(models.Model):
     pid = models.ForeignKey(posts, on_delete=models.CASCADE)
     creator_id = models.ForeignKey(users, on_delete=models.CASCADE)
-    content = models.CharField(max_length=100)
+    content = models.TextField()
