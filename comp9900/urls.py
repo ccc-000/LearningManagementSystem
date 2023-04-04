@@ -19,10 +19,38 @@ from django.urls import path
 from hydra_learning_management_system import views
 
 urlpatterns = [
-    path("", views.main_page),
     path('admin/', admin.site.urls),
     path('login/', views.log_in),
     path("register/", views.register),
+
     path("createcourses/", views.createcourses),
     path("enrollcourses/", views.enrollcourses),
+    path("courses/", views.courses),
+    path("createdcourses/", views.createdcourses),
+    path("dropcourses/", views.dropcourses),
+    path("enrolledcourses/", views.enrolledcourses),
+
+
+    path("createquiz/", views.createquiz),
+    path("attendquiz/", views.attendquiz),
+    path("markquiz/", views.markquiz),
+    path("reviewquiz/", views.reviewquiz),
+
+    path("createass/", views.createass),
+    path("submitass/", views.submitass),
+    path("markass/", views.markass),
+
+    path("grade/", views.grade),
+
+    path("forum/", views.forum),
+    path("posts/", views.posts),
+    path("createposts/", views.createposts),
+    path("replyposts/", views.replyposts),
+    path("likeposts/", views.likeposts),
+    path("setprivate/", views.setprivate),
+    path("deleteposts/", views.deleteposts),
+    path("deletereplys/", views.deletereplys),
+
+
+
 ]

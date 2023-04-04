@@ -4,16 +4,12 @@ from django.http import JsonResponse
 # Create your views here.
 from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from .models import *
 
-from .models import courses, users
-
+uid = 0
 
 # Note: The decorator must be included because we don't
 # have CSRF token in the header
-@csrf_exempt
-def main_page(request):
-    return
-
 
 @csrf_exempt
 def log_in(request):
@@ -22,8 +18,10 @@ def log_in(request):
         username = data["username"]
         password = data["password"]
         user = [username, password]
+        uid = users.objects.get(username=username).uid
+        print(uid)
         if user is not None:
-            return JsonResponse({'status': True, 'msg': 'Log in Success'})
+            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid})
         else:
             return JsonResponse({'status': False, 'msg': 'Log in Fail'})
 
@@ -66,25 +64,115 @@ def createcourses(request):
 
 @csrf_exempt
 def enrollcourses(request):
+    MAX_SEAT = 46
     if request.method == "POST":
-        return
+        data = json.loads(request.body)
+        cid = data['cid']
+        uid = data['uid']
+        enrolllist = courses.objects.get(cid=cid)['']
+        enrolllist = json.loads(enrolllist)
+        available = MAX_SEAT - len(enrolllist)
+        if available > 0:
+            enrollment = enrollments.objects.create(cid=cid, uid=uid)
+            return JsonResponse({'status': 200})
+        else:
+            return JsonResponse({'status': 500})
 
 
-def forget_pwd_reset(request):
-    return
+@csrf_exempt
+def createdcouress(request):
+    if request.method == "GET":
+        data = json.loads(request.headers)
+        creatorid = data["uid"]
+        createdcouress = courses.objects.get(creatorid=creatorid)
+    return JsonResponse({"courses": createdcouress})
 
 
-def course_main_page_stu(request):
+@csrf_exempt
+def dropcourses(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        cid = data['cid']
+        uid = data['uid']
+
+@csrf_exempt
+def createdcourses(request):
+    return HttpResponse()
+@csrf_exempt
+def enrolledcourses(request):
+    return HttpResponse()
+@csrf_exempt
+def createquiz(request):
+    return HttpResponse()
+@csrf_exempt
+def attendquiz(request):
+    return HttpResponse()
+@csrf_exempt
+def markquiz(request):
+    return HttpResponse()
+@csrf_exempt
+def reviewquiz(request):
+    return HttpResponse()
+@csrf_exempt
+def createass(request):
+    return HttpResponse()
+@csrf_exempt
+def submitass(request):
+    return HttpResponse()
+@csrf_exempt
+def markass(request):
+    return HttpResponse()
+@csrf_exempt
+def grade(request):
     return HttpResponse()
 
-
-def course_main_page_lec(request):
+@csrf_exempt
+def grade(request):
     return HttpResponse()
 
-
-def dashboard_stu(request):
+@csrf_exempt
+def forum(request):
     return HttpResponse()
+@csrf_exempt
+def posts(request):
+    return HttpResponse()
+@csrf_exempt
+def createposts(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        creatorid = data['creatorid']
+        cid = data['cid']
+        title = data['title']
+        content = data['content']
+        createtime = data['createtime']
+        keyword = data['keyword']
+        multimedia = data['multimeida']
+        replyments = json.dump([])
+        likes = json.dump([])
+        editted = False
+        flagged = json.dump([])
+        privacy = json.dump([])
+        post = posts.objects.create(creatorid=creatorid, cid=cid, createtime = createtime, keyword = keyword, title = title
+                                    ,content = content, multimedia = multimedia,replyments = replyments, likes = likes,
+                                    editted=editted,flagged=flagged,privacy = privacy)
+        if post is not None:
+            return JsonResponse({'status':200})
+        else:
+            return JsonResponse({'status':500})
 
-
-def dashboard_lec(request):
+    return HttpResponse()
+@csrf_exempt
+def replyposts(request):
+    return HttpResponse()
+@csrf_exempt
+def likeposts(request):
+    return HttpResponse()
+@csrf_exempt
+def setprivate(request):
+    return HttpResponse()
+@csrf_exempt
+def deleteposts(request):
+    return HttpResponse()
+@csrf_exempt
+def deletereplys(request):
     return HttpResponse()
