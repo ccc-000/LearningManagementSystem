@@ -1,7 +1,7 @@
 import React from 'react';
 import { LikeOutlined, PushpinOutlined } from '@ant-design/icons';
 import { Input, Button, Descriptions, Badge, message, notification, Space } from 'antd';
-import { useNavigate, Link} from 'react-router-dom';
+import { useNavigate, Link, useLocation} from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/ForumDetail-student.css';
 const { TextArea } = Input;
@@ -10,6 +10,10 @@ const { TextArea } = Input;
 function ForumDetailStudent() {
     const [messageApi1, contextHolder1] = message.useMessage();
     const [api1, contextHolder2] = notification.useNotification();
+    const {state} = useLocation();
+
+    console.log(state);
+
     const navigate = useNavigate();
     // Zaffi: 将postid对应的private属性改为true
     function makePrivate() {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { Button, DatePicker, Checkbox, Table} from 'antd';
 import {useNavigate, Link} from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -7,7 +7,38 @@ import '../styles/Forum.css';
 const { RangePicker } = DatePicker;
 
 function Forum() {
+  // Fetch meta data of all post from server
+
+  //Zaffi: 判断userid与creatorid是否相同，相同则跳转到ForumDetail-ownpage页面，不同则跳转到ForumDetail-student页面
+  // // navigate('/ForumDetailLecturer', {state: {postid: record.postid}});
+  // navigate('/forumdetailstudent', {state: {postid: record.postid}});
+  // // navigate('/ForumDetailOwnPage', {state: {postid: record.postid}});
+  const fetch_post_data = (postid) => {
+    console.log(postid);
+    navigate('/forumdetailstudent/' + postid, {state: {message: "hello"}});
+  }
+
     const navigate = useNavigate();
+    const [data, setData] = useState([{
+      postid: '998123',
+      posttitle: 'How to create a post?',
+      keyword: 'Post',
+      creatorid: '1',
+      creator:'Leonard Hofstadter',
+      posttime: '2023-04-01',
+      numberoflikes: 12,
+      pin: true,
+    },
+    {
+      postid: '518851',
+      posttitle: 'React and Djanjo',
+      keyword: 'React',
+      creator:'Sheldon Cooper',
+      posttime: '2023-04-02',
+      numberoflikes: 24,
+      pin: false,
+    }]);
+
     //tablesetting
     const columns = [
         {
@@ -65,30 +96,23 @@ function Forum() {
             },
         },
       ];
-    //Zaffi: 获取后台数据并转化为一下格式
-    const data = [
-        {
-          key: '1',
-          postid: '1',
-          posttitle: 'How to create a post?',
-          keyword: 'Post',
-          creatorid: '1',
-          creator:'Leonard Hofstadter',
-          posttime: '2023-04-01',
-          numberoflikes: 12,
-          pin: true,
-        },
-        {
-          key: '2',
-          postid: '2',
-          posttitle: 'React and Djanjo',
-          keyword: 'React',
-          creator:'Sheldon Cooper',
-          posttime: '2023-04-02',
-          numberoflikes: 24,
+
+    // This function run only once to fetch the post data
+    useEffect(() =>{
+      setInterval(() => {
+        // Simulate fetching data from backend
+        setData([...data, {
+          postid: '555111',
+          posttitle: 'Hydra',
+          keyword: 'Test',
+          creator:'Mike',
+          posttime: '2023-02-02',
+          numberoflikes: 2,
           pin: false,
-        },
-      ];
+        }])
+      }, 2000);
+    }, [])
+
     //Gemma: 实现时间筛选和ifflagged筛选
     //forumpostdate
     const onRangeChange = (dates, dateStrings) => {
@@ -139,17 +163,15 @@ function Forum() {
           </div>
           <div className="Forum-List">
               <Table 
+                // The rowkey is to tell which property of data would be the key of the row
+                rowKey={"postid"}
                 columns={columns} 
                 dataSource={data} 
                 onChange={onChangeFilter}
                 onRow={(record) => {
                   return {
-                    //Zaffi: 判断userid与creatorid是否相同，相同则跳转到ForumDetail-ownpage页面，不同则跳转到ForumDetail-student页面
-                    onClick: event => {
-                      console.log(record.postid)
-                      // navigate('/ForumDetailLecturer', {state: {postid: record.postid}});
-                      navigate('/forumdetailstudent', {state: {postid: record.postid}});
-                      // navigate('/ForumDetailOwnPage', {state: {postid: record.postid}});
+                    onClick: () => {
+                      fetch_post_data(record.postid)
                     },
                   };
                 }}

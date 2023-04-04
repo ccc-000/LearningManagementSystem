@@ -37,7 +37,7 @@ function App() {
                 <Route path="/forum" element={<Forum/>}/>
                 <Route path="/createforum" element={<CreateForum/>}/>
                 <Route path="/editforum" element={<EditForum/>}/>
-                <Route path="/forumdetailstudent" element={<ForumDetailStudent/>}/>
+                <Route path="/forumdetailstudent/:id" element={<ForumDetailStudent/>}/>
             </Routes>
         </>
     );
