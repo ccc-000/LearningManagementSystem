@@ -4,9 +4,11 @@ from django.http import JsonResponse
 # Create your views here.
 from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+
 from .models import *
 
 uid = 0
+
 
 # Note: The decorator must be included because we don't
 # have CSRF token in the header
@@ -19,7 +21,6 @@ def log_in(request):
         password = data["password"]
         user = [username, password]
         uid = users.objects.get(username=username).uid
-        print(uid)
         if user is not None:
             return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid})
         else:
@@ -94,48 +95,88 @@ def dropcourses(request):
         data = json.loads(request.body)
         cid = data['cid']
         uid = data['uid']
+        course = courses.objects.get(cid=cid)
+        course.delete()
+        enrollment = enrollments.objects.get(cid=cid)
+        enrollment.delete()
+        return JsonResponse({'status': 200})
+
 
 @csrf_exempt
 def createdcourses(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data['uid']
+        course = courses.objects.get(creatorid=uid)
+        return {"courses": course}
+
+
 @csrf_exempt
 def enrolledcourses(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data['uid']
+        cid = enrollments.objects.get(uid=uid).cid
+        for i in cid:
+            course = courses.objects.get(cid=i)
+        return JsonResponse({"courses": course})
+
+
 @csrf_exempt
 def createquiz(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def attendquiz(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def markquiz(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def reviewquiz(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def createass(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def submitass(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def markass(request):
     return HttpResponse()
-@csrf_exempt
-def grade(request):
-    return HttpResponse()
+
 
 @csrf_exempt
 def grade(request):
     return HttpResponse()
+
+
+@csrf_exempt
+def grade(request):
+    return HttpResponse()
+
 
 @csrf_exempt
 def forum(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def posts(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def createposts(request):
     if request.method == "POST":
@@ -152,27 +193,37 @@ def createposts(request):
         editted = False
         flagged = json.dump([])
         privacy = json.dump([])
-        post = posts.objects.create(creatorid=creatorid, cid=cid, createtime = createtime, keyword = keyword, title = title
-                                    ,content = content, multimedia = multimedia,replyments = replyments, likes = likes,
-                                    editted=editted,flagged=flagged,privacy = privacy)
+        post = posts.objects.create(creatorid=creatorid, cid=cid, createtime=createtime, keyword=keyword, title=title
+                                    , content=content, multimedia=multimedia, replyments=replyments, likes=likes,
+                                    editted=editted, flagged=flagged, privacy=privacy)
         if post is not None:
-            return JsonResponse({'status':200})
+            return JsonResponse({'status': 200})
         else:
-            return JsonResponse({'status':500})
+            return JsonResponse({'status': 500})
 
     return HttpResponse()
+
+
 @csrf_exempt
 def replyposts(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def likeposts(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def setprivate(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def deleteposts(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def deletereplys(request):
     return HttpResponse()
