@@ -3,6 +3,8 @@ import { Input, Button, Card } from 'antd';
 import 'antd/dist/reset.css';
 import '../styles/ResetPassword1.css';
 
+//点击按钮向后端发送请求，向用户游戏发送邮件链接，用户点击链接后跳转到ResetPassword2页面
+
 function ResetPassword1() {
   return (
     <div className="CheckEmail">

@@ -6,11 +6,16 @@ import { useNavigate, Link } from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/EditAvatar.css';
 
+//连接数据库，上传图片
+//将上传的图片显示在头像框里
+//在线修改上传的图片
+
 function EditAvatar() {
     const [messageApi, contextHolder1] = message.useMessage();
     const [api, contextHolder2] = notification.useNotification();
     const navigate = useNavigate();
-    //上传头像
+
+    //Upload avatar
     const [fileList, setFileList] = useState([
         {
           uid: '-1',
@@ -41,7 +46,8 @@ function EditAvatar() {
       onChange: handleChange,
       multiple: true,
     };
-    //保存修改
+
+    //Save modification
     function handleSave() {
       messageApi.open({
         type: 'loading',
@@ -55,10 +61,14 @@ function EditAvatar() {
           duration: 2,
         });
       }, 2100);
+      setTimeout(() => {
+        navigate('/profile');
+      }, 3500);
     }
-    //取消修改
+
+    //Cancel modification
     const confirmCancel = () => {
-      navigate('/Profile');
+      navigate('/profile');
     };
     function handleCancel(){
       const key = `open${Date.now()}`;
@@ -80,9 +90,10 @@ function EditAvatar() {
         key,
       });
     }
+    
     return (
         <div className="ChangeAvatar">
-          <Link to="/Profile"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey'}}/></Link>
+          <Link to="/profile"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey'}}/></Link>
           <Card
             id="ChangeAvatar-Card"
             bordered={false}
