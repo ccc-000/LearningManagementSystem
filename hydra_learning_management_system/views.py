@@ -50,7 +50,7 @@ def createcourses(request):
         coursename = course_info['coursename']
         creatorname = course_info['creatorname']
         creatorid = users.objects.get(username=creatorname)
-        enrolllist = json.dump([creatorid])
+        enrolllist = json.dump({"enrolllist": [creatorid]})
         cousedecription = course_info['cousedecription']
         gradedistribution = course_info['gradedistribution']
         course = courses.objects.create(coursename=coursename, creatorid=creatorid, enrolllist=enrolllist,
@@ -84,8 +84,8 @@ def createdcouress(request):
     if request.method == "GET":
         data = json.loads(request.headers)
         creatorid = data["uid"]
-        createdcouress = courses.objects.get(creatorid=creatorid)
-    return JsonResponse({"courses": createdcouress})
+        course = courses.objects.get(creatorid=creatorid)
+    return JsonResponse({"courses": course})
 
 
 @csrf_exempt
@@ -172,7 +172,7 @@ def posts(request):
         data = json.loads(request.body)
         pid = data['pid']
         reply = replyment.objects.get(pid=pid)
-        return JsonResponse({"reply":reply})
+        return JsonResponse({"reply": reply})
 
 
 @csrf_exempt
@@ -182,7 +182,7 @@ def forum(request):
         cid = data['cid']
         uid = data['uid']
         post = posts.objects.get(cid=cid)
-    return JsonResponse({"posts":post})
+    return JsonResponse({"posts": post})
 
 
 @csrf_exempt
@@ -195,12 +195,12 @@ def createposts(request):
         content = data['content']
         createtime = data['createtime']
         keyword = data['keyword']
-        multimedia = data['multimeida']
-        replyments = json.dump([])
-        likes = json.dump([])
+        multimedia = data['multimedia']
+        replyments = json.dump({"replyments": []})
+        likes = json.dump({"likes": []})
         editted = False
-        flagged = json.dump([])
-        privacy = json.dump([])
+        flagged = json.dump({"flagged": []})
+        privacy = json.dump({"privacy": []})
         post = posts.objects.create(creatorid=creatorid, cid=cid, createtime=createtime, keyword=keyword, title=title
                                     , content=content, multimedia=multimedia, replyments=replyments, likes=likes,
                                     editted=editted, flagged=flagged, privacy=privacy)
@@ -214,6 +214,7 @@ def createposts(request):
 
 @csrf_exempt
 def replyposts(request):
+
     return HttpResponse()
 
 

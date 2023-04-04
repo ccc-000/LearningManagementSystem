@@ -14,9 +14,9 @@ class courses(models.Model):
     cid = models.AutoField(primary_key=True)
     coursename = models.CharField(max_length=50)
     creatorid = models.ForeignKey(users, on_delete=models.CASCADE)
-    enrolllist = models.JSONField()
+    enrolllist = models.JSONField(default=dict)
     coursedescription = models.TextField()
-    gradedistribution = models.JSONField()
+    gradedistribution = models.JSONField(default=dict)
 
 class enrollments(models.Model):
     cid = models.ForeignKey(courses, on_delete=models.CASCADE)
@@ -28,15 +28,15 @@ class assesments(models.Model):
     ## It should be uid - json(contains quiz grade infomation) table. ##
     ###################################################################
     uid = models.ForeignKey(users, on_delete=models.CASCADE)
-    grade = models.JSONField()
+    grade = models.JSONField(default=dict)
 
 
 class quizzes(models.Model):
     qid = models.AutoField(primary_key=True)
     ddl = models.CharField(max_length=100)
-    q1 = models.JSONField()
-    q2 = models.JSONField()
-    q3 = models.JSONField()
+    q1 = models.JSONField(default=dict)
+    q2 = models.JSONField(default=dict)
+    q3 = models.JSONField(default=dict)
     ans = models.CharField(max_length=50)
 
 
@@ -58,15 +58,15 @@ class posts(models.Model):
     creatorid = models.ForeignKey(users, on_delete=models.CASCADE)
     cid = models.ForeignKey(courses, on_delete=models.CASCADE)
     createtime = models.DateField()
-    keyword = models.TextField(max_length=50)
+    keyword = models.TextField()
     title = models.TextField()
     content = models.TextField()
     multimedia = models.TextField()
-    replyments = models.JSONField()
-    likes = models.JSONField([])
+    replyments = models.JSONField(default=dict)
+    likes = models.JSONField(default=dict)
     editted = models.BooleanField()
-    flagged = models.JSONField([])
-    privacy = models.JSONField([])
+    flagged = models.JSONField(default=dict)
+    privacy = models.JSONField(default=dict)
 
 class replyment(models.Model):
     pid = models.ForeignKey(posts, on_delete=models.CASCADE)
