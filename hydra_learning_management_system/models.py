@@ -10,6 +10,7 @@ class users(models.Model):
     email = models.EmailField(max_length=50)
     role = models.CharField(max_length=10)
 
+
 class courses(models.Model):
     cid = models.AutoField(primary_key=True)
     coursename = models.CharField(max_length=50)
@@ -17,6 +18,7 @@ class courses(models.Model):
     enrolllist = models.TextField()
     coursedescription = models.TextField()
     gradedistribution = models.TextField()
+
 
 class enrollments(models.Model):
     cid = models.ForeignKey(courses, on_delete=models.CASCADE)
@@ -67,6 +69,7 @@ class posts(models.Model):
     editted = models.BooleanField()
     flagged = models.TextField()
     privacy = models.TextField()
+
 
 class replyment(models.Model):
     pid = models.ForeignKey(posts, on_delete=models.CASCADE)

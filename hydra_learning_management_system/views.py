@@ -1,10 +1,10 @@
+import datetime
 import json
-
+from django.core import serializers
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-import datetime
 from .models import *
 
 
@@ -143,17 +143,16 @@ def attendquiz(request):
     if request.method == "POST":
         data = json.loads(request.body)
         qid = data['q1']
-        #{q1:A}
+        # {q1:A}
         q1 = data["q1"]
         q2 = data["q2"]
         q3 = data["q3"]
-        ans = json.dumps({q1,q2,q3})
+        ans = json.dumps({q1, q2, q3})
         rightans = quizzes.objects.get(qid=qid).ans
         if ans == rightans:
             return JsonResponse({"grade": 3})
         else:
             return JsonResponse({"grade": 0})
-
 
 
 @csrf_exempt
@@ -200,9 +199,11 @@ def forum(request):
     if request.method == "POST":
         data = json.loads(request.body)
         cid = data['cid']
-        uid = data['uid']
-        post = posts.objects.get(cid=cid)
-    return JsonResponse({"posts": post})
+        post = posts.objects.filter(cid=cid)
+        post_info = serializers.serialize('python',post)
+        #post_info = post.values('pid', 'creatorid', 'cid', 'createtime', "keyword", "title", "content", "multimedia",
+                                #"replyments", "likes", "editted", "flagged", "privacy")
+    return JsonResponse({"posts": post_info})
 
 
 @csrf_exempt
