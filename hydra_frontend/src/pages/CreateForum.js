@@ -31,6 +31,8 @@ function CreateForum() {
   });
 
   const navigate = useNavigate();
+
+  // Function to handle creating a new post
   const onFinish = () => {
     console.log(form);
     fetch('http://localhost:8000/createposts/', {
@@ -40,20 +42,20 @@ function CreateForum() {
       },
       body: JSON.stringify({
         creatorid: localStorage.uid,
-        cid: "9900",
+        // This id is just for testing
+        cid: "1",
         title: form.title,
         content: form.content,
         keyword: form.keyword,
-        createtime: 123,
         multimedia: 12412
       }),
     })
       .then(response => response.json())
+  // If the post is successfully created, navigate the user to the forum page
       .then(data => {
-        if (data.status === true) {
-          localStorage.setItem('uid', data.uid);
-          console.log(data.uid)
-          navigate("/dashboard");
+        console.log(data);
+        if (data.status === 200) {
+          navigate("/forum");
         }
       });
     //Zaffi: 将post的内容新增到数据库中

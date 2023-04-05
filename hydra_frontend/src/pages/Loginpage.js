@@ -24,9 +24,13 @@ export default function Loginpage() {
             .then(data => {
                 if (data.status === true) {
                     localStorage.setItem('uid',data.uid);
+                    localStorage.setItem('role', data.role);
                     console.log(data.uid)
-                    //console.log('123')
-                    navigate("/dashboard");
+                    if (data.role === 'lecturer') {
+                        navigate("dashboardlecturer");
+                    } else {
+                        navigate("/dashboard");
+                    }
                 }
             });
     };
