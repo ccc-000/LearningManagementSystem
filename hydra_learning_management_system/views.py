@@ -216,7 +216,7 @@ def forum(request):
             i["privacy"] = json.loads(i["privacy"])
             i["replyments"] = json.loads(i["replyments"])
             uid = i["creatorid"]
-            creatorname = users.objects.get(uid=uid)
+            creatorname = users.objects.get(uid=uid).username
             i["creatorname"] = creatorname
             p.append((i))
     return JsonResponse({"posts": p})
