@@ -201,9 +201,12 @@ def forum(request):
         cid = data['cid']
         post = posts.objects.filter(cid=cid)
         post_info = serializers.serialize('python',post)
-        #post_info = post.values('pid', 'creatorid', 'cid', 'createtime', "keyword", "title", "content", "multimedia",
-                                #"replyments", "likes", "editted", "flagged", "privacy")
-    return JsonResponse({"posts": post_info})
+        p = []
+        for i in post_info:
+            i["fields"]["pid"] = i["pk"]
+            i = i["fields"]
+            p.append((i))
+    return JsonResponse({"posts": p})
 
 
 @csrf_exempt
@@ -239,9 +242,10 @@ def replyposts(request):
     if request.method == "POST":
         data = json.loads(request.body)
         uid = data["uid"]
-        pid = data["pid"]
+        pid = 1
         content = data['content']
         reply = replyment.objects.create(pid=pid, creator_id=uid, content=content)
+        replylist = []
         if reply is not None:
             return JsonResponse({"status": 200})
         else:
