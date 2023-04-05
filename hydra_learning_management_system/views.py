@@ -1,5 +1,6 @@
+import datetime
 import json
-
+from django.core import serializers
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -20,8 +21,11 @@ def log_in(request):
         password = data["password"]
         user = [username, password]
         uid = users.objects.get(username=username).uid
-        if user is not None:
-            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid})
+        if username == "hayden" or username == "Katrina":
+            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role":"lector"})
+        else:
+            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role":"student"})
+
         else:
             return JsonResponse({'status': False, 'msg': 'Log in Fail'})
 
@@ -142,19 +146,16 @@ def attendquiz(request):
     if request.method == "POST":
         data = json.loads(request.body)
         qid = data['q1']
+        # {q1:A}
         q1 = data["q1"]
         q2 = data["q2"]
         q3 = data["q3"]
-        ans = json.dumps({q1,q2,q3})
+        ans = json.dumps({q1, q2, q3})
         rightans = quizzes.objects.get(qid=qid).ans
         if ans == rightans:
-            return JsonResponse()
-    return HttpResponse()
-
-
-@csrf_exempt
-def markquiz(request):
-    return HttpResponse()
+            return JsonResponse({"grade": 3})
+        else:
+            return JsonResponse({"grade": 0})
 
 
 @csrf_exempt
@@ -188,7 +189,7 @@ def grade(request):
 
 
 @csrf_exempt
-def posts(request):
+def postes(request):
     if request.method == "POST":
         data = json.loads(request.body)
         pid = data['pid']
@@ -201,20 +202,28 @@ def forum(request):
     if request.method == "POST":
         data = json.loads(request.body)
         cid = data['cid']
-        uid = data['uid']
-        post = posts.objects.get(cid=cid)
-    return JsonResponse({"posts": post})
+        post = posts.objects.filter(cid=cid)
+        post_info = serializers.serialize('python',post)
+        p = []
+        for i in post_info:
+            i["fields"]["pid"] = i["pk"]
+            i = i["fields"]
+            p.append((i))
+    return JsonResponse({"posts": p})
 
 
 @csrf_exempt
 def createposts(request):
+    now = datetime.date.today()
     if request.method == "POST":
         data = json.loads(request.body)
         creatorid = data['creatorid']
         cid = data['cid']
+        cid = courses.objects.get(cid=cid)
+        creatorid = users.objects.get(uid=creatorid)
         title = data['title']
         content = data['content']
-        createtime = data['createtime']
+        createtime = now
         keyword = data['keyword']
         multimedia = data['multimedia']
         replyments = json.dumps({"replyments": []})
@@ -236,9 +245,10 @@ def replyposts(request):
     if request.method == "POST":
         data = json.loads(request.body)
         uid = data["uid"]
-        pid = data["pid"]
+        pid = data['pid']
         content = data['content']
         reply = replyment.objects.create(pid=pid, creator_id=uid, content=content)
+        replylist = posts.objects.filter(pid=pid, )
         if reply is not None:
             return JsonResponse({"status": 200})
         else:

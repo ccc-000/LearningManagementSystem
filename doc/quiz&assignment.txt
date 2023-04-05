@@ -24,17 +24,17 @@ send{
     3: A,
 }
 return suc or fail
-
-3. mark quiz:
-fetch(/markquiz)
-send{
-    1:A,
-    2:A,
-    3:A
-}
-只要有fetch,reset score
-let score = 0;
-For each, score++
+#
+# 3. mark quiz:
+# fetch(/markquiz)
+# send{
+#     1:A,
+#     2:A,
+#     3:A
+# }
+# 只要有fetch,reset score
+# let score = 0;
+# For each, score++
 
 
 3. review quiz（ddl enable review button）:
