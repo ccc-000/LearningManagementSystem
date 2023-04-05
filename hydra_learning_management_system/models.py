@@ -57,7 +57,7 @@ class posts(models.Model):
     pid = models.AutoField(primary_key=True)
     creatorid = models.ForeignKey(users, on_delete=models.CASCADE)
     cid = models.ForeignKey(courses, on_delete=models.CASCADE)
-    createtime = models.DateField()
+    createtime = models.DateTimeField()
     keyword = models.TextField()
     title = models.TextField()
     content = models.TextField()

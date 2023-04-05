@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
+import datetime
 from .models import *
 
 
@@ -206,13 +207,16 @@ def forum(request):
 
 @csrf_exempt
 def createposts(request):
+    now = datetime.date.today()
     if request.method == "POST":
         data = json.loads(request.body)
         creatorid = data['creatorid']
         cid = data['cid']
+        cid = courses.objects.get(cid=cid)
+        creatorid = users.objects.get(uid=creatorid)
         title = data['title']
         content = data['content']
-        createtime = data['createtime']
+        createtime = now
         keyword = data['keyword']
         multimedia = data['multimedia']
         replyments = json.dumps({"replyments": []})
