@@ -6,14 +6,19 @@ import {Link} from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/CourseHistory.css';
 
+//连接数据库，显示历史课程
+
 function CourseHistory() {
     const [reverse, setReverse] = useState(false);
+    
+    //reverse timeline
     const handleClick = () => {
         setReverse(!reverse);
     };
+
     return (
         <div className="EnrolmentHistory">
-            <Link to="/Profile"><LeftCircleOutlined style={{fontSize: 30, margin: 15, color: 'grey'}}/></Link>
+            <Link to="/profile"><LeftCircleOutlined style={{fontSize: 30, margin: 15, color: 'grey'}}/></Link>
             <Card
                 id="EnrolmentHistory-Card"
                 bordered={false}

@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout, Menu, theme } from 'antd';
 import { Divider } from 'antd';
 import { Card } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 import {
   AppstoreOutlined,
@@ -17,24 +18,6 @@ import {
   PieChartOutlined,
 } from '@ant-design/icons';
 const { Header, Content, Footer, Sider } = Layout;
-
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  };
-}
-
-const items = [
-  getItem('Announcements', '1', <DesktopOutlined />),
-  getItem('Online Lecture', '2', <VideoCameraOutlined />),
-  getItem('Material', '3', <FileOutlined />),
-  getItem('Forum', '4', <TeamOutlined />),
-  getItem('Assignment', '5', <AppstoreOutlined />),
-  getItem('Quiz', '6', <BarChartOutlined />),
-];
 
 //Course description
 function CourseDes () {
@@ -69,6 +52,26 @@ function Announcements () {
 }
 
 const Coursemainpage = (props) => {
+  const navigate = useNavigate();
+
+  function getItem(label, key, icon, onClick) {
+    return {
+      label,
+      key,
+      icon,
+      onClick
+    };
+  }
+  
+  const items = [
+    getItem('Announcements', '1', <DesktopOutlined />, () => {navigate('/forum')}),
+    getItem('Online Lecture', '2', <VideoCameraOutlined />),
+    getItem('Material', '3', <FileOutlined />),
+    getItem('Forum', '4', <TeamOutlined />),
+    getItem('Assignment', '5', <AppstoreOutlined />),
+    getItem('Quiz', '6', <BarChartOutlined />),
+  ];
+
   // These are the bottons on the sidebar
   const Items = props.role === 'lecturer' ? [
       UserOutlined,

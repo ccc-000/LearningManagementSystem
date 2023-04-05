@@ -1,13 +1,15 @@
 import React from 'react';
 import { UserOutlined, LeftCircleOutlined } from '@ant-design/icons';
 import { Input, Button, Avatar, Form, Select, DatePicker, Card, message, notification, Space } from 'antd';
+import { useNavigate, Link } from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/EditProfile.css';
-import { useNavigate, Link } from 'react-router-dom';
-
 const { Option } = Select;
 
-//表单
+//通过uid获取用户信息并显示
+//将修改后的信息提交到数据库
+
+//form setting
 const formItemLayout = {
     labelCol: {
       xs: {
@@ -38,8 +40,9 @@ const formItemLayout = {
       },
     },
   };
+
 function EditProfile() {
-  //表单
+  //form
   const [form] = Form.useForm();
   const [messageApi, contextHolder1] = message.useMessage();
   const [api, contextHolder2] = notification.useNotification();
@@ -54,6 +57,7 @@ function EditProfile() {
     ],
   };
 
+  //submit modify
   const onFinish = (fieldsValue) => {
     // Should format date value before submit.
     const values = {
@@ -73,11 +77,14 @@ function EditProfile() {
         duration: 2,
       });
     }, 2100);
+    setTimeout(() => {
+      navigate('/profile');
+    }, 3500);
   };
 
   //cancel modify
   const confirmCancel = () => {
-    navigate('/Profile');
+    navigate('/profile');
   };
   function handleCancel(){
     const key = `open${Date.now()}`;
@@ -102,7 +109,7 @@ function EditProfile() {
 
   return (
     <div className="EditProfile">
-        <Link to="/Profile"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey'}}/></Link>
+        <Link to="/profile"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey'}}/></Link>
         <div id="EditProfile-Content">
           <Card
             bordered={false}
