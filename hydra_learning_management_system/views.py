@@ -192,7 +192,11 @@ def postes(request):
     if request.method == "POST":
         data = json.loads(request.body)
         pid = data['pid']
-        reply = replyment.objects.get(pid=pid)
+        reply = replyment.objects.filter(pid=pid)
+        reply_info = serializers.serialize('python', reply)
+        r=[]
+        for i in reply_info:
+            print(i)
         return JsonResponse({"reply": reply})
 
 
@@ -211,6 +215,9 @@ def forum(request):
             i["likes"] = json.loads(i["likes"])
             i["privacy"] = json.loads(i["privacy"])
             i["replyments"] = json.loads(i["replyments"])
+            uid = i["creatorid"]
+            creatorname = users.objects.get(uid=uid)
+            i["creatorname"] = creatorname
             p.append((i))
     return JsonResponse({"posts": p})
 
@@ -229,7 +236,7 @@ def createposts(request):
         createtime = now
         keyword = data['keyword']
         multimedia = data['multimedia']
-        replyments = json.dumps({"replyments": []})
+        replyments = json.dumps({"replyments": {}})
         likes = json.dumps({"likes": []})
         editted = False
         flagged = json.dumps({"flagged": []})
@@ -251,7 +258,9 @@ def replyposts(request):
         pid = data['pid']
         content = data['content']
         reply = replyment.objects.create(pid=pid, creator_id=uid, content=content)
-        replylist = posts.objects.filter(pid=pid, )
+        replylist = posts.objects.get(pid=pid).replyments
+        replylist = json.loads(replylist)
+        replylist["uid"] = content
         if reply is not None:
             return JsonResponse({"status": 200})
         else:
@@ -310,8 +319,11 @@ def deletereplys(request):
         pid = data["pid"]
         uid = data["uid"]
         reply = replyment.objects.get(uid=uid)
+        replylist = posts.objects.get(pid=pid).replyments
+        replylist =[]
         if reply is not None:
             reply.delete()
+
             return JsonResponse({"status": 200})
         else:
             return JsonResponse({"status": 403})
