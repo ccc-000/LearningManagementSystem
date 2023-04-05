@@ -164,7 +164,15 @@ def reviewquiz(request):
 
 @csrf_exempt
 def createass(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        ddl = data["ddl"]
+        url = data["url"]
+        quiz = assignments.objects.create(ddl=ddl, url = url)
+        if quiz is not None:
+            return JsonResponse({'status': 200})
+        else:
+            return JsonResponse({'status': 403})
 
 
 @csrf_exempt
