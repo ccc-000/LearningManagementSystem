@@ -1,5 +1,6 @@
 import datetime
 import json
+
 from django.core import serializers
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse
@@ -24,7 +25,7 @@ def log_in(request):
         if username == "hayden" or username == "Katrina":
             return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role": "lector"})
         if user is not None:
-            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role":"student"})
+            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role": "student"})
         else:
             return JsonResponse({'status': False, 'msg': 'Log in Fail'})
 
@@ -168,8 +169,8 @@ def createass(request):
         data = json.loads(request.body)
         ddl = data["ddl"]
         url = data["url"]
-        quiz = assignments.objects.create(ddl=ddl, url = url)
-        if quiz is not None:
+        ass = assignments.objects.create(ddl=ddl, url=url)
+        if ass is not None:
             return JsonResponse({'status': 200})
         else:
             return JsonResponse({'status': 403})
@@ -202,7 +203,7 @@ def postes(request):
         pid = data['pid']
         reply = replyment.objects.filter(pid=pid)
         reply_info = serializers.serialize('python', reply)
-        r=[]
+        r = []
         for i in reply_info:
             print(i)
         return JsonResponse({"reply": reply})
@@ -214,7 +215,7 @@ def forum(request):
         data = json.loads(request.body)
         cid = data['cid']
         post = posts.objects.filter(cid=cid)
-        post_info = serializers.serialize('python',post)
+        post_info = serializers.serialize('python', post)
         p = []
         for i in post_info:
             i["fields"]["pid"] = i["pk"]
@@ -328,7 +329,7 @@ def deletereplys(request):
         uid = data["uid"]
         reply = replyment.objects.get(uid=uid)
         replylist = posts.objects.get(pid=pid).replyments
-        replylist =[]
+        replylist = []
         if reply is not None:
             reply.delete()
 
