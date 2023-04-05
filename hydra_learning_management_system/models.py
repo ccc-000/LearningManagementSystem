@@ -14,9 +14,9 @@ class courses(models.Model):
     cid = models.AutoField(primary_key=True)
     coursename = models.CharField(max_length=50)
     creatorid = models.ForeignKey(users, on_delete=models.CASCADE)
-    enrolllist = models.JSONField()
+    enrolllist = models.TextField()
     coursedescription = models.TextField()
-    gradedistribution = models.JSONField()
+    gradedistribution = models.TextField()
 
 class enrollments(models.Model):
     cid = models.ForeignKey(courses, on_delete=models.CASCADE)
@@ -28,29 +28,29 @@ class assesments(models.Model):
     ## It should be uid - json(contains quiz grade infomation) table. ##
     ###################################################################
     uid = models.ForeignKey(users, on_delete=models.CASCADE)
-    grade = models.JSONField()
+    grade = models.TextField()
 
 
 class quizzes(models.Model):
     qid = models.AutoField(primary_key=True)
-    ddl = models.CharField(max_length=100)
-    q1 = models.JSONField()
-    q2 = models.JSONField()
-    q3 = models.JSONField()
-    ans = models.CharField(max_length=50)
+    ddl = models.DateTimeField()
+    q1 = models.TextField()
+    q2 = models.TextField()
+    q3 = models.TextField()
+    ans = models.TextField()
 
 
 class assignments(models.Model):
     aid = models.AutoField(primary_key=True)
-    ddl = models.CharField(max_length=50)
-    url = models.CharField(max_length=50)
+    ddl = models.TextField()
+    url = models.TextField()
 
 
 class material(models.Model):
     mid = models.AutoField(primary_key=True)
-    type = models.CharField(max_length=10)
+    type = models.TextField()
     cid = models.ForeignKey(courses, on_delete=models.CASCADE)
-    fileapath = models.CharField(max_length=50)
+    fileapath = models.TextField()
 
 
 class posts(models.Model):
@@ -58,17 +58,17 @@ class posts(models.Model):
     creatorid = models.ForeignKey(users, on_delete=models.CASCADE)
     cid = models.ForeignKey(courses, on_delete=models.CASCADE)
     createtime = models.DateField()
-    keyword = models.TextField(max_length=50)
+    keyword = models.TextField()
     title = models.TextField()
     content = models.TextField()
     multimedia = models.TextField()
-    replyments = models.JSONField()
-    likes = models.JSONField([])
+    replyments = models.TextField()
+    likes = models.TextField()
     editted = models.BooleanField()
-    flagged = models.JSONField([])
-    privacy = models.JSONField([])
+    flagged = models.TextField()
+    privacy = models.TextField()
 
 class replyment(models.Model):
     pid = models.ForeignKey(posts, on_delete=models.CASCADE)
     creator_id = models.ForeignKey(users, on_delete=models.CASCADE)
-    content = models.CharField(max_length=100)
+    content = models.TextField()

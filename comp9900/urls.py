@@ -51,6 +51,6 @@ urlpatterns = [
     path("deleteposts/", views.deleteposts),
     path("deletereplys/", views.deletereplys),
 
-
-
+    path("uploadmaterial",views.uploadmaterial),
+    path("downloadmaterial",views.downloadmaterial),
 ]
