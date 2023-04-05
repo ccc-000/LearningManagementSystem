@@ -23,9 +23,8 @@ def log_in(request):
         uid = users.objects.get(username=username).uid
         if username == "hayden" or username == "Katrina":
             return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role":"lector"})
-        else:
+        if user is not None:
             return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role":"student"})
-
         else:
             return JsonResponse({'status': False, 'msg': 'Log in Fail'})
 
