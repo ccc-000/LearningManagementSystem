@@ -22,10 +22,9 @@ def log_in(request):
         user = [username, password]
         uid = users.objects.get(username=username).uid
         if username == "hayden" or username == "Katrina":
-            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role":"lector"})
-        else:
-            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role":"student"})
-
+            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role": "lector"})
+        if user is not None:
+            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role": "student"})
         else:
             return JsonResponse({'status': False, 'msg': 'Log in Fail'})
 
@@ -208,6 +207,10 @@ def forum(request):
         for i in post_info:
             i["fields"]["pid"] = i["pk"]
             i = i["fields"]
+            i["flagged"] = json.loads(i["flagged"])
+            i["likes"] = json.loads(i["likes"])
+            i["privacy"] = json.loads(i["privacy"])
+            i["replyments"] = json.loads(i["replyments"])
             p.append((i))
     return JsonResponse({"posts": p})
 
