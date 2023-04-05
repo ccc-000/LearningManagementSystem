@@ -6,7 +6,6 @@ import EditProfile from './pages/EditProfile';
 import EditAvatar from './pages/EditAvatar';
 import CourseHistory from './pages/CourseHistory';
 import { Route, Routes } from 'react-router-dom';
-import { BrowserRouter } from 'react-router-dom';
 import Loginpage from './pages/Loginpage';
 import Registrationpage from './pages/Registrationpage';
 import Dashboard from './pages/Dashboard';
