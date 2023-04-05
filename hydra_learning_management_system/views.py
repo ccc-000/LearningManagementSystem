@@ -107,7 +107,7 @@ def createdcourses(request):
         data = json.loads(request.body)
         uid = data['uid']
         course = courses.objects.get(creatorid=uid)
-        return {"courses": course}
+        return JsonResponse({"courses": course})
 
 
 @csrf_exempt
@@ -123,11 +123,32 @@ def enrolledcourses(request):
 
 @csrf_exempt
 def createquiz(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        ddl = data["ddl"]
+        q1 = data["q1"]
+        q2 = data["q2"]
+        q3 = data["q3"]
+        ans = data["ans"]
+        quiz = quizzes.objects.create(ddl=ddl, q1=q1, q2=q2, q3=q3, ans=ans)
+        if quiz is not None:
+            return JsonResponse({'status': 200})
+        else:
+            return JsonResponse({'status': 403})
 
 
 @csrf_exempt
 def attendquiz(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        qid = data['q1']
+        q1 = data["q1"]
+        q2 = data["q2"]
+        q3 = data["q3"]
+        ans = json.dumps({q1,q2,q3})
+        rightans = quizzes.objects.get(qid=qid).ans
+        if ans == rightans:
+            return JsonResponse()
     return HttpResponse()
 
 
@@ -196,11 +217,11 @@ def createposts(request):
         createtime = data['createtime']
         keyword = data['keyword']
         multimedia = data['multimedia']
-        replyments = json.dump({"replyments": []})
-        likes = json.dump({"likes": []})
+        replyments = json.dumps({"replyments": []})
+        likes = json.dumps({"likes": []})
         editted = False
-        flagged = json.dump({"flagged": []})
-        privacy = json.dump({"privacy": []})
+        flagged = json.dumps({"flagged": []})
+        privacy = json.dumps({"privacy": []})
         post = posts.objects.create(creatorid=creatorid, cid=cid, createtime=createtime, keyword=keyword, title=title
                                     , content=content, multimedia=multimedia, replyments=replyments, likes=likes,
                                     editted=editted, flagged=flagged, privacy=privacy)
@@ -209,30 +230,102 @@ def createposts(request):
         else:
             return JsonResponse({'status': 500})
 
-    return HttpResponse()
-
 
 @csrf_exempt
 def replyposts(request):
-
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        pid = data["pid"]
+        content = data['content']
+        reply = replyment.objects.create(pid=pid, creator_id=uid, content=content)
+        if reply is not None:
+            return JsonResponse({"status": 200})
+        else:
+            return JsonResponse({"status": 403})
 
 
 @csrf_exempt
 def likeposts(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        pid = data["pid"]
+        uid = data["uid"]
+        likes = posts.objects.get(pid=pid).likes
+        if uid in likes['like']:
+            likes["likes"].remove(uid)
+            return JsonResponse({"status": 200})
+        else:
+            likes['likes'].append(uid)
+            return JsonResponse({"status": 200})
 
 
 @csrf_exempt
 def setprivate(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        pid = data["pid"]
+        uid = data["uid"]
+        ownerid = posts.objects.get(pid=pid).creatorid
+        cid = posts.objects.get(pid=pid).cid
+        lectorid = courses.objects.get(cid=cid).creatorid
+        if uid == ownerid or uid == lectorid:
+            privacy = posts.objects.get(pid=pid).privacy
+            privacy = {"privacy": [uid, lectorid]}
+        else:
+            return JsonResponse({"status": 403})
 
 
 @csrf_exempt
 def deleteposts(request):
-    return HttpResponse()
+    if request.method == "DELETE":
+        data = json.loads(request.body)
+        pid = data["pid"]
+        uid = data["uid"]
+        post = posts.objects.get(pid=pid)
+        if post is not None:
+            post.delete()
+            return JsonResponse({"status": 200})
+        else:
+            return JsonResponse({"status": 403})
 
 
 @csrf_exempt
 def deletereplys(request):
-    return HttpResponse()
+    if request.method == "DELETE":
+        data = json.loads(request.body)
+        pid = data["pid"]
+        uid = data["uid"]
+        reply = replyment.objects.get(uid=uid)
+        if reply is not None:
+            reply.delete()
+            return JsonResponse({"status": 200})
+        else:
+            return JsonResponse({"status": 403})
+
+
+@csrf_exempt
+def uploadmaterial(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        mid = data["mid"]
+        type = data["type"]
+        cid = data["cid"]
+        filepath = data["filepath"]
+        materials = material.objects.create(mid=mid, type=type, cid=cid, filepath=filepath)
+        if materials is not None:
+            return JsonResponse({"status": 200})
+        else:
+            return JsonResponse({"status": 403})
+
+
+@csrf_exempt
+def downloadmaterial(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        mid = data["mid"]
+        filepath = material.objects.get(mid=mid).fileapath
+        if filepath is not None:
+            return JsonResponse({"filepath": filepath})
+        else:
+            return JsonResponse({"status": 403})

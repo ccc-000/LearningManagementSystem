@@ -14,9 +14,9 @@ class courses(models.Model):
     cid = models.AutoField(primary_key=True)
     coursename = models.CharField(max_length=50)
     creatorid = models.ForeignKey(users, on_delete=models.CASCADE)
-    enrolllist = models.JSONField(default=dict)
+    enrolllist = models.TextField()
     coursedescription = models.TextField()
-    gradedistribution = models.JSONField(default=dict)
+    gradedistribution = models.TextField()
 
 class enrollments(models.Model):
     cid = models.ForeignKey(courses, on_delete=models.CASCADE)
@@ -28,15 +28,15 @@ class assesments(models.Model):
     ## It should be uid - json(contains quiz grade infomation) table. ##
     ###################################################################
     uid = models.ForeignKey(users, on_delete=models.CASCADE)
-    grade = models.JSONField(default=dict)
+    grade = models.TextField()
 
 
 class quizzes(models.Model):
     qid = models.AutoField(primary_key=True)
-    ddl = models.TextField()
-    q1 = models.JSONField(default=dict)
-    q2 = models.JSONField(default=dict)
-    q3 = models.JSONField(default=dict)
+    ddl = models.DateTimeField()
+    q1 = models.TextField()
+    q2 = models.TextField()
+    q3 = models.TextField()
     ans = models.TextField()
 
 
@@ -62,11 +62,11 @@ class posts(models.Model):
     title = models.TextField()
     content = models.TextField()
     multimedia = models.TextField()
-    replyments = models.JSONField(default=dict)
-    likes = models.JSONField(default=dict)
+    replyments = models.TextField()
+    likes = models.TextField()
     editted = models.BooleanField()
-    flagged = models.JSONField(default=dict)
-    privacy = models.JSONField(default=dict)
+    flagged = models.TextField()
+    privacy = models.TextField()
 
 class replyment(models.Model):
     pid = models.ForeignKey(posts, on_delete=models.CASCADE)
