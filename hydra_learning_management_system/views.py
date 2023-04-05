@@ -21,8 +21,11 @@ def log_in(request):
         password = data["password"]
         user = [username, password]
         uid = users.objects.get(username=username).uid
-        if user is not None:
-            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid})
+        if username == "hayden" or username == "Katrina":
+            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role":"lector"})
+        else:
+            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role":"student"})
+
         else:
             return JsonResponse({'status': False, 'msg': 'Log in Fail'})
 
@@ -242,10 +245,10 @@ def replyposts(request):
     if request.method == "POST":
         data = json.loads(request.body)
         uid = data["uid"]
-        pid = 1
+        pid = data['pid']
         content = data['content']
         reply = replyment.objects.create(pid=pid, creator_id=uid, content=content)
-        replylist = []
+        replylist = posts.objects.filter(pid=pid, )
         if reply is not None:
             return JsonResponse({"status": 200})
         else:
