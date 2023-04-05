@@ -33,7 +33,6 @@ urlpatterns = [
 
     path("createquiz/", views.createquiz),
     path("attendquiz/", views.attendquiz),
-    path("markquiz/", views.markquiz),
     path("reviewquiz/", views.reviewquiz),
 
     path("createass/", views.createass),
@@ -43,7 +42,7 @@ urlpatterns = [
     path("grade/", views.grade),
 
     path("forum/", views.forum),
-    path("posts/", views.posts),
+    path("posts/", views.postes),
     path("createposts/", views.createposts),
     path("replyposts/", views.replyposts),
     path("likeposts/", views.likeposts),
@@ -51,6 +50,6 @@ urlpatterns = [
     path("deleteposts/", views.deleteposts),
     path("deletereplys/", views.deletereplys),
 
-
-
+    path("uploadmaterial",views.uploadmaterial),
+    path("downloadmaterial",views.downloadmaterial),
 ]

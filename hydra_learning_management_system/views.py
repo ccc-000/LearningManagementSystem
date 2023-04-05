@@ -1,12 +1,14 @@
+import datetime
 import json
-
+from django.core import serializers
 from django.http import JsonResponse
-# Create your views here.
 from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+
 from .models import *
 
-uid = 0
+
+# Create your views here.
 
 # Note: The decorator must be included because we don't
 # have CSRF token in the header
@@ -19,9 +21,10 @@ def log_in(request):
         password = data["password"]
         user = [username, password]
         uid = users.objects.get(username=username).uid
-        print(uid)
+        if username == "hayden" or username == "Katrina":
+            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role":"lector"})
         if user is not None:
-            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid})
+            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role":"student"})
         else:
             return JsonResponse({'status': False, 'msg': 'Log in Fail'})
 
@@ -50,7 +53,7 @@ def createcourses(request):
         coursename = course_info['coursename']
         creatorname = course_info['creatorname']
         creatorid = users.objects.get(username=creatorname)
-        enrolllist = json.dump([creatorid])
+        enrolllist = json.dump({"enrolllist": [creatorid]})
         cousedecription = course_info['cousedecription']
         gradedistribution = course_info['gradedistribution']
         course = courses.objects.create(coursename=coursename, creatorid=creatorid, enrolllist=enrolllist,
@@ -84,8 +87,8 @@ def createdcouress(request):
     if request.method == "GET":
         data = json.loads(request.headers)
         creatorid = data["uid"]
-        createdcouress = courses.objects.get(creatorid=creatorid)
-    return JsonResponse({"courses": createdcouress})
+        course = courses.objects.get(creatorid=creatorid)
+    return JsonResponse({"courses": course})
 
 
 @csrf_exempt
@@ -94,85 +97,244 @@ def dropcourses(request):
         data = json.loads(request.body)
         cid = data['cid']
         uid = data['uid']
+        course = courses.objects.get(cid=cid)
+        course.delete()
+        enrollment = enrollments.objects.get(cid=cid)
+        enrollment.delete()
+        return JsonResponse({'status': 200})
+
 
 @csrf_exempt
 def createdcourses(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data['uid']
+        course = courses.objects.get(creatorid=uid)
+        return JsonResponse({"courses": course})
+
+
 @csrf_exempt
 def enrolledcourses(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data['uid']
+        cid = enrollments.objects.get(uid=uid).cid
+        for i in cid:
+            course = courses.objects.get(cid=i)
+        return JsonResponse({"courses": course})
+
+
 @csrf_exempt
 def createquiz(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        ddl = data["ddl"]
+        q1 = data["q1"]
+        q2 = data["q2"]
+        q3 = data["q3"]
+        ans = data["ans"]
+        quiz = quizzes.objects.create(ddl=ddl, q1=q1, q2=q2, q3=q3, ans=ans)
+        if quiz is not None:
+            return JsonResponse({'status': 200})
+        else:
+            return JsonResponse({'status': 403})
+
+
 @csrf_exempt
 def attendquiz(request):
-    return HttpResponse()
-@csrf_exempt
-def markquiz(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        qid = data['q1']
+        # {q1:A}
+        q1 = data["q1"]
+        q2 = data["q2"]
+        q3 = data["q3"]
+        ans = json.dumps({q1, q2, q3})
+        rightans = quizzes.objects.get(qid=qid).ans
+        if ans == rightans:
+            return JsonResponse({"grade": 3})
+        else:
+            return JsonResponse({"grade": 0})
+
+
 @csrf_exempt
 def reviewquiz(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def createass(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def submitass(request):
     return HttpResponse()
+
+
 @csrf_exempt
 def markass(request):
     return HttpResponse()
-@csrf_exempt
-def grade(request):
-    return HttpResponse()
+
 
 @csrf_exempt
 def grade(request):
     return HttpResponse()
+
+
+@csrf_exempt
+def grade(request):
+    return HttpResponse()
+
+
+@csrf_exempt
+def postes(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        pid = data['pid']
+        reply = replyment.objects.get(pid=pid)
+        return JsonResponse({"reply": reply})
+
 
 @csrf_exempt
 def forum(request):
-    return HttpResponse()
-@csrf_exempt
-def posts(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        cid = data['cid']
+        post = posts.objects.filter(cid=cid)
+        post_info = serializers.serialize('python',post)
+        p = []
+        for i in post_info:
+            i["fields"]["pid"] = i["pk"]
+            i = i["fields"]
+            p.append((i))
+    return JsonResponse({"posts": p})
+
+
 @csrf_exempt
 def createposts(request):
+    now = datetime.date.today()
     if request.method == "POST":
         data = json.loads(request.body)
         creatorid = data['creatorid']
         cid = data['cid']
+        cid = courses.objects.get(cid=cid)
+        creatorid = users.objects.get(uid=creatorid)
         title = data['title']
         content = data['content']
-        createtime = data['createtime']
+        createtime = now
         keyword = data['keyword']
-        multimedia = data['multimeida']
-        replyments = json.dump([])
-        likes = json.dump([])
+        multimedia = data['multimedia']
+        replyments = json.dumps({"replyments": []})
+        likes = json.dumps({"likes": []})
         editted = False
-        flagged = json.dump([])
-        privacy = json.dump([])
-        post = posts.objects.create(creatorid=creatorid, cid=cid, createtime = createtime, keyword = keyword, title = title
-                                    ,content = content, multimedia = multimedia,replyments = replyments, likes = likes,
-                                    editted=editted,flagged=flagged,privacy = privacy)
+        flagged = json.dumps({"flagged": []})
+        privacy = json.dumps({"privacy": []})
+        post = posts.objects.create(creatorid=creatorid, cid=cid, createtime=createtime, keyword=keyword, title=title
+                                    , content=content, multimedia=multimedia, replyments=replyments, likes=likes,
+                                    editted=editted, flagged=flagged, privacy=privacy)
         if post is not None:
-            return JsonResponse({'status':200})
+            return JsonResponse({'status': 200})
         else:
-            return JsonResponse({'status':500})
+            return JsonResponse({'status': 500})
 
-    return HttpResponse()
+
 @csrf_exempt
 def replyposts(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        pid = data['pid']
+        content = data['content']
+        reply = replyment.objects.create(pid=pid, creator_id=uid, content=content)
+        replylist = posts.objects.filter(pid=pid, )
+        if reply is not None:
+            return JsonResponse({"status": 200})
+        else:
+            return JsonResponse({"status": 403})
+
+
 @csrf_exempt
 def likeposts(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        pid = data["pid"]
+        uid = data["uid"]
+        likes = posts.objects.get(pid=pid).likes
+        if uid in likes['like']:
+            likes["likes"].remove(uid)
+            return JsonResponse({"status": 200})
+        else:
+            likes['likes'].append(uid)
+            return JsonResponse({"status": 200})
+
+
 @csrf_exempt
 def setprivate(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        pid = data["pid"]
+        uid = data["uid"]
+        ownerid = posts.objects.get(pid=pid).creatorid
+        cid = posts.objects.get(pid=pid).cid
+        lectorid = courses.objects.get(cid=cid).creatorid
+        if uid == ownerid or uid == lectorid:
+            privacy = posts.objects.get(pid=pid).privacy
+            privacy = {"privacy": [uid, lectorid]}
+        else:
+            return JsonResponse({"status": 403})
+
+
 @csrf_exempt
 def deleteposts(request):
-    return HttpResponse()
+    if request.method == "DELETE":
+        data = json.loads(request.body)
+        pid = data["pid"]
+        uid = data["uid"]
+        post = posts.objects.get(pid=pid)
+        if post is not None:
+            post.delete()
+            return JsonResponse({"status": 200})
+        else:
+            return JsonResponse({"status": 403})
+
+
 @csrf_exempt
 def deletereplys(request):
-    return HttpResponse()
+    if request.method == "DELETE":
+        data = json.loads(request.body)
+        pid = data["pid"]
+        uid = data["uid"]
+        reply = replyment.objects.get(uid=uid)
+        if reply is not None:
+            reply.delete()
+            return JsonResponse({"status": 200})
+        else:
+            return JsonResponse({"status": 403})
+
+
+@csrf_exempt
+def uploadmaterial(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        mid = data["mid"]
+        type = data["type"]
+        cid = data["cid"]
+        filepath = data["filepath"]
+        materials = material.objects.create(mid=mid, type=type, cid=cid, filepath=filepath)
+        if materials is not None:
+            return JsonResponse({"status": 200})
+        else:
+            return JsonResponse({"status": 403})
+
+
+@csrf_exempt
+def downloadmaterial(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        mid = data["mid"]
+        filepath = material.objects.get(mid=mid).fileapath
+        if filepath is not None:
+            return JsonResponse({"filepath": filepath})
+        else:
+            return JsonResponse({"status": 403})
