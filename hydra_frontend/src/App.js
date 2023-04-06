@@ -15,6 +15,7 @@ import Forum from "./pages/Forum";
 import CreateForum from './pages/CreateForum';
 import EditForum from './pages/EditForum';
 import ForumDetailStudent from './pages/ForumDetail-student';
+import Material from './pages/Material';
 import * as React from 'react'
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                 <Route path="/createforum" element={<CreateForum/>}/>
                 <Route path="/editforum" element={<EditForum/>}/>
                 <Route path="/forumdetailstudent/:id" element={<ForumDetailStudent/>}/>
+                <Route path="/material" element={<Material/>}/>
             </Routes>
         </>
     );
