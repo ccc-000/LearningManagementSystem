@@ -342,7 +342,6 @@ def deletereplys(request):
 def uploadmaterial(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        mid = data["mid"]
         type = data["type"]
         cid = data["cid"]
         filepath = data["filepath"]
