@@ -7,51 +7,36 @@ import '../styles/Material.css';
 
 function Material() {
     const navigate = useNavigate();
-    // const [data, setData] = useState([]);
+    const [data, setData] = useState([]);
 
     const jsonToPost = (material_data) => {
       const material_list = material_data.map(m => {
         return {
           mid: m.mid,
           type: m.type,
-          filepath: m.filepath,
+          filepath: m.fileapath,
       }});
       return material_list;
     }
 
-    // useEffect(() => {
-    //   fetch('http://localhost:8000/material', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //       cid: 1,
-    //       uid: localStorage.uid
-    //     }),
-    //   })
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       const material_data = data.material;
-    //       console.log(material_data);
-    //       setData(jsonToPost(material_data));
-    //     });
-    // }, []);
-
-    const data = [
-      {
-        key: '1',
-        mid: 1,
-        type: 'Powerpoint',
-        filepath: 'D:\\9900\\COMP9900Wk01Lecture23T1.pdf',
-      },
-      {
-        key: '2',
-        mid: 2,
-        type: 'PDF',
-        filepath: 'D:\\9900\\COMP9900Wk01Lecture23T1.pdf',
-      }
-    ];
+    useEffect(() => {
+      fetch('http://localhost:8000/showmaterial/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cid: 1,
+          uid: localStorage.uid
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const material_data = data.material;
+          console.log(material_data);
+          setData(jsonToPost(material_data));
+        });
+    }, []);
 
     //tablesetting
     const columns = [
@@ -60,12 +45,20 @@ function Material() {
             dataIndex: 'type',
             filters: [
               {
-                text: 'Powerpoint',
-                value: 'Powerpoint',
+                text: 'PPT',
+                value: 'PPT',
               },
               {
                 text: 'PDF',
                 value: 'PDF',
+              },
+              {
+                text: 'ZIP',
+                value: 'ZIP',
+              },
+              {
+                text: 'MP4',
+                value: 'MP4',
               },
             ],
             filterMode: 'tree',
@@ -104,7 +97,7 @@ function Material() {
     const handleOk = () => {
       console.log(form);
       setConfirmLoading(true);
-      fetch('http://localhost:8000/uploadmaterial', {
+      fetch('http://localhost:8000/uploadmaterial/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,8 +115,10 @@ function Material() {
             setTimeout(() => {
               setOpen(false);
               setConfirmLoading(false);
+              window.location.reload();
             }, 2000);
           }
+          // TODO: if upload failed, show error message
         });
     };
 
@@ -179,20 +174,20 @@ function Material() {
                     onChange={handleChange}
                     options={[
                       {
-                        value: 'ppt',
+                        value: 'PPT',
                         label: 'PPT',
                       },
                       {
-                        value: 'pdf',
+                        value: 'PDF',
                         label: 'PDF',
                       },
                       {
-                        value: 'zip',
-                        label: 'Zip',
+                        value: 'ZIP',
+                        label: 'ZIP',
                       },
                       {
-                        value: 'word',
-                        label: 'Word',
+                        value: 'MP4',
+                        label: 'MP4',
                       },
                     ]}
                   />
@@ -207,6 +202,7 @@ function Material() {
           </div>
           <div className="Material-List">
               <Table 
+                rowKey={"mid"}
                 columns={columns} 
                 dataSource={data} 
                 onChange={onChangeFilter}
