@@ -373,6 +373,8 @@ def showmaterial(request):
         m = serializers.serialize("python", materials)
         res = []
         for i in m:
+            i["fields"]['mid'] = i['pk']
+            i = i["fields"]
             print(i)
             res.append(i)
-        return JsonResponse({'status':200})
+        return JsonResponse({"material":res})
