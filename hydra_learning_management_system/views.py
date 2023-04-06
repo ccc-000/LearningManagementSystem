@@ -369,7 +369,7 @@ def showmaterial(request):
     if request.method == "POST":
         data = json.loads(request.body)
         cid = data["cid"]
-        materials = material.objects.filter(cid = cid)
+        materials = material.objects.filter(cid=cid)
         m = serializers.serialize("python", materials)
         res = []
         for i in m:
