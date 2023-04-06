@@ -363,3 +363,16 @@ def downloadmaterial(request):
             return JsonResponse({"filepath": filepath})
         else:
             return JsonResponse({"status": 403})
+
+@csrf_exempt
+def showmaterial(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        cid = data["cid"]
+        materials = material.objects.filter(cid=cid)
+        m = serializers.serialize("python", materials)
+        res = []
+        for i in m:
+            print(i)
+            res.append(i)
+        return JsonResponse({'status':200})
