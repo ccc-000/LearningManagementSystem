@@ -1,5 +1,6 @@
 import datetime
 import json
+
 from django.core import serializers
 from django.http import JsonResponse
 from django.shortcuts import HttpResponse
@@ -164,7 +165,15 @@ def reviewquiz(request):
 
 @csrf_exempt
 def createass(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        ddl = data["ddl"]
+        url = data["url"]
+        ass = assignments.objects.create(ddl=ddl, url=url)
+        if ass is not None:
+            return JsonResponse({'status': 200})
+        else:
+            return JsonResponse({'status': 403})
 
 
 @csrf_exempt
@@ -192,7 +201,11 @@ def postes(request):
     if request.method == "POST":
         data = json.loads(request.body)
         pid = data['pid']
-        reply = replyment.objects.get(pid=pid)
+        reply = replyment.objects.filter(pid=pid)
+        reply_info = serializers.serialize('python', reply)
+        r = []
+        for i in reply_info:
+            print(i)
         return JsonResponse({"reply": reply})
 
 
@@ -202,11 +215,18 @@ def forum(request):
         data = json.loads(request.body)
         cid = data['cid']
         post = posts.objects.filter(cid=cid)
-        post_info = serializers.serialize('python',post)
+        post_info = serializers.serialize('python', post)
         p = []
         for i in post_info:
             i["fields"]["pid"] = i["pk"]
             i = i["fields"]
+            i["flagged"] = json.loads(i["flagged"])
+            i["likes"] = json.loads(i["likes"])
+            i["privacy"] = json.loads(i["privacy"])
+            i["replyments"] = json.loads(i["replyments"])
+            uid = i["creatorid"]
+            creatorname = users.objects.get(uid=uid).username
+            i["creatorname"] = creatorname
             p.append((i))
     return JsonResponse({"posts": p})
 
@@ -225,7 +245,7 @@ def createposts(request):
         createtime = now
         keyword = data['keyword']
         multimedia = data['multimedia']
-        replyments = json.dumps({"replyments": []})
+        replyments = json.dumps({"replyments": {}})
         likes = json.dumps({"likes": []})
         editted = False
         flagged = json.dumps({"flagged": []})
@@ -247,7 +267,9 @@ def replyposts(request):
         pid = data['pid']
         content = data['content']
         reply = replyment.objects.create(pid=pid, creator_id=uid, content=content)
-        replylist = posts.objects.filter(pid=pid, )
+        replylist = posts.objects.get(pid=pid).replyments
+        replylist = json.loads(replylist)
+        replylist["uid"] = content
         if reply is not None:
             return JsonResponse({"status": 200})
         else:
@@ -306,8 +328,11 @@ def deletereplys(request):
         pid = data["pid"]
         uid = data["uid"]
         reply = replyment.objects.get(uid=uid)
+        replylist = posts.objects.get(pid=pid).replyments
+        replylist = []
         if reply is not None:
             reply.delete()
+
             return JsonResponse({"status": 200})
         else:
             return JsonResponse({"status": 403})
@@ -338,3 +363,18 @@ def downloadmaterial(request):
             return JsonResponse({"filepath": filepath})
         else:
             return JsonResponse({"status": 403})
+
+@csrf_exempt
+def showmaterial(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        cid = data["cid"]
+        materials = material.objects.filter(cid=cid)
+        m = serializers.serialize("python", materials)
+        res = []
+        for i in m:
+            i["fields"]['mid'] = i['pk']
+            i = i["fields"]
+            print(i)
+            res.append(i)
+        return JsonResponse({"material":res})
