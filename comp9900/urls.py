@@ -30,7 +30,6 @@ urlpatterns = [
     path("dropcourses/", views.dropcourses),
     path("enrolledcourses/", views.enrolledcourses),
 
-
     path("createquiz/", views.createquiz),
     path("attendquiz/", views.attendquiz),
     path("reviewquiz/", views.reviewquiz),
@@ -50,6 +49,7 @@ urlpatterns = [
     path("deleteposts/", views.deleteposts),
     path("deletereplys/", views.deletereplys),
 
-    path("uploadmaterial",views.uploadmaterial),
-    path("downloadmaterial",views.downloadmaterial),
+    path("uploadmaterial/", views.uploadmaterial),
+    path("downloadmaterial/", views.downloadmaterial),
+    path("showmaterial/", views.showmaterial)
 ]
