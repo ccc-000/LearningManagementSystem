@@ -342,11 +342,11 @@ def deletereplys(request):
 def uploadmaterial(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        mid = data["mid"]
         type = data["type"]
         cid = data["cid"]
+        course = courses.objects.get(cid = cid)
         filepath = data["filepath"]
-        materials = material.objects.create(mid=mid, type=type, cid=cid, filepath=filepath)
+        materials = material.objects.create(type=type, cid=course, fileapath=filepath)
         if materials is not None:
             return JsonResponse({"status": 200})
         else:
@@ -373,6 +373,8 @@ def showmaterial(request):
         m = serializers.serialize("python", materials)
         res = []
         for i in m:
+            i["fields"]['mid'] = i['pk']
+            i = i["fields"]
             print(i)
             res.append(i)
-        return JsonResponse({'status':200})
+        return JsonResponse({"material":res})
