@@ -7,7 +7,7 @@ import '../styles/Material.css';
 
 function Material() {
     const navigate = useNavigate();
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
 
     const jsonToPost = (material_data) => {
       const material_list = material_data.map(m => {
@@ -19,24 +19,39 @@ function Material() {
       return material_list;
     }
 
-    useEffect(() => {
-      fetch('http://localhost:8000/material', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          cid: 1,
-          uid: localStorage.uid
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          const material_data = data.material;
-          console.log(material_data);
-          setData(jsonToPost(material_data));
-        });
-    }, []);
+    // useEffect(() => {
+    //   fetch('http://localhost:8000/material', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       cid: 1,
+    //       uid: localStorage.uid
+    //     }),
+    //   })
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       const material_data = data.material;
+    //       console.log(material_data);
+    //       setData(jsonToPost(material_data));
+    //     });
+    // }, []);
+
+    const data = [
+      {
+        key: '1',
+        mid: 1,
+        type: 'Powerpoint',
+        filepath: 'D:\\9900\\COMP9900Wk01Lecture23T1.pdf',
+      },
+      {
+        key: '2',
+        mid: 2,
+        type: 'PDF',
+        filepath: 'D:\\9900\\COMP9900Wk01Lecture23T1.pdf',
+      }
+    ];
 
     //tablesetting
     const columns = [
@@ -197,9 +212,9 @@ function Material() {
                 onChange={onChangeFilter}
                 onRow={(record) => {
                   return {
-                    //Zaffi: 判断userid与creatorid是否相同，相同则跳转到ForumDetail-ownpage页面，不同则跳转到ForumDetail-student页面
                     onClick: event => {
                       console.log(record.filepath)
+                      window.location.assign(record.filepath);
                     },
                   };
                 }}
