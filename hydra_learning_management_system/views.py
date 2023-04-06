@@ -344,8 +344,9 @@ def uploadmaterial(request):
         data = json.loads(request.body)
         type = data["type"]
         cid = data["cid"]
+        course = courses.objects.get(cid = cid)
         filepath = data["filepath"]
-        materials = material.objects.create(type=type, cid=cid, filepath=filepath)
+        materials = material.objects.create(type=type, cid=course, filepath=filepath)
         if materials is not None:
             return JsonResponse({"status": 200})
         else:
