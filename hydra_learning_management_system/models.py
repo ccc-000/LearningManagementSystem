@@ -45,8 +45,9 @@ class Quizzes(models.Model):
 
 class Assignments(models.Model):
     aid = models.AutoField(primary_key=True)
+    title = models.TextField()
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
-    ddl = models.DateTimeField()
+    assignmentdescription = models.TextField()
     url = models.TextField()
 
 

@@ -41,6 +41,10 @@ def log_in(request):
 
 
 @csrf_exempt
+def logout(request):
+    if request.method == "GET":
+        return JsonResponse({'status': 200})
+@csrf_exempt
 def forget_pwd_send_link(request):
     return
 
@@ -175,9 +179,11 @@ def reviewquiz(request):
 def createass(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        ddl = data["ddl"]
+        title = data["title"]
+        cid = data["cid"]
         url = data["url"]
-        ass = Assignments.objects.create(ddl=ddl, url=url)
+        assdescription = data["assdescription"]
+        ass = Assignments.objects.create(cid=cid, url=url,title=title,assignmentdescription=assdescription)
         if ass is not None:
             return JsonResponse({'status': 200})
         else:
@@ -235,7 +241,7 @@ def forum(request):
             uid = i["creatorid"]
             creatorname = Users.objects.get(uid=uid).username
             i["creatorname"] = creatorname
-            p.append((i))
+            p.append(i)
         return JsonResponse({"posts": p})
 
 
