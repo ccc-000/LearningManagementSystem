@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 
-class users(models.Model):
+class Users(models.Model):
     uid = models.AutoField(primary_key=True)
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
@@ -11,29 +11,30 @@ class users(models.Model):
     role = models.CharField(max_length=10)
 
 
-class courses(models.Model):
+class Courses(models.Model):
     cid = models.AutoField(primary_key=True)
     coursename = models.CharField(max_length=50)
-    creatorid = models.ForeignKey(users, on_delete=models.CASCADE)
+    creatorid = models.ForeignKey(Users, on_delete=models.CASCADE)
     enrolllist = models.TextField()
     coursedescription = models.TextField()
     gradedistribution = models.TextField()
 
 
-class enrollments(models.Model):
-    cid = models.ForeignKey(courses, on_delete=models.CASCADE)
-    uid = models.ForeignKey(users, on_delete=models.CASCADE)
+class Enrollments(models.Model):
+    cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
+    uid = models.ForeignKey(Users, on_delete=models.CASCADE)
 
 
-class assesments(models.Model):
+class Assessments(models.Model):
     ####################################################################
     ## It should be uid - json(contains quiz grade infomation) table. ##
     ###################################################################
-    uid = models.ForeignKey(users, on_delete=models.CASCADE)
+    uid = models.ForeignKey(Users, on_delete=models.CASCADE)
+    cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
     grade = models.TextField()
 
 
-class quizzes(models.Model):
+class Quizzes(models.Model):
     qid = models.AutoField(primary_key=True)
     ddl = models.DateTimeField()
     q1 = models.TextField()
@@ -42,23 +43,24 @@ class quizzes(models.Model):
     ans = models.TextField()
 
 
-class assignments(models.Model):
+class Assignments(models.Model):
     aid = models.AutoField(primary_key=True)
+    cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
     ddl = models.TextField()
     url = models.TextField()
 
 
-class material(models.Model):
+class Materials(models.Model):
     mid = models.AutoField(primary_key=True)
     type = models.TextField()
-    cid = models.ForeignKey(courses, on_delete=models.CASCADE)
-    fileapath = models.TextField()
+    cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
+    filepath = models.TextField()
 
 
-class posts(models.Model):
+class Posts(models.Model):
     pid = models.AutoField(primary_key=True)
-    creatorid = models.ForeignKey(users, on_delete=models.CASCADE)
-    cid = models.ForeignKey(courses, on_delete=models.CASCADE)
+    creatorid = models.ForeignKey(Users, on_delete=models.CASCADE)
+    cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
     createtime = models.DateTimeField()
     keyword = models.TextField()
     title = models.TextField()
@@ -71,7 +73,7 @@ class posts(models.Model):
     privacy = models.TextField()
 
 
-class replyment(models.Model):
-    pid = models.ForeignKey(posts, on_delete=models.CASCADE)
-    creator_id = models.ForeignKey(users, on_delete=models.CASCADE)
+class Replies(models.Model):
+    pid = models.ForeignKey(Posts, on_delete=models.CASCADE)
+    creator_id = models.ForeignKey(Users, on_delete=models.CASCADE)
     content = models.TextField()

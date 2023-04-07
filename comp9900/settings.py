@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'comp9900.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hydra',
+        'NAME': 'hydra_db',
         'USER': 'django_admin',
         'PASSWORD': 'Zshh0724',
         'HOST': 'rm-t4n0tu80671s505h73o.rwlb.singapore.rds.aliyuncs.com',
@@ -140,5 +140,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = ' @gmail.com'
-EMAIL_HOST_PASSWORD = 'your-password'
+EMAIL_HOST_USER = 'randomzsh@gmail.com'
+EMAIL_HOST_PASSWORD = 'Zshh0724'
