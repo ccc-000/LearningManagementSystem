@@ -61,9 +61,9 @@ def createcourses(request):
         gradedistribution = course_info['gradedistribution']
         course = Courses.objects.create(coursename=coursename, creatorid=creatorid, enrolllist=enrolllist,
                                         cousedecription=cousedecription, gradedistribution=gradedistribution)
-        all_courses = Courses.objects.get(creatorid=creatorid)
+
         if course:
-            return JsonResponse({'status': 200, "courses": all_courses})
+            return JsonResponse({'status': 200})
         else:
             return JsonResponse({'status': 403})
 
