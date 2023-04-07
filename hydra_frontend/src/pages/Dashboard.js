@@ -117,7 +117,7 @@ function DashboardPage() {
                         {selectedOptions.length > 0 && (
                             <div className='cardBox'>
                                 {selectedOptions.map((option, index) => (
-                                    <Link to='/coursemainpage'>
+                                    <Link to='/coursemainpageStudent'>
                                         <Card
                                             hoverable
                                             key={index}
@@ -178,22 +178,32 @@ function DashboardPage() {
                             ]}
                         >
                             <Checkbox
-                                onChange={() => handleOptionClick('COMP9318 	Data Warehousing and Data Mining')}>
-                                COMP9318 Data Warehousing and Data Mining
-                            </Checkbox>
-                            <br/>
-                            <Checkbox onChange={() => handleOptionClick('COMP9414 	Artificial Intelligence')}>
-                                COMP9414 Artificial Intelligence
+                                onChange={() => handleOptionClick('23t1COMP6080 	Web Front-End Programming')}>
+                                23t1COMP6080 Web Front-End Programming
                             </Checkbox>
                             <br/>
                             <Checkbox
-                                onChange={() => handleOptionClick('COMP9417 	Machine Learning and Data Mining')}>
-                                COMP9417 Machine Learning and Data Mining
+                                onChange={() => handleOptionClick('23t1COMP9318 	Data Warehousing and Data Mining')}>
+                                23t1COMP9318 Data Warehousing and Data Mining
+                            </Checkbox>
+                            <br/>
+                            <Checkbox onChange={() => handleOptionClick('23t1COMP9414 	Artificial Intelligence')}>
+                                23t1COMP9414 Artificial Intelligence
                             </Checkbox>
                             <br/>
                             <Checkbox
-                                onChange={() => handleOptionClick('COMP9418 	Advanced Topics in Statistical Machine Learning')}>
-                                COMP9418 Advanced Topics in Statistical Machine Learning
+                                onChange={() => handleOptionClick('23t1COMP9417 	Machine Learning and Data Mining')}>
+                                23t1COMP9417 Machine Learning and Data Mining
+                            </Checkbox>
+                            <br/>
+                            <Checkbox
+                                onChange={() => handleOptionClick('23t1COMP9418 	Advanced Topics in Statistical Machine Learning')}>
+                                23t1COMP9418 Advanced Topics in Statistical Machine Learning
+                            </Checkbox>
+                            <br/>
+                            <Checkbox
+                                onChange={() => handleOptionClick('23t1COMP9900 Information Technology Project')}>
+                                23t1COMP9900	Information Technology Project
                             </Checkbox>
                         </Modal>
                     </div>
