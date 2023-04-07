@@ -25,16 +25,17 @@ def register(request):
         user = Users.objects.create(username=username, password=password, email=email, role=role)
         return JsonResponse({'status': 200, 'msg': 'Register Success'})
 
+
 @csrf_exempt
 def log_in(request):
     if request.method == "POST":
         data = json.loads(request.body)
         username = data["username"]
         password = data["password"]
-        uid = Users.objects.get(username = username).uid
+        uid = Users.objects.get(username=username).uid
         rightpwd = Users.objects.get(username=username).password
         role = Users.objects.get(username=username).role
-        if password==rightpwd:
+        if password == rightpwd:
             return JsonResponse({'status': 200, 'msg': 'Log in Success', 'uid': uid, "role": role})
         else:
             return JsonResponse({'status': 403, 'msg': 'Log in Fail'})
@@ -52,7 +53,7 @@ def createcourses(request):
         coursename = course_info['coursename']
         creatorname = course_info['creatorname']
         creatorid = Users.objects.get(username=creatorname)
-        enrolllist = json.dump({"enrolllist": [creatorid]})
+        enrolllist = json.dumps({"enrolllist": [creatorid]})
         cousedecription = course_info['cousedecription']
         gradedistribution = course_info['gradedistribution']
         course = Courses.objects.create(coursename=coursename, creatorid=creatorid, enrolllist=enrolllist,
@@ -63,11 +64,12 @@ def createcourses(request):
         else:
             return JsonResponse({'status': 403})
 
+
 @csrf_exempt
 def showcourses(request):
     if request.method == "POST":
-
         return
+
 
 @csrf_exempt
 def enrollcourses(request):
@@ -91,8 +93,9 @@ def createdcouress(request):
     if request.method == "GET":
         data = json.loads(request.headers)
         creatorid = data["uid"]
-        course = Courses.objects.get(creatorid=creatorid)
-    return JsonResponse({"courses": course})
+        courses = Courses.objects.filter(creatorid=creatorid)
+        courses = serializers.serialize("python", courses)
+        return JsonResponse({"courses": courses})
 
 
 @csrf_exempt
@@ -123,9 +126,12 @@ def enrolledcourses(request):
         data = json.loads(request.body)
         uid = data['uid']
         cid = Enrollments.objects.get(uid=uid).cid
+        courses = []
         for i in cid:
             course = Courses.objects.get(cid=i)
-        return JsonResponse({"courses": course})
+            courses.append(course)
+        courses = serializers.serialize("python", courses)
+        return JsonResponse({"courses": courses})
 
 
 @csrf_exempt
@@ -232,7 +238,7 @@ def forum(request):
             creatorname = Users.objects.get(uid=uid).username
             i["creatorname"] = creatorname
             p.append((i))
-    return JsonResponse({"posts": p})
+        return JsonResponse({"posts": p})
 
 
 @csrf_exempt
@@ -348,7 +354,7 @@ def uploadmaterial(request):
         data = json.loads(request.body)
         type = data["type"]
         cid = data["cid"]
-        course = Courses.objects.get(cid = cid)
+        course = Courses.objects.get(cid=cid)
         filepath = data["filepath"]
         materials = Materials.objects.create(type=type, cid=course, fileapath=filepath)
         if materials is not None:
@@ -368,6 +374,7 @@ def downloadmaterial(request):
         else:
             return JsonResponse({"status": 403})
 
+
 @csrf_exempt
 def showmaterial(request):
     if request.method == "POST":
@@ -381,4 +388,4 @@ def showmaterial(request):
             i = i["fields"]
             print(i)
             res.append(i)
-        return JsonResponse({"material":res})
+        return JsonResponse({"material": res})
