@@ -66,13 +66,10 @@ ass table{
 
 1. Create ass:
 fetch(/createass)
-send:
-ass table{
-    assid:,
+send:{
     creatorid:,
-    title:,
-    assdescription(url):,
-    ddl:
+    assdescription(url): ,
+
 }
 return success or failed.
 

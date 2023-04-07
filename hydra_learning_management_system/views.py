@@ -42,6 +42,10 @@ def log_in(request):
 
 
 @csrf_exempt
+def logout(request):
+    if request.method == "GET":
+        return JsonResponse({'status': 200})
+@csrf_exempt
 def forget_pwd_send_link(request):
     return
 
@@ -58,9 +62,9 @@ def createcourses(request):
         gradedistribution = course_info['gradedistribution']
         course = Courses.objects.create(coursename=coursename, creatorid=creatorid, enrolllist=enrolllist,
                                         cousedecription=cousedecription, gradedistribution=gradedistribution)
-        all_courses = Courses.objects.get(creatorid=creatorid)
+
         if course:
-            return JsonResponse({'status': 200, "courses": all_courses})
+            return JsonResponse({'status': 200})
         else:
             return JsonResponse({'status': 403})
 
@@ -68,11 +72,16 @@ def createcourses(request):
 @csrf_exempt
 def showcourses(request):
     if request.method == "POST":
-        return
+        data = json.loads(request.body)
+        uid = data["uid"]
+        courses = Courses.objects.filter(creatorid=uid)
+        courses = serializers.serialize("python", courses)
+        return JsonResponse({"courses":courses})
 
 
 @csrf_exempt
 def enrollcourses(request):
+    # We assume the max enrollment of a course is 45 and the lecturer.
     MAX_SEAT = 46
     if request.method == "POST":
         data = json.loads(request.body)
@@ -125,7 +134,7 @@ def enrolledcourses(request):
     if request.method == "POST":
         data = json.loads(request.body)
         uid = data['uid']
-        cid = Enrollments.objects.get(uid=uid).cid
+        cid = Enrollments.objects.filter(uid=uid).cid
         courses = []
         for i in cid:
             course = Courses.objects.get(cid=i)
@@ -177,9 +186,11 @@ def reviewquiz(request):
 def createass(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        ddl = data["ddl"]
+        title = data["title"]
+        cid = data["cid"]
         url = data["url"]
-        ass = Assignments.objects.create(ddl=ddl, url=url)
+        assdescription = data["assdescription"]
+        ass = Assignments.objects.create(cid=cid, url=url,title=title,assignmentdescription=assdescription)
         if ass is not None:
             return JsonResponse({'status': 200})
         else:
@@ -237,7 +248,7 @@ def forum(request):
             uid = i["creatorid"]
             creatorname = Users.objects.get(uid=uid).username
             i["creatorname"] = creatorname
-            p.append((i))
+            p.append(i)
         return JsonResponse({"posts": p})
 
 

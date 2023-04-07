@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ["0.0.0.0", "localhost"]
 INSTALLED_APPS = [
     'corsheaders',
     "hydra_learning_management_system.apps.HydraLearningManagementSystemConfig",
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,6 +50,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+
 
 # This line is to allow CORS from frontend
 CORS_ALLOW_ALL_ORIGINS = True
@@ -88,7 +96,7 @@ WSGI_APPLICATION = 'comp9900.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hydra_db',
+        'NAME': 'hydradb',
         'USER': 'django_admin',
         'PASSWORD': 'Zshh0724',
         'HOST': 'rm-t4n0tu80671s505h73o.rwlb.singapore.rds.aliyuncs.com',
