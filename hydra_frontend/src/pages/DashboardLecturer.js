@@ -1,4 +1,5 @@
 import pic from '../img/unsw.jpeg';
+import avatar from '../img/avatar.png';
 import '../styles/DashboardPage.css';
 import {
     AppstoreOutlined,
@@ -9,11 +10,12 @@ import {
     UploadOutlined,
     UserOutlined,
     VideoCameraOutlined,
+    LogoutOutlined
 } from '@ant-design/icons';
-import {Form, Input, Button, Card, Layout, Menu, Modal} from 'antd';
+import {Form, Input, Button, Card, Layout, Menu, Modal, Avatar} from 'antd';
 import React, {useRef, useState} from 'react';
 import Draggable from 'react-draggable';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate } from 'react-router-dom';
 
 const {Content, Footer, Sider} = Layout;
 
@@ -34,6 +36,7 @@ const items = [
 }));
 
 function DashboardLecturer() {
+    const navigate = useNavigate();
     const [showCard, setShowCard] = useState(false);
     const [showModal, setShowModal] = useState(false);
     // const [options, setOptions] = useState([]);
@@ -91,6 +94,16 @@ function DashboardLecturer() {
             bottom: clientHeight - (targetRect.bottom - uiData.y),
         });
     };
+    const handleLogout = () => {
+        localStorage.clear();
+        navigate('/')
+    };
+    const handleProfile = () => {
+        navigate('/profile')
+    };
+    const handleEditAvatar = () => {
+        navigate('/editavatar')
+    };
     return (
         <Layout hasSider>
             <Sider
@@ -110,7 +123,31 @@ function DashboardLecturer() {
 
                     }}
                 />
-                 <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
+
+                <Menu theme="dark" mode="inline">
+                    <Avatar 
+                    style={{
+                        size: 40,
+                        cursor: 'pointer',
+                        marginLeft: '80px',
+                    }}
+                    src={avatar} onClick={handleEditAvatar}/>
+                    <Menu.Item
+                        key="profile"
+                        icon={<UserOutlined />}
+                        onClick={handleProfile}
+                        >
+                        Profile
+                    </Menu.Item>
+                    <Menu.Item
+                        key="logout"
+                        icon={<LogoutOutlined />}
+                        style={{ position: 'absolute', bottom: 0 }}
+                        onClick={handleLogout}
+                        >
+                        Logout
+                    </Menu.Item>
+                </Menu>
             </Sider>
             <Layout
                 className="site-layout"

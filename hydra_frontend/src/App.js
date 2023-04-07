@@ -26,7 +26,7 @@ import AnnouncementLecturer from "./pages/AnnouncementLecturer";
 import CoursemainpageStudent from "./pages/CoursemainpageStudent";
 import QuizStudent from "./pages/QuizStudent";
 import AssignmentStudent from "./pages/AssignmentStudent";
-import Grade from './pages/Grade';
+// import Grade from './pages/Grade';
 
 function App() {
 
@@ -55,7 +55,7 @@ function App() {
                 <Route path="/CoursemainpageStudent" element={<CoursemainpageStudent/>}/>
                 <Route path="/CoursemainpageStudent/quizStudent" element={<QuizStudent/>}/>
                 <Route path="/CoursemainpageStudent/assignmentStudent" element={<AssignmentStudent/>}/>
-                <Route path="/CoursemainpageStudent/grade" element={<Grade/>}/>
+                {/* <Route path="/CoursemainpageStudent/grade" element={<Grade/>}/> */}
             </Routes>
         </>
     );
