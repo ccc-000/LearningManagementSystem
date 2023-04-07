@@ -24,6 +24,10 @@ import {
     const {
       token: { colorBgContainer },
     } = theme.useToken();
+    const logOut = () => {
+      localStorage.clear();
+      navigate('/');
+    }
     return (
       <Layout hasSider>
         <Sider
@@ -85,7 +89,7 @@ import {
               icon: <LogoutOutlined />,
               label: 'Logout',
               style: { position: 'absolute', bottom: 0 },
-              onClick: () => {navigate('/')},
+              onClick: logOut(),
             }
           ]} />
         </Sider>
