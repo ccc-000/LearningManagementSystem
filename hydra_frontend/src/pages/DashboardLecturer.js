@@ -10,12 +10,14 @@ import {
     UserOutlined,
     VideoCameraOutlined,
 } from '@ant-design/icons';
-import {Button, Card, Checkbox, Layout, Menu, Modal} from 'antd';
+import {Form, Input, Button, Card, Layout, Menu, Modal} from 'antd';
 import React, {useRef, useState} from 'react';
 import Draggable from 'react-draggable';
 import {Link} from 'react-router-dom';
 
 const {Content, Footer, Sider} = Layout;
+
+ 
 const items = [
     UserOutlined,
     VideoCameraOutlined,
@@ -31,9 +33,10 @@ const items = [
     label: `nav ${index + 1}`,
 }));
 
-function DashboardPage() {
+function DashboardLecturer() {
+    const [showCard, setShowCard] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [selectedOptions, setSelectedOptions] = useState([]);
+    // const [options, setOptions] = useState([]);
     const [disabled, setDisabled] = useState(false);
     const [bounds, setBounds] = useState({
         left: 0,
@@ -41,8 +44,32 @@ function DashboardPage() {
         bottom: 0,
         right: 0,
     });
+    const [formData, setFormData] = useState({
+        coursename: '',
+        creatorname: '',
+        coursedescription: '',
+        gradedistribution: { 
+            quiz: {
+            quiz1: 9,
+            quiz2: 9,
+            quiz3: 9
+            },
+            ass: {
+            ass1: 15,
+            ass2: 15,
+            ass3: 15
+            },
+            final: {
+            'final exam': 28
+            }}
+    });
+
     const draggleRef = useRef(null);
 
+    const handleSubmit = () => {
+        setShowModal(false);
+        setShowCard(true);
+      };
     const handleOpen = () => {
         setShowModal(true);
     };
@@ -51,13 +78,6 @@ function DashboardPage() {
         setShowModal(false);
     };
 
-    const handleOptionClick = (option) => {
-        if (selectedOptions.includes(option)) {
-            setSelectedOptions(selectedOptions.filter((item) => item !== option));
-        } else {
-            setSelectedOptions([...selectedOptions, option]);
-        }
-    };
     const onStart = (_event, uiData) => {
         const {clientWidth, clientHeight} = window.document.documentElement;
         const targetRect = draggleRef.current?.getBoundingClientRect();
@@ -90,7 +110,7 @@ function DashboardPage() {
 
                     }}
                 />
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items}/>
+                 <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
             </Sider>
             <Layout
                 className="site-layout"
@@ -106,15 +126,52 @@ function DashboardPage() {
                     <div className='divider'></div>
 
                     <div style={{position: 'relative'}}>
-                        <Button onClick={handleOpen}
-                                style={{
-                                    position: 'absolute',
-                                    top: '8px',
-                                    right: '10px',
-                                }}>
-                            Create Courses
-                        </Button>
-                        {selectedOptions.length > 0 && (
+                        <div>
+                            <Button onClick={handleOpen}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '8px',
+                                        right: '10px',
+                                    }}>
+                                Create Courses
+                            </Button>
+                        </div>
+                        <div className='cardBox'>
+                            <Link to='/coursemainpageLecturer'>
+                                <Card
+                                    hoverable
+                                    className='courseCard'
+                                    cover={
+                                        <img
+                                            alt="course"
+                                            src={pic}
+                                        />
+                                    }
+                                >
+                                    <Card.Meta className='meta' title="23t1COMP9900	Information Technology Project" description="It's the last course of 8543."/>
+                                </Card>
+                            </Link>
+                        {showCard && (
+                           
+                            <Link to='/coursemainpageLecturer'>
+                                <Card
+                                    hoverable
+                                    className='courseCard'
+                                    cover={
+                                        <img
+                                            alt="course"
+                                            src={pic}
+                                        />
+                                    }
+                                >
+                                    <Card.Meta className='meta' title={formData.coursename} description={formData.coursedescription}/>
+                                </Card>
+                            </Link>
+                        )}
+                       </div>
+
+
+                        {/* {selectedOptions.length > 0 && (
                             <div className='cardBox'>
                                 {selectedOptions.map((option, index) => (
                                     <Link to='/coursemainpage'>
@@ -134,7 +191,7 @@ function DashboardPage() {
                                     </Link>
                                 ))}
                             </div>
-                        )}
+                        )} */}
 
 
                         <Modal
@@ -158,7 +215,7 @@ function DashboardPage() {
                                     }}
                                     // end
                                 >
-                                    Enrol Courses
+                                    Course Information
                                 </div>
                             }
                             open={showModal}
@@ -174,27 +231,43 @@ function DashboardPage() {
                                 </Draggable>
                             )}
                             footer={[
-                                <Button onClick={handleClose}>Close</Button>,
+                                <><Button type='primary' onClick={handleSubmit}>
+                                    Submit
+                                </Button>
+                                <Button onClick={handleClose}>
+                                    Close
+                                </Button></>
                             ]}
                         >
-                            <Checkbox
-                                onChange={() => handleOptionClick('COMP9318 	Data Warehousing and Data Mining')}>
-                                COMP9318 Data Warehousing and Data Mining
-                            </Checkbox>
-                            <br/>
-                            <Checkbox onChange={() => handleOptionClick('COMP9414 	Artificial Intelligence')}>
-                                COMP9414 Artificial Intelligence
-                            </Checkbox>
-                            <br/>
-                            <Checkbox
-                                onChange={() => handleOptionClick('COMP9417 	Machine Learning and Data Mining')}>
-                                COMP9417 Machine Learning and Data Mining
-                            </Checkbox>
-                            <br/>
-                            <Checkbox
-                                onChange={() => handleOptionClick('COMP9418 	Advanced Topics in Statistical Machine Learning')}>
-                                COMP9418 Advanced Topics in Statistical Machine Learning
-                            </Checkbox>
+                            <Form>
+                                <Form.Item label='Course Name'>
+                                    <Input
+                                        name="coursename"
+                                        value={formData.coursename}
+                                        onChange={(e) => setFormData({ ...formData, coursename: e.target.value })}></Input>
+                                </Form.Item>
+                                <Form.Item label='Creator Name'>
+                                    <Input
+                                        name="creatorname"
+                                        value={formData.creatorname}
+                                        onChange={(e) => setFormData({ ...formData, creatorname: e.target.value })}></Input>
+                                </Form.Item>
+                                <Form.Item label='Course Description'>
+                                    <Input.TextArea
+                                        name="coursedescription"
+                                        defaultValue={formData.coursedescription}
+                                        onChange={(e) => setFormData({ ...formData, coursedescription: e.target.value })}
+                                    />
+                                </Form.Item>
+                                <Form.Item label='Grade Distribution'>
+                                    <Input.TextArea
+                                        name="gradedistribution"
+                                        defaultValue={JSON.stringify(formData.gradedistribution)}
+                                        onChange={(e) => setFormData({ ...formData, gradedistribution: e.target.value })}
+                                    />
+                                </Form.Item>
+                            </Form>
+    
                         </Modal>
                     </div>
                 </Content>
@@ -210,4 +283,4 @@ function DashboardPage() {
     );
 }
 
-export default DashboardPage;
+export default DashboardLecturer;
