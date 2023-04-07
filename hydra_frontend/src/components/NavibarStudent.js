@@ -3,25 +3,26 @@ import { useNavigate } from 'react-router-dom';
 import {
   AppstoreOutlined,
   BarChartOutlined,
-  CloudOutlined,
   DesktopOutlined,
-  ShopOutlined,
   TeamOutlined,
-  UploadOutlined,
-  UserOutlined,
   VideoCameraOutlined,
   FileOutlined,
   PieChartOutlined,
+  LogoutOutlined
   } from '@ant-design/icons';
   import { Layout, Menu, theme } from 'antd';
   import React from 'react';
   const { Header, Content, Footer, Sider } = Layout;
-  
+ 
   const Navibar = () => {
     const navigate = useNavigate();
     const {
       token: { colorBgContainer },
     } = theme.useToken();
+    const logOut = () => {
+      localStorage.clear();
+      navigate('/');
+    }
     return (
       <Layout hasSider>
         <Sider
@@ -89,7 +90,7 @@ import {
               icon: <LogoutOutlined />,
               label: 'Logout',
               style: { position: 'absolute', bottom: 0 },
-              onClick: () => {navigate('/')},
+              onClick: logOut(),
             }
           ]} />
         </Sider>
