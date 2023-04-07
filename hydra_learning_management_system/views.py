@@ -52,7 +52,7 @@ def createcourses(request):
         coursename = course_info['coursename']
         creatorname = course_info['creatorname']
         creatorid = Users.objects.get(username=creatorname)
-        enrolllist = json.dump({"enrolllist": [creatorid]})
+        enrolllist = json.dumps({"enrolllist": [creatorid]})
         cousedecription = course_info['cousedecription']
         gradedistribution = course_info['gradedistribution']
         course = Courses.objects.create(coursename=coursename, creatorid=creatorid, enrolllist=enrolllist,
@@ -91,8 +91,9 @@ def createdcouress(request):
     if request.method == "GET":
         data = json.loads(request.headers)
         creatorid = data["uid"]
-        course = Courses.objects.get(creatorid=creatorid)
-    return JsonResponse({"courses": course})
+        courses = Courses.objects.filter(creatorid=creatorid)
+        courses = serializers.serialize("python", courses)
+        return JsonResponse({"courses": courses})
 
 
 @csrf_exempt
@@ -122,10 +123,12 @@ def enrolledcourses(request):
     if request.method == "POST":
         data = json.loads(request.body)
         uid = data['uid']
-        cid = Enrollments.objects.get(uid=uid).cid
+        cid = Enrollments.objects.filter(uid=uid).cid
+        courses = []
         for i in cid:
             course = Courses.objects.get(cid=i)
-        return JsonResponse({"courses": course})
+            courses.append(course)
+        return JsonResponse({"courses": courses})
 
 
 @csrf_exempt
@@ -232,7 +235,7 @@ def forum(request):
             creatorname = Users.objects.get(uid=uid).username
             i["creatorname"] = creatorname
             p.append((i))
-    return JsonResponse({"posts": p})
+        return JsonResponse({"posts": p})
 
 
 @csrf_exempt
