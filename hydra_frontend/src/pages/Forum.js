@@ -7,19 +7,39 @@ import '../styles/Forum.css';
 const { RangePicker } = DatePicker;
 
 function Forum() {
-  // Fetch meta data of all post from server
 
   //Zaffi: 判断userid与creatorid是否相同，相同则跳转到ForumDetail-ownpage页面，不同则跳转到ForumDetail-student页面
   // // navigate('/ForumDetailLecturer', {state: {postid: record.postid}});
   // navigate('/forumdetailstudent', {state: {postid: record.postid}});
   // // navigate('/ForumDetailOwnPage', {state: {postid: record.postid}});
-  const fetch_post_data = (postid) => {
+  
+  // FUnction to fetch meta data of all post from server
+  const fetch_post_data = (postid, creatorid) => {
     console.log(postid);
-    navigate('/forumdetailstudent/' + postid, { state: { message: "hello" } });
+    console.log(creatorid);
+    if (localStorage.getItem('uid') === creatorid.toString()) {
+      // TODO: should navigate to the owner page
+      console.log("same");
+    }
+    else {
+      navigate('/forumdetailstudent/' + postid, { state: { message: "hello" } });
+    }
   }
 
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+
+  // Function to get UNIQUE keywods from the data
+  // TODO: the key words should be unique
+  const getKeyWords = () => {
+    const key_list = data.map(p => {
+      return {
+        text: p.keyword,
+        value: p.keyword,
+      }
+    })
+    return key_list;
+  }
 
   //tablesetting
   const columns = [
@@ -28,22 +48,14 @@ function Forum() {
       dataIndex: 'posttitle',
       sorter: {
         compare: (a, b) => a.posttitle.localeCompare(b.posttitle),
+        // Multiplier is used for sorting attribute priority
         multiply: 5,
       },
     },
     {
       title: 'Keyword',
       dataIndex: 'keyword',
-      filters: [
-        {
-          text: 'Post',
-          value: 'Post',
-        },
-        {
-          text: 'React',
-          value: 'React',
-        },
-      ],
+      filters: getKeyWords(),
       filterMode: 'tree',
       filterSearch: true,
       sorter: {
@@ -86,11 +98,13 @@ function Forum() {
         postid: p.pid,
         posttitle: p.title,
         keyword: p.keyword,
-        creator:p.creatorid,
+        creator: p.creatorname,
+        creatorid: p.creatorid,
         posttime: p.createtime.slice(0, 10),
-        numberoflikes: 1,
-        pin: false,
-    }});
+        numberoflikes: p.likes.likes.length,
+      }
+    });
+    console.log(post_list);
     return post_list;
   }
 
@@ -173,7 +187,7 @@ function Forum() {
             onRow={(record) => {
               return {
                 onClick: () => {
-                  fetch_post_data(record.postid)
+                  fetch_post_data(record.postid, record.creatorid)
                 },
               };
             }}

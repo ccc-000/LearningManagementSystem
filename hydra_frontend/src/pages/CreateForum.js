@@ -8,33 +8,48 @@ const { TextArea } = Input;
 
 
 function CreateForum() {
-  //连接服务器，实现上传文件
-  //multimedia file
-  //默认图片
-  const fileList = [
-    {
-      uid: '-1',
-      name: 'yyy.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-  ];
-
-  //create a post
   const [messageApi, contextHolder1] = message.useMessage();
   const [api, contextHolder2] = notification.useNotification();
-  const [form, setForm] = useState({
+  const navigate = useNavigate();
+  const [form, setFrom] = useState({
     title: "",
     content: "",
-    keyword: ""
+    keyword: "",
+    multimedia: ""
   });
 
-  const navigate = useNavigate();
+  // Conver the img into base64
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+    })
+  };
+
+  // Function to handle changes in multimedia
+  const multimediaHandler = async (e) => {
+    // Get the file obj from the file list
+    const file = e.fileList[0].originFileObj;
+    const file_base64 = await convertBase64(file);
+    setFrom({...form, multimedia: file_base64});
+    console.log(file_base64);
+  }
 
   // Function to handle creating a new post
   const onFinish = () => {
     console.log(form);
+
+    // The loading button always present until success/failure
+    messageApi.loading("Uploading to server...");
+
     fetch('http://localhost:8000/createposts/', {
       method: 'POST',
       headers: {
@@ -42,49 +57,36 @@ function CreateForum() {
       },
       body: JSON.stringify({
         creatorid: localStorage.uid,
-        // This id is just for testing
+        // TODO: the course ID should obtain from the url
         cid: "1",
         title: form.title,
         content: form.content,
         keyword: form.keyword,
-        multimedia: 12412
+        multimedia: form.multimedia
       }),
     })
       .then(response => response.json())
-  // If the post is successfully created, navigate the user to the forum page
+      // If the post is successfully created, navigate the user to the forum page
       .then(data => {
         console.log(data);
         if (data.status === 200) {
+          messageApi.destroy();
+          messageApi.success("Success!")
           navigate("/forum");
         }
-      });
-    //Zaffi: 将post的内容新增到数据库中
-    //获取Forum页面传输的courseid和creatorid
-    //获取当前时间
-    //获取post内容
-    // console.log('Received values of post: ', currentTime);
-
-    messageApi.open({
-      type: 'loading',
-      content: 'Creating...',
-      duration: 2,
-    });
-    setTimeout(() => {
-      messageApi.open({
-        type: 'success',
-        content: 'Created!',
-        duration: 2,
-      });
-    }, 2100);
-    // setTimeout(() => {
-    //   navigate('/forum');
-    // }, 3500);
+      })
+      .catch((error) => {
+        messageApi.destroy();
+        messageApi.error("Cannot connect to the server")
+        console.log(error);
+      })
   };
 
-  //cancel create
+  // Control the button to cancle post creation
   const confirmCancel = () => {
     navigate('/forum');
   };
+
   function handleCancel() {
     const key = `open${Date.now()}`;
     const btn = (
@@ -105,6 +107,7 @@ function CreateForum() {
       key,
     });
   }
+
   return (
     <div className="CreateForum-Total">
       <Link to="/forum"><LeftCircleOutlined style={{ fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey' }} /></Link>
@@ -118,9 +121,10 @@ function CreateForum() {
         </div>
         <div className="Create-File">
           <Upload
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            // This line is to prevent automatic uploading
+            beforeUpload={() => false}
+            onChange={multimediaHandler}
             listType="picture"
-            defaultFileList={[...fileList]}
             maxCount={1}
             className="upload-list-inline"
           >
