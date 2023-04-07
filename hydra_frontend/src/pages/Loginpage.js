@@ -22,7 +22,7 @@ export default function Loginpage() {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.status === true) {
+                if (data.status === 200) {
                     localStorage.setItem('uid',data.uid);
                     localStorage.setItem('role', data.role);
                     console.log(data.uid)
