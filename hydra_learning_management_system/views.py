@@ -15,25 +15,6 @@ from .models import *
 # have CSRF token in the header
 
 @csrf_exempt
-<<<<<<< HEAD
-def log_in(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        username = data["username"]
-        password = data["password"]
-        user = [username, password]
-        uid = users.objects.get(username=username).uid
-        if username == "hayden" or username == "Katrina":
-            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role":"lector"})
-        elif user is not None:
-            return JsonResponse({'status': True, 'msg': 'Log in Success', 'uid': uid, "role":"student"})
-        else:
-            return JsonResponse({'status': False, 'msg': 'Log in Fail'})
-
-
-@csrf_exempt
-=======
->>>>>>> dev_zsh
 def register(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -400,8 +381,4 @@ def showmaterial(request):
             i = i["fields"]
             print(i)
             res.append(i)
-<<<<<<< HEAD
         return JsonResponse({"material":res})
-=======
-        return JsonResponse({"material":res})
->>>>>>> dev_zsh
