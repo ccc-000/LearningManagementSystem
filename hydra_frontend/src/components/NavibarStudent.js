@@ -83,6 +83,13 @@ import {
                 icon: <PieChartOutlined />,
                 label: 'Grade',
                 onClick: () => {navigate('/coursemainpageStudent/grade')},
+            },
+            {
+              key: '8',
+              icon: <LogoutOutlined />,
+              label: 'Logout',
+              style: { position: 'absolute', bottom: 0 },
+              onClick: () => {navigate('/')},
             }
           ]} />
         </Sider>

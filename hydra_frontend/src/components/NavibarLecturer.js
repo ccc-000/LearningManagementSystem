@@ -12,6 +12,7 @@ import {
   VideoCameraOutlined,
   FileOutlined,
   PieChartOutlined,
+  LogoutOutlined
   } from '@ant-design/icons';
   import { Layout, Menu, theme } from 'antd';
   import React from 'react';
@@ -78,6 +79,13 @@ import {
               icon: <BarChartOutlined />,
               label: 'Quiz',
               onClick: () => {navigate('/coursemainpageLecturer/quizLecturer')},
+            },
+            {
+              key: '7',
+              icon: <LogoutOutlined />,
+              label: 'Logout',
+              style: { position: 'absolute', bottom: 0 },
+              onClick: () => {navigate('/')},
             }
           ]} />
         </Sider>
