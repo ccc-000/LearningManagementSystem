@@ -114,10 +114,10 @@ function CreateForum() {
       <div className="CreateForum-Content">
         <div className="Create-Title">
           <span style={{ marginRight: 20 }}>Title</span>
-          <Input placeholder="Please input a post title" value={form.title} onChange={(e) => { setFrom({ ...form, title: e.target.value }) }} />
+          <Input placeholder="Please input a post title" value={form.title} onChange={(e) => { setForm({ ...form, title: e.target.value }) }} />
         </div>
         <div className="Create-Content">
-          <TextArea rows={8} placeholder="Please input post content" value={form.content} onChange={(e) => { setFrom({ ...form, content: e.target.value }) }} />
+          <TextArea rows={8} placeholder="Please input post content" value={form.content} onChange={(e) => { setForm({ ...form, content: e.target.value }) }} />
         </div>
         <div className="Create-File">
           <Upload
@@ -133,7 +133,7 @@ function CreateForum() {
         </div>
         <div className="Create-Button">
           <span style={{ marginRight: 20 }}>Keyword</span>
-          <Input placeholder="Please input a keyword" style={{ width: 180 }} value={form.keyword} onChange={(e) => { setFrom({ ...form, keyword: e.target.value }) }} />
+          <Input placeholder="Please input a keyword" style={{ width: 180 }} value={form.keyword} onChange={(e) => { setForm({ ...form, keyword: e.target.value }) }} />
           {contextHolder2}
           <Button size="large" style={{ width: 100, float: 'right', marginRight: 20, marginTop: -10 }} onClick={handleCancel}>Cancel</Button>
           {contextHolder1}

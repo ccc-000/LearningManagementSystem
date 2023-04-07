@@ -16,6 +16,13 @@ json:
     3:{...}
 }
 
+1.5 show quiz
+fetch(showquiz/)
+send{
+    cid
+}
+return {所有quiz的信息}
+
 2. stu attend quiz(ddl:time time limit:10 min):
 fetch(/attendquiz)
 send{
@@ -39,12 +46,11 @@ return suc or fail
 
 3. review quiz（ddl enable review button）:
 fetch(/reviewquiz)
-{1:{description:1+1=?, A: 1, B:2，C:3, D:4, ans:B}}
-2
-3
+send{uid, cid}
+return {
+    quiz1的所有内容，
+    score
 }
-+
-stu.score
 
 
 
@@ -60,15 +66,19 @@ ass table{
 
 1. Create ass:
 fetch(/createass)
-send:
-ass table{
-    assid:,
+send:{
     creatorid:,
-    title:,
-    assdescription(url):,
-    ddl:
+    assdescription(url): ,
+
 }
-return seccess or failed.
+return success or failed.
+
+1.5 show ass
+fetch(showass/)
+send{
+    cid
+}
+return {所有ass的信息}
 
 2. stu submit:
 fetch(/submitass)
