@@ -1,35 +1,45 @@
-import logo from './logo.svg';
 import './App.css';
+import ResetPassword1 from './pages/ResetPassword1';
+import ResetPassword2 from './pages/ResetPassword2';
+import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
+import EditAvatar from './pages/EditAvatar';
+import CourseHistory from './pages/CourseHistory';
+import { Route, Routes } from 'react-router-dom';
+import Loginpage from './pages/Loginpage';
+import Registrationpage from './pages/Registrationpage';
+import Dashboard from './pages/Dashboard';
+import DashboardLecturer from './pages/DashboardLecturer';
+import Coursemainpage from "./pages/Coursemainpage";
+import Forum from "./pages/Forum";
+import CreateForum from './pages/CreateForum';
+import EditForum from './pages/EditForum';
+import ForumDetailStudent from './pages/ForumDetail-student';
+import * as React from 'react'
 
 function App() {
 
-  function connect() {
-    fetch('http://localhost:8000')
-      .then(response => response.json())
-      .then(data => console.log(data));
-  }
-
-  connect();
-
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <>
+            <Routes>
+                <Route path="/" element={<Loginpage/>}/>
+                <Route path="/register" element={<Registrationpage/>}/>
+                <Route path="/dashboard" element={<Dashboard/>}/>
+                <Route path="/dashboardlecturer" element={<DashboardLecturer/>}/>
+                <Route path="/coursemainpage" element={<Coursemainpage/>}/>
+                <Route path="/editprofile" element={<EditProfile/>}/>
+                <Route path="/enrolmenthistory" element={<CourseHistory/>}/>
+                <Route path="/profile" element={<Profile/>}/>
+                <Route path="/editavatar" element={<EditAvatar/>}/>
+                <Route path="/resetpassword/1" element={<ResetPassword1/>}/>
+                <Route path="/resetpassword/2" element={<ResetPassword2/>}/>
+                <Route path="/forum" element={<Forum/>}/>
+                <Route path="/createforum" element={<CreateForum/>}/>
+                <Route path="/editforum" element={<EditForum/>}/>
+                <Route path="/forumdetailstudent/:id" element={<ForumDetailStudent/>}/>
+            </Routes>
+        </>
+    );
 }
 
 export default App;

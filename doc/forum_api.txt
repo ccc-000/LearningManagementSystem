@@ -1,0 +1,115 @@
+posts{
+    pid(primary key),
+    creatorid,
+    courseid,
+    title,
+    keyword,
+    createtime,
+    content,
+    mutlimediapath,
+    reply {123:good,234:bad},
+    likes{[uid]},
+    editted(true),
+    flagged{[uid]},
+    privacy{[uid]}(length = 1, 给所有人, blocked 老师的id加进去)
+}
+
+1. When click the forum
+fetch(/forum)
+    "POST"
+    send{
+    cid
+    }
+    return {
+    list of {
+    posts{
+    pid(primary key),
+    creatorname,
+    title,
+    keyword,
+    createtime,
+    likes{[uid]}(int),
+    privacy{[uid]}(length = 1, 给所有人, blocked 老师的id加进去)
+}
+    }
+    }
+    Receive: metadata of all forum of the course (post_id, title, keyword, type, creator, time, num_of_likes, pin[list of user id])
+
+2. When click a specific post
+fetch(/posts)
+POST
+    Send: {
+    pid
+    }
+    return:{
+    posts{
+    creatorname,
+    courseid,
+    title,
+    keyword,
+    createtime,
+    content,
+    mutlimediapath,
+    reply {123:good,234:bad},
+    likes{[uid]},
+    editted(true),
+    flagged{[uid]},
+    privacy{[uid]}(length = 1, 给所有人, blocked 老师的id加进去)
+}
+    }
+    All reply of the post (reply_id, content, creator, reply_time, num_of_likes, file)
+
+3. Create a new post
+fetch(/createposts)
+POST
+posts{
+    creatorid,
+    courseid,
+    title,
+    keyword,
+    content,
+    mutlimediapath,
+}
+    Receive: 200 / 403
+
+4. Reply a post
+fetch(/replyposts)
+{
+    uid,
+    pid,
+    content
+}
+    Send: post_id, content, time, creator
+    Receive: 200 / 403
+
+5. Like a post(增删逻辑)
+fetch(/likeposts)
+    Send: {
+    pid, uid
+    }
+    Receive: 200 / 403
+
+6. Set private (can only done by creator or lecturer)
+fetch(/setprivate)
+send{
+pid,uid
+}
+
+8. Delete a post (can only done by creator or lecturer)
+fetch(/deleteposts)
+"DELETE"
+    send{
+pid,
+uid
+}
+    Receive: success / error
+
+9. Delete a reply
+fetch(/deleteposts)
+"DELETE"
+    send{
+pid,
+uid
+}
+    Receive: success / error
+

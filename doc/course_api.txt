@@ -1,0 +1,102 @@
+default the size of enrolllist is 50
+quiz: 9
+ass: 15
+final: 28
+{
+    courseid:1,
+    coursename:23t1_COMP9900_ITProject,
+    creatorid: 5,
+    enrolllist:[1,2,3],
+    coursedescription:"It's the final course of your 8543",
+    gradedistribution:{
+        quiz:{quiz1: 9, quiz2: 9, quiz3: 9},
+        ass:{ass1:15, ass2: 15, ass3: 15},
+        final:{final exam: 28}
+        }
+}
+
+1.create course:
+fetch(localhost/createcourses)
+form{
+    coursename: ,
+    !!!creatorname: ,
+    coursedescription：,
+    gradedistribution：
+}
+send
+{
+    head:
+    authenication: tokens
+    method:
+    body:
+    coursename,
+    coursedescription,
+    gradedistribution
+}
+return 200 or 500
+
+1.5 show courses you created
+fetch(localhost/createdcourses)
+"POST"{
+uid
+}
+
+
+2. show course which u have not enrolled:
+fetch(/courses)
+send:
+"GET"(tokens)
+{}
+
+"POST":{uid}
+return 
+{
+    {
+    courseid:1,
+    coursename:23t1_COMP9900_ITProject,
+    creatorname:(string)(transfer from creator id),
+    coursedescription:"It's the final course of your 8543",
+    },
+    {
+    courseid:2,
+    coursename:23t1_COMP9900_ITProject,
+    creatorname:(string)(transfer from creator id),
+    coursedescription:"It's the final course of your 8543",
+    },
+    {...}
+}
+
+3. enroll course:
+fetch('/enrollcourses')
+"POST"
+send:{
+    course id,
+    uid
+}
+return(avaible > 0) 200 or 500
+
+4. drop:
+fetch("/dropcourses")
+"POST"
+send:{
+    courseid:,
+    uid:,
+}
+return 200 or 500
+
+5. show course u enrolled:
+fetch("/enrolledcourses")
+send:
+"GET"{}
+"POST"{}
+return 
+{
+    {
+    courseid:1,
+    coursename:23t1_COMP9900_ITProject,
+    creatorname:(string)(transfer from creator id)
+    avaible seat: 45(int),
+    coursedescription:"It's the final course of your 8543",
+    },
+    {...}
+}
