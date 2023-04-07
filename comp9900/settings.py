@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'comp9900.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hydra_db',
+        'NAME': 'hydradb',
         'USER': 'django_admin',
         'PASSWORD': 'Zshh0724',
         'HOST': 'rm-t4n0tu80671s505h73o.rwlb.singapore.rds.aliyuncs.com',

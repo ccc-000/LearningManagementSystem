@@ -46,7 +46,7 @@ class Quizzes(models.Model):
 class Assignments(models.Model):
     aid = models.AutoField(primary_key=True)
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
-    ddl = models.TextField()
+    ddl = models.DateTimeField()
     url = models.TextField()
 
 
@@ -66,7 +66,7 @@ class Posts(models.Model):
     title = models.TextField()
     content = models.TextField()
     multimedia = models.TextField()
-    replyments = models.TextField()
+    reply = models.TextField()
     likes = models.TextField()
     editted = models.BooleanField()
     flagged = models.TextField()

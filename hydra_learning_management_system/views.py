@@ -71,6 +71,7 @@ def showcourses(request):
 
 @csrf_exempt
 def enrollcourses(request):
+    # We assign the max enrollment of a course is 45 and the lecturer.
     MAX_SEAT = 46
     if request.method == "POST":
         data = json.loads(request.body)
