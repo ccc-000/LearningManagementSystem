@@ -5,3 +5,7 @@ Sprint 1
 Sprint 2
 2.1 establish many database table: courses, quizzes, assignments, assessments, posts, replyments, Done
 Sprint 3
+4.7
+1. Change the structure of "assessment" table, and rewrite the create assignment funcition
+2. Talk with the teammate who is in charge of courses. And debug about the course functionality.
+3. try to write the token funtionality but failed. It should be done tmr.
