@@ -34,7 +34,7 @@ const RegistraionFrom = () => {
       .then(response => response.json())
       .then(data => {
         console.log(data)
-        if (data.status === true) {
+        if (data.status === 200) {
           navigate("/");
         }
       });
