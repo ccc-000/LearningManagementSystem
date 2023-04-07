@@ -70,8 +70,11 @@ def createcourses(request):
 @csrf_exempt
 def showcourses(request):
     if request.method == "POST":
-
-        return
+        data = json.loads(request.body)
+        uid = data["uid"]
+        courses = Courses.objects.filter(creatorid=uid)
+        courses = serializers.serialize("python", courses)
+        return JsonResponse({"courses":courses})
 
 @csrf_exempt
 def enrollcourses(request):
