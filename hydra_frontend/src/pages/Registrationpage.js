@@ -72,7 +72,7 @@ const RegistraionFrom = () => {
             <Form.Item label="Role: " name="role">
               <Select>
                 <Select.Option value="student">Student</Select.Option>
-                <Select.Option value="lecturre">Lecturer</Select.Option>
+                <Select.Option value="lecturer">Lecturer</Select.Option>
               </Select>
             </Form.Item>
             {/* <Form.Item label="Date of birth: " name="birthday">
