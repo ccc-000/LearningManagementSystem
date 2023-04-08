@@ -17,13 +17,12 @@ import DashboardLecturer from './pages/DashboardLecturer';
 // import EditForum from './pages/EditForum';
 // import ForumDetailStudent from './pages/ForumDetail-student';
 //Course main page for lecturer.
-import CoursemainpageLecturer from "./pages/CoursemainpageLecturer";
+import Coursemainpage from "./pages/Coursemainpage";
 import QuizLecturer from "./pages/QuizLecturer";
 import AssignmentLecturer from "./pages/AssignmentLecturer";
 import AnnouncementLecturer from "./pages/AnnouncementLecturer";
 
 //Course main page for student.
-import CoursemainpageStudent from "./pages/CoursemainpageStudent";
 import QuizStudent from "./pages/QuizStudent";
 import AssignmentStudent from "./pages/AssignmentStudent";
 // import Grade from './pages/Grade';
@@ -37,7 +36,7 @@ function App() {
                 <Route path="/register" element={<Registrationpage/>}/>
                 <Route path="/dashboard" element={<Dashboard/>}/>
                 <Route path="/dashboardlecturer" element={<DashboardLecturer/>}/>
-                <Route path="/CoursemainpageLecturer" element={<CoursemainpageLecturer/>}/>
+                <Route path="/coursemainpage" element={<Coursemainpage/>}/>
                 <Route path="/editprofile" element={<EditProfile/>}/>
                 <Route path="/enrolmenthistory" element={<CourseHistory/>}/>
                 <Route path="/profile" element={<Profile/>}/>
@@ -48,13 +47,12 @@ function App() {
                 {/* <Route path="/createforum" element={<CreateForum/>}/> */}
                 {/* <Route path="/editforum" element={<EditForum/>}/> */}
                 {/* <Route path="/forumdetailstudent/:id" element={<ForumDetailStudent/>}/> */}
-                <Route path="/CoursemainpageLecturer/quizLecturer" element={<QuizLecturer/>}/>
-                <Route path="/CoursemainpageLecturer/assignmentLecturer" element={<AssignmentLecturer/>}/>
-                <Route path="/CoursemainpageLecturer/announcementsLecturer" element={<AnnouncementLecturer/>}/>
+                <Route path="/coursemainpage/quizLecturer" element={<QuizLecturer/>}/>
+                <Route path="/coursemainpage/assignmentLecturer" element={<AssignmentLecturer/>}/>
+                <Route path="/coursemainpage/announcementsLecturer" element={<AnnouncementLecturer/>}/>
 
-                <Route path="/CoursemainpageStudent" element={<CoursemainpageStudent/>}/>
-                <Route path="/CoursemainpageStudent/quizStudent" element={<QuizStudent/>}/>
-                <Route path="/CoursemainpageStudent/assignmentStudent" element={<AssignmentStudent/>}/>
+                <Route path="/coursemainpage/quizStudent" element={<QuizStudent/>}/>
+                <Route path="/coursemainpage/assignmentStudent" element={<AssignmentStudent/>}/>
                 {/* <Route path="/CoursemainpageStudent/grade" element={<Grade/>}/> */}
             </Routes>
         </>

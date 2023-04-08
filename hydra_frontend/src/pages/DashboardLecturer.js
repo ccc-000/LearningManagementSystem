@@ -174,7 +174,7 @@ function DashboardLecturer() {
                             </Button>
                         </div>
                         <div className='cardBox'>
-                            <Link to='/coursemainpageLecturer'>
+                            <Link to='/coursemainpage'>
                                 <Card
                                     hoverable
                                     className='courseCard'
