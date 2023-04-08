@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import { Button, Card, Avatar, Timeline, Select, message } from 'antd';
 import {Link} from 'react-router-dom';
@@ -12,6 +12,23 @@ const { Option } = Select;
 function Profile() {
     const [messageApi, contextHolder] = message.useMessage();
 
+    useEffect(() => {
+      fetch('http://localhost:8000/showprofile/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: localStorage.uid
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const profile_data = data.profile;
+          console.log(profile_data);
+        });
+    }, []);
+    
     //update language
     function handleChange() {
       messageApi.open({
