@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Table, Modal, Select, Upload, message} from 'antd';
 import {useNavigate, Link} from 'react-router-dom';
 import { UploadOutlined } from '@ant-design/icons';
+import { Document, Page } from "@react-pdf/renderer";
 import 'antd/dist/reset.css';
 import '../styles/Material.css';
 
@@ -11,9 +12,11 @@ function Material() {
 
     const jsonToPost = (material_data) => {
       const material_list = material_data.map(m => {
+        const urlObj = new URL(m.filepath);
         return {
           mid: m.mid,
           type: m.type,
+          filename: urlObj.pathname.split('/').pop().replace(/%20/g, ' '),
           filepath: m.filepath,
       }});
       return material_list;
@@ -45,10 +48,6 @@ function Material() {
             dataIndex: 'type',
             filters: [
               {
-                text: 'PPT',
-                value: 'PPT',
-              },
-              {
                 text: 'PDF',
                 value: 'PDF',
               },
@@ -71,9 +70,9 @@ function Material() {
         },
         {
             title: 'Material',
-            dataIndex: 'filepath',
+            dataIndex: 'filename',
             sorter: {
-                compare: (a, b) => a.filepath.localeCompare(b.filepath),
+                compare: (a, b) => a.filename.localeCompare(b.filename),
             },
         },
       ];
@@ -88,7 +87,7 @@ function Material() {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [form, setForm] = useState({
       type: "",
-      filepath: "D:\\9900\\COMP9900Wk01Lecture23T1.pdf"
+      filepath: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
     });
 
     const showModal = () => {
@@ -174,10 +173,6 @@ function Material() {
                     onChange={handleChange}
                     options={[
                       {
-                        value: 'PPT',
-                        label: 'PPT',
-                      },
-                      {
                         value: 'PDF',
                         label: 'PDF',
                       },
@@ -209,8 +204,27 @@ function Material() {
                 onRow={(record) => {
                   return {
                     onClick: event => {
-                      console.log(record.filepath)
-                      window.location.assign(record.filepath);
+                      if (record.filepath.endsWith('.pdf')) {
+                        console.log("pdf",record.filepath);
+                        window.location.assign(record.filepath);
+                        // window.location.assign(<iframe src={record.filepath} title="file preview" width="100%" height="600px" />)
+                      } 
+                      if (record.filepath.endsWith('.zip')) {
+                        fetch(record.filepath) // 替换为要下载的文件 URL
+                          .then(response => response.blob())
+                          .then(blob => {
+                            const downloadLink = document.createElement("a");
+                            downloadLink.href = URL.createObjectURL(blob);
+                            const urlObj = new URL(record.filepath);
+                            downloadLink.download = urlObj.pathname.split('/').pop().replace(/%20/g, ' '); // 替换为要下载的文件名称
+                            downloadLink.click();
+                          })
+                          .catch(error => console.error("Download failed", error));
+                      }
+                      if (record.filepath.endsWith('.mp4')){
+                        console.log("mp4", record.filepath);
+                        navigate('/coursemainpage/videoPlayer', { state: { filepath: record.filepath } });
+                      }
                     },
                   };
                 }}

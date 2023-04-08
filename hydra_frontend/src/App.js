@@ -29,6 +29,7 @@ import AssignmentStudent from "./pages/AssignmentStudent";
 
 // Material page for lecturer.
 import Material from "./pages/Material";
+import VideoPlayer from './pages/VedioPlayer';
 
 function App() {
 
@@ -58,6 +59,7 @@ function App() {
                 <Route path="/coursemainpage/assignmentStudent" element={<AssignmentStudent/>}/>
                 {/* <Route path="/CoursemainpageStudent/grade" element={<Grade/>}/> */}
                 <Route path="/coursemainpage/material" element={<Material/>}/>
+                <Route path="/coursemainpage/videoPlayer" element={<VideoPlayer/>}/>
             </Routes>
         </>
     );
