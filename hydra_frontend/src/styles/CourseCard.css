@@ -1,0 +1,4 @@
+.coursecard {
+    display: flex;
+    flex-direction: row;
+}
