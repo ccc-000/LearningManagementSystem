@@ -50,8 +50,24 @@ def logout(request):
 def editprofile(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        firstname = data["firstname"]
-        lastname = data["lastname"]
+        uid = data["uid"]
+        user_info = Users.objects.get(uid=uid)
+        username = user_info.username
+        firstname = user_info.firstname
+        lastname = user_info.lastname
+        gender = user_info.gender
+        birthday = user_info.birthday
+        email = user_info.email
+        preferedlanguage = user_info.preferredlanguage
+        return JsonResponse({
+            "Firstname": firstname,
+            "Lastname": lastname,
+            "gender": gender,
+            "birthday": birthday,
+            "email": email,
+            "language": preferedlanguage
+        })
+
 
 @csrf_exempt
 def forget_pwd_send_link(request):
@@ -65,11 +81,12 @@ def createcourses(request):
         coursename = course_info['coursename']
         creatorname = course_info['creatorname']
         creatorid = Users.objects.get(username=creatorname)
-        enrolllist = json.dumps({"enrolllist": [creatorid]})
-        cousedecription = course_info['cousedecription']
+        crid = creatorid.uid
+        enrolllist = json.dumps({"enrolllist": [crid]})
+        coursedecription = course_info['coursedescription']
         gradedistribution = course_info['gradedistribution']
         course = Courses.objects.create(coursename=coursename, creatorid=creatorid, enrolllist=enrolllist,
-                                        cousedecription=cousedecription, gradedistribution=gradedistribution)
+                                        coursedescription=coursedecription, gradedistribution=gradedistribution)
 
         if course:
             return JsonResponse({'status': 200})
@@ -84,7 +101,8 @@ def showcourses(request):
         uid = data["uid"]
         courses = Courses.objects.filter(creatorid=uid)
         courses = serializers.serialize("python", courses)
-        return JsonResponse({"courses":courses})
+        return JsonResponse({"courses": courses})
+
 
 
 @csrf_exempt
@@ -198,7 +216,7 @@ def createass(request):
         cid = data["cid"]
         url = data["url"]
         assdescription = data["assdescription"]
-        ass = Assignments.objects.create(cid=cid, url=url,title=title,assignmentdescription=assdescription)
+        ass = Assignments.objects.create(cid=cid, url=url, title=title, assignmentdescription=assdescription)
         if ass is not None:
             return JsonResponse({'status': 200})
         else:
@@ -375,7 +393,7 @@ def uploadmaterial(request):
         cid = data["cid"]
         course = Courses.objects.get(cid=cid)
         filepath = data["filepath"]
-        materials = Materials.objects.create(type=type, cid=course, fileapath=filepath)
+        materials = Materials.objects.create(type=type, cid=course, filepath=filepath)
         if materials is not None:
             return JsonResponse({"status": 200})
         else:
