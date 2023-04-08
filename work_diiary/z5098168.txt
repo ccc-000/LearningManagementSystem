@@ -1,0 +1,5 @@
+07/04/2023 
+1. Fixed the UI logic of the "create forum" page. 
+2. Complete a function which converts image into Base64 string. 
+3. All data including multimedia(mostly image) into the database. 
+4. The forum can now sorted by creators'(user) name. 

@@ -46,6 +46,28 @@ def logout(request):
     if request.method == "GET":
         return JsonResponse({'status': 200})
 
+@csrf_exempt
+def editprofile(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        user_info = Users.objects.get(uid=uid)
+        username = user_info.username
+        firstname = user_info.firstname
+        lastname = user_info.lastname
+        gender = user_info.gender
+        birthday = user_info.birthday
+        email = user_info.email
+        preferedlanguage = user_info.preferredlanguage
+        return JsonResponse({
+            "Firstname": firstname,
+            "Lastname": lastname,
+            "gender": gender,
+            "birthday": birthday,
+            "email": email,
+            "language": preferedlanguage
+        })
+
 
 @csrf_exempt
 def forget_pwd_send_link(request):
@@ -80,6 +102,7 @@ def showcourses(request):
         courses = Courses.objects.filter(creatorid=uid)
         courses = serializers.serialize("python", courses)
         return JsonResponse({"courses": courses})
+
 
 
 @csrf_exempt
@@ -142,6 +165,7 @@ def enrolledcourses(request):
         for i in cid:
             course = Courses.objects.get(cid=i)
             courses.append(course)
+        courses = serializers.serialize("python", courses)
         return JsonResponse({"courses": courses})
 
 
