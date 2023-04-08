@@ -63,9 +63,9 @@ function DashboardLecturer() {
     });
     const [form] = Form.useForm();
     const [initialValues, setInitialValues] = useState({
-        coursename: '1',
-        creatorname: '1',
-        coursedescription: '1',
+        coursename: '',
+        creatorname: '',
+        coursedescription: '',
         gradedistribution: JSON.stringify(grade),
     });
 
@@ -73,7 +73,7 @@ function DashboardLecturer() {
 
     const handleSubmit = () => {
         form.validateFields().then(values => {
-            console.log(values);
+            console.log(JSON.stringify(values));
         // console.log('form data:',JSON.stringify(formData))
             fetch('http://localhost:8000/createcourses/', {
                 method: 'POST',
@@ -88,7 +88,9 @@ function DashboardLecturer() {
                     return;
                 }
                 message.success('Successful!');
-                setShowModal(false);          
+                setShowModal(false);
+                form.resetFields();
+                form.setFieldsValue({ gradedistribution: JSON.stringify(grade) });          
             });
         });
     
@@ -127,7 +129,7 @@ function DashboardLecturer() {
     const handleEditAvatar = () => {
         navigate('/editavatar')
     };
-
+    console.log('dashboard',uid);
     return (
         <Layout hasSider>
             <Sider
@@ -196,7 +198,7 @@ function DashboardLecturer() {
                             Create Courses
                         </Button>
                         <div className='cardBox'>
-                            <ShowCourse id={uid}/>
+                            <ShowCourse uid={uid}/>
                             
                        </div>
 

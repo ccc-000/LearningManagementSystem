@@ -3,8 +3,10 @@ import { useState, useEffect } from 'react';
 
 
 const ShowCourse = ({uid}) => {
+  console.log('show course',uid);
   const [courseList, setCourseList] = useState([]);
   useEffect(() => {
+    console.log(uid);
     fetch(`http://localhost:8000/createdcourses/`, {
     method: 'POST',
     headers: {
