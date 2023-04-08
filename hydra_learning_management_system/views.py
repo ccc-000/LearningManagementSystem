@@ -122,9 +122,13 @@ def createdcourses(request):
         uid = data["uid"]
         courses = Courses.objects.filter(creatorid=uid)
         courses = serializers.serialize("python", courses)
+        course = []
         for i in courses:
-            i = i["fields"]
-        return JsonResponse({"courses": courses})
+            tmp = {}
+            tmp["coursename"] = i["fields"]["coursename"]
+            tmp["coursedescription"] = i["fields"]["coursedescription"]
+            course.append(tmp)
+        return JsonResponse({"courses": course})
 
 
 @csrf_exempt
