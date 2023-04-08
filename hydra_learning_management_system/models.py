@@ -13,7 +13,7 @@ class Users(models.Model):
     lastname = models.TextField(default='')
     gender = models.TextField(default='')
     birthday = models.TextField(default='')
-    perferredlanguage = models.TextField(default='')
+    preferredlanguage = models.TextField(default='')
 
 
 class Courses(models.Model):
