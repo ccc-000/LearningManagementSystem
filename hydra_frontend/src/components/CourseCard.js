@@ -1,10 +1,15 @@
 import { Card, message } from 'antd';
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
+import {useNavigate } from 'react-router-dom';
 import '../styles/CourseCard.css';
 
 const ShowCourse = ({uid}) => {
   console.log('show course',uid);
+  const navigate = useNavigate();
   const [courseList, setCourseList] = useState([]);
+  const handleNavigate = () => {
+    navigate('/coursemainpage');
+  };
   useEffect(() => {
     console.log(uid);
     fetch(`http://localhost:8000/createdcourses/`, {
@@ -24,18 +29,16 @@ const ShowCourse = ({uid}) => {
         console.log(typeof jsonRes);
         console.log(jsonRes.courses);
         setCourseList(jsonRes.courses);
-        // if (Array.isArray(jsonRes)) {
-        //   setCourseList(jsonRes);
-        // }
-        // else {
-        //   console.log('not an array', typeof jsonRes);
-        // }
     })
   }, []);
   return (
     <div className='coursecard'>
       {courseList.map(courses => (
-        <Card title={courses.coursename} key={courses.cid}>
+        <Card 
+        className='card'
+        title={courses.coursename} 
+        key={courses.cid}
+        onClick={handleNavigate}>
           <p>{courses.coursedescription}</p>
         </Card>
       ))}
