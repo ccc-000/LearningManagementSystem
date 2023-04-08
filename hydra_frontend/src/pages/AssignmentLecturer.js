@@ -7,9 +7,9 @@ import { Button, Modal, Space, Input, message } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
 
 const { Header, Content, Footer, Sider } = Layout;
+const { TextArea } = Input;
 
-
-function CreateAssignment() {
+export default function CreateAssignment() {
     const [loading, setLoading] = useState(false); //for modal
     const [open, setOpen] = useState(false); 
     const showModal = () => {
@@ -20,24 +20,21 @@ function CreateAssignment() {
         setTimeout(() => {
         setLoading(false);
         setOpen(false);
-        }, 3000);
+        }, 1500);
     };
     const handleCancel = () => {
         setOpen(false);
     };
 
-    const [assData, setAssData] = useState({
-        ddl: '',
-        url: ''
-    });
+    const [title, setTitle] = useState('');
+    const [url, setUrl] = useState('');
 
-    const handleChange = (e) => {
-        setAssData({
-            ...assData,
-            link: e.target.value,
-        });
+    const handleChange = () => {
+        const data = {
+          title: title,
+          url: url
+        };
     };
-
     const handleSubmit = (e) => {
         e.preventDefault();
         fetch('http://localhost:8000/createass/', {
@@ -46,8 +43,8 @@ function CreateAssignment() {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            ddl: '',
-            url: assData.link
+            title: title,
+            url: url
         }),
     })
         .then((response) => response.json())
@@ -94,8 +91,12 @@ function CreateAssignment() {
                 ]}
             >
                 <div style={{fontWeight:'bold', marginLeft:'15px', marginTop:'15px', marginBottom:'20px'}}>
+                    Assignment Title:
+                    <Input placeholder="Input Assignment Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+                <br />
+                <br />
                     Assignment Link:
-                    <Input placeholder="Input Assignment Link" value={assData.link} onChange={handleChange} />
+                    <Input placeholder="Input Assignment Link" value={url} onChange={(e) => setUrl(e.target.value)} />
                 </div>
 
             </Modal>
@@ -136,4 +137,3 @@ function CreateAssignment() {
     );
 }
 
-export default CreateAssignment;
