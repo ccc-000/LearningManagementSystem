@@ -222,6 +222,7 @@ function Material() {
                           .catch(error => console.error("Download failed", error));
                       }
                       if (record.filepath.endsWith('.mp4')){
+                        //if file is mp4, navigate to videoPlayer page
                         console.log("mp4", record.filepath);
                         navigate('/coursemainpage/videoPlayer', { state: { filepath: record.filepath } });
                       }
