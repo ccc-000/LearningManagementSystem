@@ -1,6 +1,6 @@
 import { Card, message } from 'antd';
 import { useState, useEffect } from 'react';
-
+import '../styles/CourseCard.css';
 
 const ShowCourse = ({uid}) => {
   console.log('show course',uid);
@@ -12,23 +12,31 @@ const ShowCourse = ({uid}) => {
     headers: {
         'Content-Type': 'application/json',
     },
-    body: JSON.stringify(uid),
+    body: JSON.stringify({'uid': uid}),
     }).then(async(response) => {
         const jsonRes = await response.json();
+        console.log(jsonRes);
         if (response.status !== 200) {
             message.error(jsonRes.error);
             return;
         }
         message.success('Successful!');
-        setCourseList(jsonRes);
+        console.log(typeof jsonRes);
+        console.log(jsonRes.courses);
+        setCourseList(jsonRes.courses);
+        // if (Array.isArray(jsonRes)) {
+        //   setCourseList(jsonRes);
+        // }
+        // else {
+        //   console.log('not an array', typeof jsonRes);
+        // }
     })
   }, []);
   return (
-    <div>
-      {courseList.map(course => (
-        <Card title={course.coursename} key={course.cid}>
-          <p>{course.coursedescription}</p>
-    
+    <div className='coursecard'>
+      {courseList.map(courses => (
+        <Card title={courses.coursename} key={courses.cid}>
+          <p>{courses.coursedescription}</p>
         </Card>
       ))}
     </div>
@@ -36,3 +44,4 @@ const ShowCourse = ({uid}) => {
 };
 
 export default ShowCourse;
+
