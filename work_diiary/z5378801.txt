@@ -1,0 +1,4 @@
+4.7
+1. material page: show file name instead of url in file list table
+2. material page: classify the file type in the url link and navigate to different pages
+3. vedioplayer page: create a vedioplayer page to show mp4 file
