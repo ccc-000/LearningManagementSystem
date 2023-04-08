@@ -11,7 +11,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Loginpage from './pages/Loginpage';
 import Registrationpage from './pages/Registrationpage';
 import Dashboard from './pages/Dashboard';
-import DashboardLecturer from './pages/DashboardLecturer';
+import DashboardLecturer from './pages/DashboardLecturer_3';
 // import Forum from "./pages/Forum";
 // import CreateForum from './pages/CreateForum';
 // import EditForum from './pages/EditForum';
