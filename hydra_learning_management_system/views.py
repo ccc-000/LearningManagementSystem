@@ -59,11 +59,12 @@ def createcourses(request):
         coursename = course_info['coursename']
         creatorname = course_info['creatorname']
         creatorid = Users.objects.get(username=creatorname)
-        enrolllist = json.dumps({"enrolllist": [creatorid]})
-        cousedecription = course_info['cousedecription']
+        crid = creatorid.uid
+        enrolllist = json.dumps({"enrolllist": [crid]})
+        coursedecription = course_info['coursedescription']
         gradedistribution = course_info['gradedistribution']
         course = Courses.objects.create(coursename=coursename, creatorid=creatorid, enrolllist=enrolllist,
-                                        cousedecription=cousedecription, gradedistribution=gradedistribution)
+                                        coursedescription=coursedecription, gradedistribution=gradedistribution)
 
         if course:
             return JsonResponse({'status': 200})
