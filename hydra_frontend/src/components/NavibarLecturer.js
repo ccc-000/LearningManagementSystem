@@ -89,7 +89,7 @@ import {
               icon: <LogoutOutlined />,
               label: 'Logout',
               style: { position: 'absolute', bottom: 0 },
-              onClick: logOut(),
+              onClick: logOut,
             }
           ]} />
         </Sider>

@@ -61,15 +61,7 @@ function CreateAssignment() {
         })
     };
 
-    const [data, setData] = useState([]);
-    useEffect(() => {
-        async function fetchData() {
-            const response = await fetch('http://localhost:8000/createass/');
-            const data = await response.json();
-            setData(data);
-        }
-        fetchData();
-    }, []);
+    
 
     return (
         <>
