@@ -9,6 +9,11 @@ class Users(models.Model):
     password = models.CharField(max_length=50)
     email = models.EmailField(max_length=50)
     role = models.CharField(max_length=10)
+    firstname = models.TextField(default='')
+    lastname = models.TextField(default='')
+    gender = models.TextField(default='')
+    birthday = models.TextField(default='')
+    perferredlanguage = models.TextField(default='')
 
 
 class Courses(models.Model):
