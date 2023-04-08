@@ -14,7 +14,7 @@ function Material() {
         return {
           mid: m.mid,
           type: m.type,
-          filepath: m.fileapath,
+          filepath: m.filepath,
       }});
       return material_list;
     }

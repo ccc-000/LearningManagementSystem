@@ -27,6 +27,9 @@ import QuizStudent from "./pages/QuizStudent";
 import AssignmentStudent from "./pages/AssignmentStudent";
 // import Grade from './pages/Grade';
 
+// Material page for lecturer.
+import Material from "./pages/Material";
+
 function App() {
 
     return (
@@ -54,6 +57,7 @@ function App() {
                 <Route path="/coursemainpage/quizStudent" element={<QuizStudent/>}/>
                 <Route path="/coursemainpage/assignmentStudent" element={<AssignmentStudent/>}/>
                 {/* <Route path="/CoursemainpageStudent/grade" element={<Grade/>}/> */}
+                <Route path="/coursemainpage/material" element={<Material/>}/>
             </Routes>
         </>
     );
