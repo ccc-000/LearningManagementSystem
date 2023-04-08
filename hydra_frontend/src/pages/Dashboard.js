@@ -117,7 +117,7 @@ function DashboardPage() {
                         {selectedOptions.length > 0 && (
                             <div className='cardBox'>
                                 {selectedOptions.map((option, index) => (
-                                    <Link to='/coursemainpageStudent'>
+                                    <Link to='/coursemainpage'>
                                         <Card
                                             hoverable
                                             key={index}
