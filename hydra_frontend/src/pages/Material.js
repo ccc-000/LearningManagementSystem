@@ -210,6 +210,7 @@ function Material() {
                         // window.location.assign(<iframe src={record.filepath} title="file preview" width="100%" height="600px" />)
                       } 
                       if (record.filepath.endsWith('.zip')) {
+                        //if file is zip, download it
                         fetch(record.filepath) // 替换为要下载的文件 URL
                           .then(response => response.blob())
                           .then(blob => {
