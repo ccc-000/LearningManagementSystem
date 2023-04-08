@@ -278,7 +278,7 @@ def forum(request):
             i["flagged"] = json.loads(i["flagged"])
             i["likes"] = json.loads(i["likes"])
             i["privacy"] = json.loads(i["privacy"])
-            i["replyments"] = json.loads(i["replyments"])
+            i["reply"] = json.loads(i["reply"])
             uid = i["creatorid"]
             creatorname = Users.objects.get(uid=uid).username
             i["creatorname"] = creatorname
@@ -431,6 +431,5 @@ def showmaterial(request):
         for i in m:
             i["fields"]['mid'] = i['pk']
             i = i["fields"]
-            print(i)
             res.append(i)
         return JsonResponse({"material": res})
