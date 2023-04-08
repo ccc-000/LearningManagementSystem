@@ -25,16 +25,17 @@ def register(request):
         user = Users.objects.create(username=username, password=password, email=email, role=role)
         return JsonResponse({'status': 200, 'msg': 'Register Success'})
 
+
 @csrf_exempt
 def log_in(request):
     if request.method == "POST":
         data = json.loads(request.body)
         username = data["username"]
         password = data["password"]
-        uid = Users.objects.get(username = username).uid
+        uid = Users.objects.get(username=username).uid
         rightpwd = Users.objects.get(username=username).password
         role = Users.objects.get(username=username).role
-        if password==rightpwd:
+        if password == rightpwd:
             return JsonResponse({'status': 200, 'msg': 'Log in Success', 'uid': uid, "role": role})
         else:
             return JsonResponse({'status': 403, 'msg': 'Log in Fail'})
@@ -44,6 +45,8 @@ def log_in(request):
 def logout(request):
     if request.method == "GET":
         return JsonResponse({'status': 200})
+
+
 @csrf_exempt
 def forget_pwd_send_link(request):
     return
@@ -67,6 +70,7 @@ def createcourses(request):
         else:
             return JsonResponse({'status': 403})
 
+
 @csrf_exempt
 def showcourses(request):
     if request.method == "POST":
@@ -74,7 +78,8 @@ def showcourses(request):
         uid = data["uid"]
         courses = Courses.objects.filter(creatorid=uid)
         courses = serializers.serialize("python", courses)
-        return JsonResponse({"courses":courses})
+        return JsonResponse({"courses": courses})
+
 
 @csrf_exempt
 def enrollcourses(request):
@@ -186,7 +191,7 @@ def createass(request):
         cid = data["cid"]
         url = data["url"]
         assdescription = data["assdescription"]
-        ass = Assignments.objects.create(cid=cid, url=url,title=title,assignmentdescription=assdescription)
+        ass = Assignments.objects.create(cid=cid, url=url, title=title, assignmentdescription=assdescription)
         if ass is not None:
             return JsonResponse({'status': 200})
         else:
@@ -361,9 +366,9 @@ def uploadmaterial(request):
         data = json.loads(request.body)
         type = data["type"]
         cid = data["cid"]
-        course = Courses.objects.get(cid = cid)
+        course = Courses.objects.get(cid=cid)
         filepath = data["filepath"]
-        materials = Materials.objects.create(type=type, cid=course, fileapath=filepath)
+        materials = Materials.objects.create(type=type, cid=course, filepath=filepath)
         if materials is not None:
             return JsonResponse({"status": 200})
         else:
@@ -381,6 +386,7 @@ def downloadmaterial(request):
         else:
             return JsonResponse({"status": 403})
 
+
 @csrf_exempt
 def showmaterial(request):
     if request.method == "POST":
@@ -394,4 +400,4 @@ def showmaterial(request):
             i = i["fields"]
             print(i)
             res.append(i)
-        return JsonResponse({"material":res})
+        return JsonResponse({"material": res})
