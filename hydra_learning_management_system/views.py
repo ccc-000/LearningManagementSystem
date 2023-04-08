@@ -306,7 +306,7 @@ def createposts(request):
         flagged = json.dumps({"flagged": []})
         privacy = json.dumps({"privacy": []})
         post = Posts.objects.create(creatorid=creatorid, cid=cid, createtime=createtime, keyword=keyword, title=title
-                                    , content=content, multimedia=multimedia, replyments=replyments, likes=likes,
+                                    , content=content, multimedia=multimedia, reply=replyments, likes=likes,
                                     editted=editted, flagged=flagged, privacy=privacy)
         if post is not None:
             return JsonResponse({'status': 200})
