@@ -51,5 +51,8 @@ urlpatterns = [
 
     path("uploadmaterial/", views.uploadmaterial),
     path("downloadmaterial/", views.downloadmaterial),
-    path("showmaterial/", views.showmaterial)
+    path("showmaterial/", views.showmaterial),
+
+    path("showprofile/",views.showprofile),
+    path("editprofile/",views.editprofile),
 ]

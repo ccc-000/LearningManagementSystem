@@ -46,8 +46,9 @@ def logout(request):
     if request.method == "GET":
         return JsonResponse({'status': 200})
 
+
 @csrf_exempt
-def editprofile(request):
+def showprofile(request):
     if request.method == "POST":
         data = json.loads(request.body)
         uid = data["uid"]
@@ -67,6 +68,27 @@ def editprofile(request):
             "email": email,
             "language": preferedlanguage
         })
+
+
+@csrf_exempt
+def editprofile(request):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        firstname = data["firstname"]
+        lastname = data["lastname"]
+        gender = data["gender"]
+        birthday = data["birthday"]
+        email = data["email"]
+        preferedlanguage = data["preferedlanguage"]
+        user = Users.objects.get(uid=uid)
+        user.firstname = firstname
+        user.lastname = lastname
+        user.gender = gender
+        user.birthday = birthday
+        user.email = email
+        user.preferedlanguage = preferedlanguage
+        return JsonResponse({"status": 200})
 
 
 @csrf_exempt
@@ -92,9 +114,6 @@ def createcourses(request):
             return JsonResponse({'status': 200})
         else:
             return JsonResponse({'status': 403})
-
-
-
 
 
 @csrf_exempt
@@ -142,7 +161,6 @@ def dropcourses(request):
         enrollment = Enrollments.objects.get(cid=cid)
         enrollment.delete()
         return JsonResponse({'status': 200})
-
 
 
 @csrf_exempt
