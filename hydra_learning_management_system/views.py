@@ -45,6 +45,14 @@ def log_in(request):
 def logout(request):
     if request.method == "GET":
         return JsonResponse({'status': 200})
+
+@csrf_exempt
+def editprofile(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        firstname = data["firstname"]
+        lastname = data["lastname"]
+
 @csrf_exempt
 def forget_pwd_send_link(request):
     return
