@@ -122,6 +122,8 @@ def createdcourses(request):
         uid = data["uid"]
         courses = Courses.objects.filter(creatorid=uid)
         courses = serializers.serialize("python", courses)
+        for i in courses:
+            i = i["fields"]
         return JsonResponse({"courses": courses})
 
 
