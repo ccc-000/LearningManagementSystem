@@ -12,8 +12,8 @@ import Loginpage from './pages/Loginpage';
 import Registrationpage from './pages/Registrationpage';
 import Dashboard from './pages/Dashboard';
 import DashboardLecturer from './pages/DashboardLecturer_3';
-// import Forum from "./pages/Forum";
-// import CreateForum from './pages/CreateForum';
+import Forum from "./pages/Forum";
+import CreateForum from './pages/CreateForum';
 // import EditForum from './pages/EditForum';
 // import ForumDetailStudent from './pages/ForumDetail-student';
 //Course main page for lecturer.
@@ -47,8 +47,8 @@ function App() {
                 <Route path="/editavatar" element={<EditAvatar/>}/>
                 <Route path="/resetpassword/1" element={<ResetPassword1/>}/>
                 <Route path="/resetpassword/2" element={<ResetPassword2/>}/>
-                {/* <Route path="/forum" element={<Forum/>}/> */}
-                {/* <Route path="/createforum" element={<CreateForum/>}/> */}
+                <Route path="/forum" element={<Forum/>}/>
+                <Route path="/createforum" element={<CreateForum/>}/>
                 {/* <Route path="/editforum" element={<EditForum/>}/> */}
                 {/* <Route path="/forumdetailstudent/:id" element={<ForumDetailStudent/>}/> */}
                 <Route path="/coursemainpage/quizLecturer" element={<QuizLecturer/>}/>
