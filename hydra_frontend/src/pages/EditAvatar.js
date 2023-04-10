@@ -93,7 +93,7 @@ function EditAvatar() {
     
     return (
         <div className="ChangeAvatar">
-          <Link to="/profile"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey'}}/></Link>
+          {/* <Link to="/profile"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey'}}/></Link> */}
           <Card
             id="ChangeAvatar-Card"
             bordered={false}

@@ -69,6 +69,7 @@ function Profile() {
             width: 380,
             height: 400,
             marginRight: 15,
+            fontSize: 15,
             }}
           >
             <div>
