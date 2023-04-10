@@ -30,7 +30,6 @@ function CourseHistory() {
                 <div id="EnrolmentHistory-Title"><span>Enrolment History</span></div>
                 <div id="EnrolmentHistory-Content">
                     <Timeline
-                        pending="Recording..."
                         reverse={reverse}
                         items={[
                             {

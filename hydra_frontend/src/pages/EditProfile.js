@@ -72,6 +72,7 @@ function EditProfile() {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data)
         setData(data);
       });
   }, []);
@@ -84,8 +85,9 @@ function EditProfile() {
     email: data.email,
     language: data.language,
   }
-  console.log("data", data)
-  console.log("initialValues", initialValues)
+
+  // console.log("data", data)
+  // console.log("initialValues", initialValues)
 
   //submit modify
   const onFinish = (fieldsValue) => {
@@ -95,14 +97,14 @@ function EditProfile() {
       'date-picker': fieldsValue['birthday'].format('YYYY-MM-DD'),
     };
     console.log('Received values of form: ', values);
-    
+
     messageApi.open({
       type: 'loading',
       content: 'Updating...',
     });
 
     fetch('http://localhost:8000/editprofile/', {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },

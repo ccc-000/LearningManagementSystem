@@ -9,8 +9,20 @@ import '../styles/Profile.css';
 //将修改后的prefer language提交到数据库
 
 function Profile() {
-    // const [messageApi, contextHolder] = message.useMessage();
-    const [data, setData] = useState([]);
+    const [data1, setData1] = useState([]);
+    const [data2, setData2] = useState([]);
+    // console.log(data2.courses);
+
+    // const jsonToList = (data2) => {
+    //   const enrollment_list = [];
+    //   data2.courses.map((course) => {
+    //     enrollment_list.push({
+    //       children: {course}
+    //     });
+    //   }
+    //   console.log(enrollment_list);
+    //   return data2;
+    // }
 
     useEffect(() => {
       fetch('http://localhost:8000/showprofile/', {
@@ -23,9 +35,23 @@ function Profile() {
         }),
       })
         .then((response) => response.json())
-        .then((data) => {
-          setData(data);
+        .then((data1) => {
+          setData1(data1);
         });
+
+      // fetch('http://localhost:8000/enrolledcourses/', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     uid: localStorage.uid
+      //   }),
+      // })
+      //   .then(response => response.json())
+      //   .then(data2 => {
+      //     setData2(data2);
+      //   });
     }, []);
 
     return (
@@ -46,12 +72,12 @@ function Profile() {
             }}
           >
             <div>
-              <p><span style={{ fontWeight: 'bold' }}>First Name:</span>{'\u00A0'}{'\u00A0'}{data.Firstname}</p>
-              <p><span style={{ fontWeight: 'bold' }}>Last Name:</span>{'\u00A0'}{'\u00A0'}{data.Lastname}</p>
-              <p><span style={{ fontWeight: 'bold' }}>Gender:</span>{'\u00A0'}{'\u00A0'}{data.gender}</p>
-              <p><span style={{ fontWeight: 'bold' }}>Birthday:</span>{'\u00A0'}{'\u00A0'}{data.birthday}</p>
-              <p><span style={{ fontWeight: 'bold' }}>Email:</span>{'\u00A0'}{'\u00A0'}{data.email}</p>
-              <p><span style={{ fontWeight: 'bold' }}>Preferred Language:</span>{'\u00A0'}{'\u00A0'}{data.language}</p>
+              <p><span style={{ fontWeight: 'bold' }}>First Name:</span>{'\u00A0'}{'\u00A0'}{data1.Firstname}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Last Name:</span>{'\u00A0'}{'\u00A0'}{data1.Lastname}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Gender:</span>{'\u00A0'}{'\u00A0'}{data1.gender}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Birthday:</span>{'\u00A0'}{'\u00A0'}{data1.birthday}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Email:</span>{'\u00A0'}{'\u00A0'}{data1.email}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Preferred Language:</span>{'\u00A0'}{'\u00A0'}{data1.language}</p>
             </div>
             <Link to="/editprofile">
               <div id="ProfileDetail-Button">
@@ -71,7 +97,7 @@ function Profile() {
             }}
             >
             <Timeline
-                pending="Recording..."
+                pending="More"
                 items={[
                 {
                     children: 'Term One, 2023 COMP9900',
