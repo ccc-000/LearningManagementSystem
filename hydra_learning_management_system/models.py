@@ -18,7 +18,7 @@ class Users(models.Model):
 
 class Courses(models.Model):
     cid = models.AutoField(primary_key=True)
-    coursename = models.CharField(max_length=50)
+    coursename = models.CharField(max_length=60)
     creatorid = models.ForeignKey(Users, on_delete=models.CASCADE)
     enrolllist = models.TextField()
     coursedescription = models.TextField()
