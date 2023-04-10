@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import NavibarStudent from '../components/NavibarStudent';
+import Navibar from '../components/Navibar';
 import { Divider, Layout, Button, message, Upload, Modal, Tooltip, Space, Input } from 'antd';
 import { UploadOutlined, RollbackOutlined } from '@ant-design/icons';
 
@@ -90,7 +90,7 @@ function AllAssignments() {
 
             </Modal>
         </div>
-        <NavibarStudent />
+        <Navibar />
         <Footer
             style={{
                 textAlign: 'center',

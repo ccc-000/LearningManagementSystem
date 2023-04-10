@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Layout, theme, Tooltip } from 'antd';
-import NavibarLecturer from '../components/NavibarLecturer';
-import NavibarStudent from '../components/NavibarStudent';
+import Navibar from '../components/Navibar';
 import { RollbackOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
@@ -32,7 +31,7 @@ const Coursemainpage = () => {
             </Tooltip>
           </Link>
         </Header>
-        <NavibarLecturer />   
+        <Navibar />   
         <Footer
         style={{
             textAlign: 'center',
@@ -41,8 +40,7 @@ const Coursemainpage = () => {
           Hydra Learning management system©2023 Created by COMP9900 HYDRA Group
       </Footer>
     </Layout>  
-    )
-    } else {
+    )} else {
       return (
       <Layout
       className="site-layout"
@@ -58,7 +56,7 @@ const Coursemainpage = () => {
             </Tooltip>
           </Link>
         </Header>
-        <NavibarStudent />   
+        <Navibar />   
         <Footer
         style={{
             textAlign: 'center',

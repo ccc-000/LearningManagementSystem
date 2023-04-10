@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Modal, Form, Input, message, Layout, Divider, Tooltip} from 'antd';
-import NavibarLecturer from '../components/NavibarLecturer';
+import Navibar from '../components/Navibar';
 import { RollbackOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
@@ -106,7 +106,7 @@ const AnnouncementPage = () => {
           </Form>
         </Modal>
       </div>
-      <NavibarLecturer />
+      <Navibar />
       <Footer
         style={{
           textAlign: 'center',

@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Divider, List, Typography, Layout, Tooltip } from 'antd';
-import NavibarLecturer from '../components/NavibarLecturer';
+import Navibar from '../components/Navibar';
 import { Button, Modal, Space, Input, Radio } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
 
@@ -109,7 +109,7 @@ function CreateQuiz () {
                 </List.Item>
             )}
         /> */}
-        <NavibarLecturer />
+        <Navibar />
         <Footer
             style={{
                 textAlign: 'center',
