@@ -57,7 +57,7 @@ function App() {
 
                 <Route path="/coursemainpage/quizStudent" element={<QuizStudent/>}/>
                 <Route path="/coursemainpage/assignmentStudent" element={<AssignmentStudent/>}/>
-                {/* <Route path="/CoursemainpageStudent/grade" element={<Grade/>}/> */}
+                {/* <Route path="/Coursemainpage/grade" element={<Grade/>}/> */}
                 <Route path="/coursemainpage/material" element={<Material/>}/>
                 <Route path="/coursemainpage/videoPlayer" element={<VideoPlayer/>}/>
             </Routes>

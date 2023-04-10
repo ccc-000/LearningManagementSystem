@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Divider, List, Typography, Layout } from 'antd';
-import NavibarStudent from '../components/NavibarStudent';
+import Navibar from '../components/Navibar';
 import { Button, Modal, Space, Input, Radio, Tooltip } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
 
@@ -89,7 +89,7 @@ function AllQuiz () {
                 </List.Item>
             )}
         /> */}
-        <NavibarStudent />
+        <Navibar />
         <Footer
             style={{
                 textAlign: 'center',

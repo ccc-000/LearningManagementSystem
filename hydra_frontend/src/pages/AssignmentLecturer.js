@@ -1,5 +1,5 @@
 import React from 'react';
-import NavibarLecturer from '../components/NavibarLecturer';
+import Navibar from '../components/Navibar';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Divider, List, Typography, Layout, Tooltip } from 'antd';
@@ -122,7 +122,7 @@ export default function CreateAssignment() {
                 // </List.Item>
             // )}
         /> */}
-        <NavibarLecturer />
+        <Navibar />
         <Footer
             style={{
                 textAlign: 'center',
