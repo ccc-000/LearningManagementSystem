@@ -7,11 +7,10 @@ import { Link } from 'react-router-dom';
 const { Header, Content, Footer, Sider } = Layout;
 
 // localStorage.setItem('courseId', cid);
+const role = localStorage.getItem('role');
+console.log(role);
 
 const Coursemainpage = () => {
-  const role = localStorage.getItem('role');
-  console.log(role);
-
   const {
       token: { colorBgContainer },
   } = theme.useToken();
