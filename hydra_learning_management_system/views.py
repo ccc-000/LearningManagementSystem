@@ -46,8 +46,9 @@ def logout(request):
     if request.method == "GET":
         return JsonResponse({'status': 200})
 
+
 @csrf_exempt
-def editprofile(request):
+def showprofile(request):
     if request.method == "POST":
         data = json.loads(request.body)
         uid = data["uid"]
@@ -67,6 +68,27 @@ def editprofile(request):
             "email": email,
             "language": preferedlanguage
         })
+
+
+@csrf_exempt
+def editprofile(request):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        firstname = data["firstname"]
+        lastname = data["lastname"]
+        gender = data["gender"]
+        birthday = data["birthday"]
+        email = data["email"]
+        preferedlanguage = data["preferedlanguage"]
+        user = Users.objects.get(uid=uid)
+        user.firstname = firstname
+        user.lastname = lastname
+        user.gender = gender
+        user.birthday = birthday
+        user.email = email
+        user.preferedlanguage = preferedlanguage
+        return JsonResponse({"status": 200})
 
 
 @csrf_exempt
@@ -95,17 +117,6 @@ def createcourses(request):
 
 
 @csrf_exempt
-def showcourses(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        uid = data["uid"]
-        courses = Courses.objects.filter(creatorid=uid)
-        courses = serializers.serialize("python", courses)
-        return JsonResponse({"courses": courses})
-
-
-
-@csrf_exempt
 def enrollcourses(request):
     # We assume the max enrollment of a course is 45 and the lecturer.
     MAX_SEAT = 46
@@ -124,13 +135,20 @@ def enrollcourses(request):
 
 
 @csrf_exempt
-def createdcouress(request):
-    if request.method == "GET":
-        data = json.loads(request.headers)
-        creatorid = data["uid"]
-        courses = Courses.objects.filter(creatorid=creatorid)
+def createdcourses(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        courses = Courses.objects.filter(creatorid=uid)
         courses = serializers.serialize("python", courses)
-        return JsonResponse({"courses": courses})
+        course = []
+        for i in courses:
+            tmp = {}
+            tmp["coursename"] = i["fields"]["coursename"]
+            tmp["coursedescription"] = i["fields"]["coursedescription"]
+            tmp["cid"] = i["fields"]["cid"]
+            course.append(tmp)
+        return JsonResponse({"courses": course})
 
 
 @csrf_exempt
@@ -147,20 +165,11 @@ def dropcourses(request):
 
 
 @csrf_exempt
-def createdcourses(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        uid = data['uid']
-        course = Courses.objects.get(creatorid=uid)
-        return JsonResponse({"courses": course})
-
-
-@csrf_exempt
 def enrolledcourses(request):
     if request.method == "POST":
         data = json.loads(request.body)
         uid = data['uid']
-        cid = Enrollments.objects.filter(uid=uid).cid
+        cid = Enrollments.objects.filter(uid=uid)
         courses = []
         for i in cid:
             course = Courses.objects.get(cid=i)
@@ -270,7 +279,7 @@ def forum(request):
             i["flagged"] = json.loads(i["flagged"])
             i["likes"] = json.loads(i["likes"])
             i["privacy"] = json.loads(i["privacy"])
-            i["replyments"] = json.loads(i["replyments"])
+            i["reply"] = json.loads(i["reply"])
             uid = i["creatorid"]
             creatorname = Users.objects.get(uid=uid).username
             i["creatorname"] = creatorname
@@ -298,7 +307,7 @@ def createposts(request):
         flagged = json.dumps({"flagged": []})
         privacy = json.dumps({"privacy": []})
         post = Posts.objects.create(creatorid=creatorid, cid=cid, createtime=createtime, keyword=keyword, title=title
-                                    , content=content, multimedia=multimedia, replyments=replyments, likes=likes,
+                                    , content=content, multimedia=multimedia, reply=replyments, likes=likes,
                                     editted=editted, flagged=flagged, privacy=privacy)
         if post is not None:
             return JsonResponse({'status': 200})
@@ -423,6 +432,5 @@ def showmaterial(request):
         for i in m:
             i["fields"]['mid'] = i['pk']
             i = i["fields"]
-            print(i)
             res.append(i)
         return JsonResponse({"material": res})
