@@ -1,16 +1,16 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { Button, Card, Avatar, Timeline, Select, message } from 'antd';
+import { Button, Card, Avatar, Timeline} from 'antd';
 import {Link} from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/Profile.css';
-const { Option } = Select;
 
 //通过uid获取用户信息并显示
 //将修改后的prefer language提交到数据库
 
 function Profile() {
-    const [messageApi, contextHolder] = message.useMessage();
+    // const [messageApi, contextHolder] = message.useMessage();
+    const [data, setData] = useState([]);
 
     useEffect(() => {
       fetch('http://localhost:8000/showprofile/', {
@@ -24,26 +24,9 @@ function Profile() {
       })
         .then((response) => response.json())
         .then((data) => {
-          const profile_data = data.profile;
-          console.log(profile_data);
+          setData(data);
         });
     }, []);
-    
-    //update language
-    function handleChange() {
-      messageApi.open({
-        type: 'loading',
-        content: 'Updating...',
-        duration: 2,
-      });
-      setTimeout(() => {
-        messageApi.open({
-          type: 'success',
-          content: 'Updated!',
-          duration: 2,
-        });
-      }, 2100);
-    }
 
     return (
       <div className="ProfileDetail">
@@ -63,21 +46,12 @@ function Profile() {
             }}
           >
             <div>
-              <p>First Name:</p>
-              <p>Last Name:</p>
-              <p>Gender:</p>
-              <p>Birthday:</p>
-              <p>Email:</p>
-              <div id="ProfileDetail-Language">
-                <p>Preferred Language:</p>
-                <Select placeholder="select preferred language" defaultValue="english" style={{marginLeft:20}}>
-                    <Option value="english">English</Option>
-                    <Option value="french">French</Option>
-                    <Option value="chinese">Chinese</Option>
-                </Select>
-                {contextHolder}
-                <Button id="ProfileDetail-Update" type="primary" onClick={handleChange}>Update</Button>
-              </div>
+              <p><span style={{ fontWeight: 'bold' }}>First Name:</span>{'\u00A0'}{'\u00A0'}{data.Firstname}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Last Name:</span>{'\u00A0'}{'\u00A0'}{data.Lastname}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Gender:</span>{'\u00A0'}{'\u00A0'}{data.gender}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Birthday:</span>{'\u00A0'}{'\u00A0'}{data.birthday}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Email:</span>{'\u00A0'}{'\u00A0'}{data.email}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Preferred Language:</span>{'\u00A0'}{'\u00A0'}{data.language}</p>
             </div>
             <Link to="/editprofile">
               <div id="ProfileDetail-Button">

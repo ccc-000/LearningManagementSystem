@@ -4,3 +4,8 @@
 3. vedioplayer page: create a vedioplayer page to show mp4 file
 
 4.8
+1. profile page: show profile detail using uid in localStorage
+2. editprofile page: show profile detail using uid in localStorage
+3. editprofile page: upload edited profile detail to database using uid in localStorage
+
+4.10
