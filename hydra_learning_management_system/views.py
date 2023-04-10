@@ -146,6 +146,7 @@ def createdcourses(request):
             tmp = {}
             tmp["coursename"] = i["fields"]["coursename"]
             tmp["coursedescription"] = i["fields"]["coursedescription"]
+            tmp["cid"] = i["fields"]["cid"]
             course.append(tmp)
         return JsonResponse({"courses": course})
 
@@ -168,7 +169,7 @@ def enrolledcourses(request):
     if request.method == "POST":
         data = json.loads(request.body)
         uid = data['uid']
-        cid = Enrollments.objects.filter(uid=uid).cid
+        cid = Enrollments.objects.filter(uid=uid)
         courses = []
         for i in cid:
             course = Courses.objects.get(cid=i)
