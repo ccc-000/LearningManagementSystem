@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { UserOutlined, LeftCircleOutlined } from '@ant-design/icons';
 import { Input, Button, Avatar, Form, Select, DatePicker, Card, message, notification, Space } from 'antd';
 import { useNavigate, Link } from 'react-router-dom';
+import dayjs from 'dayjs';
 import 'antd/dist/reset.css';
 import '../styles/EditProfile.css';
 const { Option } = Select;
@@ -43,7 +44,6 @@ const formItemLayout = {
 
 function EditProfile() {
   //form
-  const [form] = Form.useForm();
   const [messageApi, contextHolder1] = message.useMessage();
   const [api, contextHolder2] = notification.useNotification();
   const navigate = useNavigate();
@@ -72,20 +72,21 @@ function EditProfile() {
     })
       .then((response) => response.json())
       .then((data) => {
+        // console.log(data)
         setData(data);
       });
   }, []);
 
+  const [form] = Form.useForm();
   const initialValues = {
     firstname: data.Firstname,
     lastname: data.Lastname,
     gender: data.gender,
-    birthday: data.birthday,
+    birthday: dayjs(data.birthday),
     email: data.email,
     language: data.language,
   }
-  console.log("data", data)
-  console.log("initialValues", initialValues)
+  form.setFieldsValue(initialValues);
 
   //submit modify
   const onFinish = (fieldsValue) => {
@@ -95,14 +96,14 @@ function EditProfile() {
       'date-picker': fieldsValue['birthday'].format('YYYY-MM-DD'),
     };
     console.log('Received values of form: ', values);
-    
+
     messageApi.open({
       type: 'loading',
       content: 'Updating...',
     });
 
     fetch('http://localhost:8000/editprofile/', {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -165,7 +166,7 @@ function EditProfile() {
 
   return (
     <div className="EditProfile">
-        <Link to="/profile"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey'}}/></Link>
+        {/* <Link to="/profile"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey'}}/></Link> */}
         <div id="EditProfile-Content">
           <Card
             bordered={false}
@@ -266,9 +267,26 @@ function EditProfile() {
                 ]}
               >
                 <Select placeholder="select preferred language">
+                  <Option value="Arabic">Arabic</Option>
+                  <Option value="Chinese">Chinese</Option>
+                  <Option value="Danish">Danish</Option>
+                  <Option value="Dutch">Dutch</Option>
                   <Option value="English">English</Option>
                   <Option value="French">French</Option>
-                  <Option value="Chinese">Chinese</Option>
+                  <Option value="German">German</Option>
+                  <Option value="Greek">Greek</Option>
+                  <Option value="Hindi">Hindi</Option>
+                  <Option value="Italian">Italian</Option>
+                  <Option value="Japanese">Japanese</Option>
+                  <Option value="Korean">Korean</Option>
+                  <Option value="Norwegian">Norwegian</Option>
+                  <Option value="Portuguese">Portuguese</Option>
+                  <Option value="Russian">Russian</Option>
+                  <Option value="Spanish">Spanish</Option>
+                  <Option value="Swedish">Swedish</Option>
+                  <Option value="Thai">Thai</Option>
+                  <Option value="Turkish">Turkish</Option>
+                  <Option value="Vietnamese">Vietnamese</Option>
                 </Select>
               </Form.Item>
 
