@@ -7,15 +7,16 @@ const ShowCourse = ({uid}) => {
   console.log('show course',uid);
   const navigate = useNavigate();
   const [courseList, setCourseList] = useState([]);
-  const handleNavigate = () => {
+  const handleNavigate = (id) => {
+    localStorage.setItem('cid', id);
     navigate('/coursemainpage');
   };
   useEffect(() => {
     console.log(uid);
     fetch(`http://localhost:8000/createdcourses/`, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
     },
     body: JSON.stringify({'uid': uid}),
     }).then(async(response) => {
@@ -38,7 +39,7 @@ const ShowCourse = ({uid}) => {
         className='card'
         title={courses.coursename} 
         key={courses.cid}
-        onClick={handleNavigate}>
+        onClick={handleNavigate(courses.cid)}>
           <p>{courses.coursedescription}</p>
         </Card>
       ))}
