@@ -159,6 +159,7 @@ def courses(request):
         courses = Courses.objects.all()
         corurses = serializers.serialize("python", courses)
         return courses
+
 @csrf_exempt
 def dropcourses(request):
     if request.method == "POST":
