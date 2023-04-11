@@ -1,0 +1,7 @@
+.coursecard {
+    display: flex;
+    flex-direction: row;
+}
+.card {
+    cursor: pointer;
+}

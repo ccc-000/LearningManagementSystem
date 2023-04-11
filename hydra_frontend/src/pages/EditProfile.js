@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { UserOutlined, LeftCircleOutlined } from '@ant-design/icons';
 import { Input, Button, Avatar, Form, Select, DatePicker, Card, message, notification, Space } from 'antd';
 import { useNavigate, Link } from 'react-router-dom';
+import dayjs from 'dayjs';
 import 'antd/dist/reset.css';
 import '../styles/EditProfile.css';
 const { Option } = Select;
@@ -43,7 +44,6 @@ const formItemLayout = {
 
 function EditProfile() {
   //form
-  const [form] = Form.useForm();
   const [messageApi, contextHolder1] = message.useMessage();
   const [api, contextHolder2] = notification.useNotification();
   const navigate = useNavigate();
@@ -57,6 +57,37 @@ function EditProfile() {
     ],
   };
 
+  //get user info
+  const [data, setData] = useState([]);
+  
+  useEffect(() => {
+    fetch('http://localhost:8000/showprofile/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        uid: localStorage.uid
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log(data)
+        setData(data);
+      });
+  }, []);
+
+  const [form] = Form.useForm();
+  const initialValues = {
+    firstname: data.Firstname,
+    lastname: data.Lastname,
+    gender: data.gender,
+    birthday: dayjs(data.birthday),
+    email: data.email,
+    language: data.language,
+  }
+  form.setFieldsValue(initialValues);
+
   //submit modify
   const onFinish = (fieldsValue) => {
     // Should format date value before submit.
@@ -65,21 +96,47 @@ function EditProfile() {
       'date-picker': fieldsValue['birthday'].format('YYYY-MM-DD'),
     };
     console.log('Received values of form: ', values);
+
     messageApi.open({
       type: 'loading',
       content: 'Updating...',
-      duration: 2,
     });
-    setTimeout(() => {
-      messageApi.open({
-        type: 'success',
-        content: 'Updated!',
-        duration: 2,
-      });
-    }, 2100);
-    setTimeout(() => {
-      navigate('/profile');
-    }, 3500);
+
+    fetch('http://localhost:8000/editprofile/', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        uid: localStorage.uid,
+        firstname: values.firstname,
+        lastname: values.lastname,
+        gender: values.gender,
+        birthday: values["date-picker"],
+        email: values.email,
+        preferedlanguage: values.language,
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data.status === 200) {
+          messageApi.destroy();
+          messageApi.open({
+            type: 'success',
+            content: 'Updated!',
+            duration: 2,
+          });
+          setTimeout(() => {
+            navigate('/profile');
+          }, 2100);
+        }
+      })
+      .catch((error) => {
+        messageApi.destroy();
+        messageApi.error("Cannot connect to the server")
+        console.error(error);
+      })
   };
 
   //cancel modify
@@ -109,7 +166,7 @@ function EditProfile() {
 
   return (
     <div className="EditProfile">
-        <Link to="/profile"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey'}}/></Link>
+        {/* <Link to="/profile"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey'}}/></Link> */}
         <div id="EditProfile-Content">
           <Card
             bordered={false}
@@ -125,10 +182,8 @@ function EditProfile() {
             {...formItemLayout}
             form={form}
             name="edit"
+            initialValues={initialValues}
             onFinish={onFinish}
-            initialValues={{
-                language: 'English',
-            }}
             style={{
                 maxWidth: 600,
                 marginTop: 30,
@@ -174,9 +229,9 @@ function EditProfile() {
                 ]}
               >
                 <Select placeholder="select your gender">
-                <Option value="male">Male</Option>
-                <Option value="female">Female</Option>
-                <Option value="other">Other</Option>
+                <Option value="Male">Male</Option>
+                <Option value="Female">Female</Option>
+                <Option value="Other">Other</Option>
                 </Select>
               </Form.Item>
 
@@ -212,9 +267,26 @@ function EditProfile() {
                 ]}
               >
                 <Select placeholder="select preferred language">
-                  <Option value="english">English</Option>
-                  <Option value="french">French</Option>
-                  <Option value="chinese">Chinese</Option>
+                  <Option value="Arabic">Arabic</Option>
+                  <Option value="Chinese">Chinese</Option>
+                  <Option value="Danish">Danish</Option>
+                  <Option value="Dutch">Dutch</Option>
+                  <Option value="English">English</Option>
+                  <Option value="French">French</Option>
+                  <Option value="German">German</Option>
+                  <Option value="Greek">Greek</Option>
+                  <Option value="Hindi">Hindi</Option>
+                  <Option value="Italian">Italian</Option>
+                  <Option value="Japanese">Japanese</Option>
+                  <Option value="Korean">Korean</Option>
+                  <Option value="Norwegian">Norwegian</Option>
+                  <Option value="Portuguese">Portuguese</Option>
+                  <Option value="Russian">Russian</Option>
+                  <Option value="Spanish">Spanish</Option>
+                  <Option value="Swedish">Swedish</Option>
+                  <Option value="Thai">Thai</Option>
+                  <Option value="Turkish">Turkish</Option>
+                  <Option value="Vietnamese">Vietnamese</Option>
                 </Select>
               </Form.Item>
 

@@ -13,7 +13,7 @@ import {
 import {Button, Card, Checkbox, Layout, Menu, Modal} from 'antd';
 import React, {useRef, useState} from 'react';
 import Draggable from 'react-draggable';
-import {Link} from 'react-router-dom';
+import {Link, useEffect} from 'react-router-dom';
 
 const {Content, Footer, Sider} = Layout;
 const items = [
@@ -32,6 +32,7 @@ const items = [
 }));
 
 function DashboardPage() {
+    const uid = localStorage.getItem('uid');
     const [showModal, setShowModal] = useState(false);
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [disabled, setDisabled] = useState(false);
@@ -41,6 +42,29 @@ function DashboardPage() {
         bottom: 0,
         right: 0,
     });
+    useEffect(() => {
+
+    },[])
+    const sendCourses = () => {
+        fetch(`http://localhost:8000/createdcourses/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({'uid': uid}),
+        }).then(async(response) => {
+            const jsonRes = await response.json();
+            console.log(jsonRes);
+            if (response.status !== 200) {
+                message.error(jsonRes.error);
+                return;
+            }
+            message.success('Successful!');
+            console.log(typeof jsonRes);
+            console.log(jsonRes.courses);
+            setCourseList(jsonRes.courses);
+        })
+    }
     const draggleRef = useRef(null);
 
     const handleOpen = () => {

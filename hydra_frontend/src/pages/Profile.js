@@ -1,32 +1,58 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { Button, Card, Avatar, Timeline, Select, message } from 'antd';
+import { Button, Card, Avatar, Timeline} from 'antd';
 import {Link} from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/Profile.css';
-const { Option } = Select;
 
 //通过uid获取用户信息并显示
 //将修改后的prefer language提交到数据库
 
 function Profile() {
-    const [messageApi, contextHolder] = message.useMessage();
+    const [data1, setData1] = useState([]);
+    const [data2, setData2] = useState([]);
+    // console.log(data2.courses);
 
-    //update language
-    function handleChange() {
-      messageApi.open({
-        type: 'loading',
-        content: 'Updating...',
-        duration: 2,
-      });
-      setTimeout(() => {
-        messageApi.open({
-          type: 'success',
-          content: 'Updated!',
-          duration: 2,
+    // const jsonToList = (data2) => {
+    //   const enrollment_list = [];
+    //   data2.courses.map((course) => {
+    //     enrollment_list.push({
+    //       children: {course}
+    //     });
+    //   }
+    //   console.log(enrollment_list);
+    //   return data2;
+    // }
+
+    useEffect(() => {
+      fetch('http://localhost:8000/showprofile/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: localStorage.uid
+        }),
+      })
+        .then((response) => response.json())
+        .then((data1) => {
+          setData1(data1);
         });
-      }, 2100);
-    }
+
+      // fetch('http://localhost:8000/enrolledcourses/', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     uid: localStorage.uid
+      //   }),
+      // })
+      //   .then(response => response.json())
+      //   .then(data2 => {
+      //     setData2(data2);
+      //   });
+    }, []);
 
     return (
       <div className="ProfileDetail">
@@ -43,24 +69,16 @@ function Profile() {
             width: 380,
             height: 400,
             marginRight: 15,
+            fontSize: 15,
             }}
           >
             <div>
-              <p>First Name:</p>
-              <p>Last Name:</p>
-              <p>Gender:</p>
-              <p>Birthday:</p>
-              <p>Email:</p>
-              <div id="ProfileDetail-Language">
-                <p>Preferred Language:</p>
-                <Select placeholder="select preferred language" defaultValue="english" style={{marginLeft:20}}>
-                    <Option value="english">English</Option>
-                    <Option value="french">French</Option>
-                    <Option value="chinese">Chinese</Option>
-                </Select>
-                {contextHolder}
-                <Button id="ProfileDetail-Update" type="primary" onClick={handleChange}>Update</Button>
-              </div>
+              <p><span style={{ fontWeight: 'bold' }}>First Name:</span>{'\u00A0'}{'\u00A0'}{data1.Firstname}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Last Name:</span>{'\u00A0'}{'\u00A0'}{data1.Lastname}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Gender:</span>{'\u00A0'}{'\u00A0'}{data1.gender}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Birthday:</span>{'\u00A0'}{'\u00A0'}{data1.birthday}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Email:</span>{'\u00A0'}{'\u00A0'}{data1.email}</p>
+              <p><span style={{ fontWeight: 'bold' }}>Preferred Language:</span>{'\u00A0'}{'\u00A0'}{data1.language}</p>
             </div>
             <Link to="/editprofile">
               <div id="ProfileDetail-Button">
@@ -80,7 +98,7 @@ function Profile() {
             }}
             >
             <Timeline
-                pending="Recording..."
+                pending="More"
                 items={[
                 {
                     children: 'Term One, 2023 COMP9900',

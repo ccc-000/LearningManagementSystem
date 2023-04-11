@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, DatePicker, Checkbox, Table } from 'antd';
 import { useNavigate, Link, json } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -7,19 +7,40 @@ import '../styles/Forum.css';
 const { RangePicker } = DatePicker;
 
 function Forum() {
-  // Fetch meta data of all post from server
 
   //Zaffi: 判断userid与creatorid是否相同，相同则跳转到ForumDetail-ownpage页面，不同则跳转到ForumDetail-student页面
   // // navigate('/ForumDetailLecturer', {state: {postid: record.postid}});
   // navigate('/forumdetailstudent', {state: {postid: record.postid}});
   // // navigate('/ForumDetailOwnPage', {state: {postid: record.postid}});
-  const fetch_post_data = (postid) => {
+  
+  // FUnction to fetch meta data of all post from server
+  const fetch_post_data = (postid, creatorid) => {
     console.log(postid);
-    navigate('/forumdetailstudent/' + postid, { state: { message: "hello" } });
+    console.log(creatorid);
+    if (localStorage.getItem('uid') === creatorid.toString()) {
+      // TODO: should navigate to the owner page
+      console.log("same");
+    }
+    else {
+      navigate('/forum/' + postid);
+    }
   }
 
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const [tabledata, setTableData] = useState([]);
+
+  // Function to get UNIQUE keywods from the data
+  // TODO: the key words should be unique
+  const getKeyWords = () => {
+    const key_list = data.map(p => {
+      return {
+        text: p.keyword,
+        value: p.keyword,
+      }
+    })
+    return key_list;
+  }
 
   //tablesetting
   const columns = [
@@ -28,22 +49,14 @@ function Forum() {
       dataIndex: 'posttitle',
       sorter: {
         compare: (a, b) => a.posttitle.localeCompare(b.posttitle),
+        // Multiplier is used for sorting attribute priority
         multiply: 5,
       },
     },
     {
       title: 'Keyword',
       dataIndex: 'keyword',
-      filters: [
-        {
-          text: 'Post',
-          value: 'Post',
-        },
-        {
-          text: 'React',
-          value: 'React',
-        },
-      ],
+      filters: getKeyWords(),
       filterMode: 'tree',
       filterSearch: true,
       sorter: {
@@ -86,11 +99,14 @@ function Forum() {
         postid: p.pid,
         posttitle: p.title,
         keyword: p.keyword,
-        creator:p.creatorid,
+        creator: p.creatorname,
+        creatorid: p.creatorid,
         posttime: p.createtime.slice(0, 10),
-        numberoflikes: 1,
-        pin: false,
-    }});
+        numberoflikes: p.likes.likes.length,
+        flagged: p.flagged.flagged,
+      }
+    });
+    console.log(post_list);
     return post_list;
   }
 
@@ -110,18 +126,24 @@ function Forum() {
       .then(response => response.json())
       .then(data => {
         const posts_data = data.posts;
-        console.log(posts_data);
         setData(jsonToPost(posts_data));
+        setTableData(jsonToPost(posts_data));
       });
   }, [])
 
-  //Gemma: 实现时间筛选和ifflagged筛选
   //forumpostdate
   const onRangeChange = (dates, dateStrings) => {
+    const datedata = [];
     if (dates) {
-      console.log('From: ', dates[0], ', to: ', dates[1]);
       console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
+      data.forEach(item => {
+        if (item.posttime >= dateStrings[0] && item.posttime <= dateStrings[1]) {
+          datedata.push(item);
+        }
+      });
+      setTableData(datedata);
     } else {
+      setTableData(data);
       console.log('Clear');
     }
   };
@@ -143,21 +165,33 @@ function Forum() {
       value: [dayjs().add(-90, 'd'), dayjs()],
     },
   ];
+
   //ifflagged
   const onChange = (e) => {
     console.log(`checked = ${e.target.checked}`);
+    const flagdata = [];
+    if (e.target.checked) {
+      data.forEach(item => {
+        if (item.flagged.includes(localStorage.getItem('uid'))) {
+          flagdata.push(item);
+        }
+      });
+      setTableData(flagdata);
+    }else{
+      setTableData(data);
+    }
   };
+
   //tablefilter
   const onChangeFilter = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra);
   };
-  //Gemma: ?是否将createforum做成弹窗
+
   return (
     <div className="Forum-Total">
       <div className="Forum-Content">
         <div className="Forum-Filter">
           <Link to="/createforum">
-            {/* Zaffi: 向createpost页面传输courseid和creatorid */}
             <Button type="primary" htmlType="submit" size="large" style={{ width: 160, marginRight: 50 }}>Create a Post</Button>
           </Link>
           <RangePicker presets={rangePresets} onChange={onRangeChange} style={{ width: 400, height: 35, marginRight: 50 }} />
@@ -168,12 +202,12 @@ function Forum() {
             // The rowkey is to tell which property of data would be the key of the row
             rowKey={"postid"}
             columns={columns}
-            dataSource={data}
+            dataSource={tabledata}
             onChange={onChangeFilter}
             onRow={(record) => {
               return {
                 onClick: () => {
-                  fetch_post_data(record.postid)
+                  fetch_post_data(record.postid, record.creatorid)
                 },
               };
             }}

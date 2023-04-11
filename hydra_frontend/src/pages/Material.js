@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Table, Modal, Select, Upload, message} from 'antd';
 import {useNavigate, Link} from 'react-router-dom';
 import { UploadOutlined } from '@ant-design/icons';
+import { Document, Page } from "@react-pdf/renderer";
 import 'antd/dist/reset.css';
 import '../styles/Material.css';
 
@@ -11,16 +12,18 @@ function Material() {
 
     const jsonToPost = (material_data) => {
       const material_list = material_data.map(m => {
+        const urlObj = new URL(m.filepath);
         return {
           mid: m.mid,
           type: m.type,
+          filename: urlObj.pathname.split('/').pop().replace(/%20/g, ' '),
           filepath: m.filepath,
       }});
       return material_list;
     }
 
     useEffect(() => {
-      fetch('http://localhost:8000/material', {
+      fetch('http://localhost:8000/showmaterial/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -45,12 +48,16 @@ function Material() {
             dataIndex: 'type',
             filters: [
               {
-                text: 'Powerpoint',
-                value: 'Powerpoint',
-              },
-              {
                 text: 'PDF',
                 value: 'PDF',
+              },
+              {
+                text: 'ZIP',
+                value: 'ZIP',
+              },
+              {
+                text: 'MP4',
+                value: 'MP4',
               },
             ],
             filterMode: 'tree',
@@ -63,9 +70,9 @@ function Material() {
         },
         {
             title: 'Material',
-            dataIndex: 'filepath',
+            dataIndex: 'filename',
             sorter: {
-                compare: (a, b) => a.filepath.localeCompare(b.filepath),
+                compare: (a, b) => a.filename.localeCompare(b.filename),
             },
         },
       ];
@@ -80,7 +87,7 @@ function Material() {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [form, setForm] = useState({
       type: "",
-      filepath: "D:\\9900\\COMP9900Wk01Lecture23T1.pdf"
+      filepath: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
     });
 
     const showModal = () => {
@@ -89,7 +96,7 @@ function Material() {
     const handleOk = () => {
       console.log(form);
       setConfirmLoading(true);
-      fetch('http://localhost:8000/uploadmaterial', {
+      fetch('http://localhost:8000/uploadmaterial/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -107,8 +114,10 @@ function Material() {
             setTimeout(() => {
               setOpen(false);
               setConfirmLoading(false);
+              window.location.reload();
             }, 2000);
           }
+          // TODO: if upload failed, show error message
         });
     };
 
@@ -164,20 +173,16 @@ function Material() {
                     onChange={handleChange}
                     options={[
                       {
-                        value: 'ppt',
-                        label: 'PPT',
-                      },
-                      {
-                        value: 'pdf',
+                        value: 'PDF',
                         label: 'PDF',
                       },
                       {
-                        value: 'zip',
-                        label: 'Zip',
+                        value: 'ZIP',
+                        label: 'ZIP',
                       },
                       {
-                        value: 'word',
-                        label: 'Word',
+                        value: 'MP4',
+                        label: 'MP4',
                       },
                     ]}
                   />
@@ -192,14 +197,36 @@ function Material() {
           </div>
           <div className="Material-List">
               <Table 
+                rowKey={"mid"}
                 columns={columns} 
                 dataSource={data} 
                 onChange={onChangeFilter}
                 onRow={(record) => {
                   return {
-                    //Zaffi: 判断userid与creatorid是否相同，相同则跳转到ForumDetail-ownpage页面，不同则跳转到ForumDetail-student页面
                     onClick: event => {
-                      console.log(record.filepath)
+                      if (record.filepath.endsWith('.pdf')) {
+                        console.log("pdf",record.filepath);
+                        window.location.assign(record.filepath);
+                        // window.location.assign(<iframe src={record.filepath} title="file preview" width="100%" height="600px" />)
+                      } 
+                      if (record.filepath.endsWith('.zip')) {
+                        //if file is zip, download it
+                        fetch(record.filepath) // 替换为要下载的文件 URL
+                          .then(response => response.blob())
+                          .then(blob => {
+                            const downloadLink = document.createElement("a");
+                            downloadLink.href = URL.createObjectURL(blob);
+                            const urlObj = new URL(record.filepath);
+                            downloadLink.download = urlObj.pathname.split('/').pop().replace(/%20/g, ' '); // 替换为要下载的文件名称
+                            downloadLink.click();
+                          })
+                          .catch(error => console.error("Download failed", error));
+                      }
+                      if (record.filepath.endsWith('.mp4')){
+                        //if file is mp4, navigate to videoPlayer page
+                        console.log("mp4", record.filepath);
+                        navigate('/coursemainpage/videoPlayer', { state: { filepath: record.filepath } });
+                      }
                     },
                   };
                 }}
