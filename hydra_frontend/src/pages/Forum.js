@@ -22,7 +22,7 @@ function Forum() {
       console.log("same");
     }
     else {
-      navigate('/forumdetailstudent/' + postid, { state: { message: "hello" } });
+      navigate('/forum/' + postid);
     }
   }
 

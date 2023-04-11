@@ -1,7 +1,7 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { LikeOutlined, PushpinOutlined } from '@ant-design/icons';
 import { Input, Button, Descriptions, Badge, message, notification, Space } from 'antd';
-import { useNavigate, Link, useLocation} from 'react-router-dom';
+import { useNavigate, Link, useParams} from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/ForumDetail-student.css';
 const { TextArea } = Input;
@@ -10,9 +10,25 @@ const { TextArea } = Input;
 function ForumDetailStudent() {
     const [messageApi1, contextHolder1] = message.useMessage();
     const [api1, contextHolder2] = notification.useNotification();
-    const {state} = useLocation();
+    const {pid} = useParams();
 
-    console.log(state);
+    console.log(pid);
+    // Receive post data from the backend
+  useEffect(() => {
+    fetch('http://localhost:8000/posts/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          pid: pid
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+         console.log(data)
+        });
+  }, [pid]);
 
     const navigate = useNavigate();
     // Zaffi: 将postid对应的private属性改为true
