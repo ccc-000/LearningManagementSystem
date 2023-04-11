@@ -257,12 +257,18 @@ def postes(request):
     if request.method == "POST":
         data = json.loads(request.body)
         pid = data['pid']
-        reply = Replies.objects.filter(pid=pid)
-        reply_info = serializers.serialize('python', reply)
-        r = []
-        for i in reply_info:
-            print(i)
-        return JsonResponse({"reply": reply})
+        post = Posts.objects.get(pid=pid)
+        post = serializers.serialize("python",[post])
+        post = post[0]
+        uid = post["fields"]["creatorid"]
+        creatorname = Users.objects.get(uid=uid).username
+        post["fields"]["creatorname"] = creatorname
+        post["fields"]["reply"] = json.loads(post["fields"]["reply"])
+        post["fields"]["likes"] = json.loads(post["fields"]["likes"])
+        post["fields"]["flagged"] = json.loads(post["fields"]["flagged"])
+        post["fields"]["privacy"] = json.loads(post["fields"]["privacy"])
+        post = post["fields"]
+        return JsonResponse(post)
 
 
 @csrf_exempt
