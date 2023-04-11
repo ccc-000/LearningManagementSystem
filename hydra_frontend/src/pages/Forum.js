@@ -160,6 +160,9 @@ function Forum() {
   //ifflagged
   const onChange = (e) => {
     console.log(`checked = ${e.target.checked}`);
+    if(e.target.checked){
+      console.log("flagged");
+    }
   };
   //tablefilter
   const onChangeFilter = (pagination, filters, sorter, extra) => {
