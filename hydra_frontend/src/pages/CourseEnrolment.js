@@ -113,8 +113,8 @@ const CourseEnrolment = () => {
                 return;
             }
             message.success('Successful!');
-            setData(jsonRes);
-            setFilteredData(jsonRes);
+            setData(jsonRes.courses);
+            setFilteredData(jsonRes.courses);
             
         })
   };
