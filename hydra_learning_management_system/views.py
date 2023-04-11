@@ -81,6 +81,7 @@ def editprofile(request):
         birthday = data["birthday"]
         email = data["email"]
         preferedlanguage = data["preferedlanguage"]
+        print(uid, firstname, lastname, gender,birthday,email, preferedlanguage)
         user = Users.objects.get(uid=uid)
         user.firstname = firstname
         user.lastname = lastname
@@ -88,6 +89,7 @@ def editprofile(request):
         user.birthday = birthday
         user.email = email
         user.preferedlanguage = preferedlanguage
+        print(user.firstname)
         return JsonResponse({"status": 200})
 
 
@@ -144,9 +146,10 @@ def createdcourses(request):
         course = []
         for i in courses:
             tmp = {}
+            cid = i["pk"]
             tmp["coursename"] = i["fields"]["coursename"]
             tmp["coursedescription"] = i["fields"]["coursedescription"]
-            tmp["cid"] = i["fields"]["cid"]
+            tmp["cid"] = cid
             course.append(tmp)
         return JsonResponse({"courses": course})
 
