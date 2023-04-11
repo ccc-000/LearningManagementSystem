@@ -39,7 +39,7 @@ const ShowCourse = ({uid}) => {
         className='card'
         title={courses.coursename} 
         key={courses.cid}
-        onClick={handleNavigate(courses.cid)}>
+        onClick={() => handleNavigate(courses.cid)}>
           <p>{courses.coursedescription}</p>
         </Card>
       ))}
