@@ -169,7 +169,6 @@ function Forum() {
           flagdata.push(item);
         }
       });
-      console.log(flagdata);
       tabledata = flagdata;
     }else{
       tabledata = data;
