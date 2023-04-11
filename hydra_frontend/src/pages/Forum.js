@@ -28,6 +28,7 @@ function Forum() {
 
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  let tabledata = data;
 
   // Function to get UNIQUE keywods from the data
   // TODO: the key words should be unique
@@ -102,6 +103,7 @@ function Forum() {
         creatorid: p.creatorid,
         posttime: p.createtime.slice(0, 10),
         numberoflikes: p.likes.likes.length,
+        flagged: p.flagged.flagged,
       }
     });
     console.log(post_list);
@@ -124,8 +126,8 @@ function Forum() {
       .then(response => response.json())
       .then(data => {
         const posts_data = data.posts;
-        console.log(posts_data);
         setData(jsonToPost(posts_data));
+        console.log(data);
       });
   }, [])
 
@@ -160,8 +162,17 @@ function Forum() {
   //ifflagged
   const onChange = (e) => {
     console.log(`checked = ${e.target.checked}`);
-    if(e.target.checked){
-      console.log("flagged");
+    const flagdata = [];
+    if (e.target.checked) {
+      data.forEach(item => {
+        if (item.flagged.includes(localStorage.getItem('uid'))) {
+          flagdata.push(item);
+        }
+      });
+      console.log(flagdata);
+      tabledata = flagdata;
+    }else{
+      tabledata = data;
     }
   };
   //tablefilter
@@ -185,7 +196,7 @@ function Forum() {
             // The rowkey is to tell which property of data would be the key of the row
             rowKey={"postid"}
             columns={columns}
-            dataSource={data}
+            dataSource={tabledata}
             onChange={onChangeFilter}
             onRow={(record) => {
               return {
