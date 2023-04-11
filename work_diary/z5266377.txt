@@ -2,3 +2,7 @@
 1.Add logout for dashboard and course page
 2.Optimise nav bar and link it with profile and avatar
 3.Modify dashboardlecturer in version 3.0
+ 
+4.8
+Create courses success
+Show course card success

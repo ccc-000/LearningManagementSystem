@@ -11,7 +11,7 @@ function CreateForum() {
   const [messageApi, contextHolder1] = message.useMessage();
   const [api, contextHolder2] = notification.useNotification();
   const navigate = useNavigate();
-  const [form, setFrom] = useState({
+  const [form, setForm] = useState({
     title: "",
     content: "",
     keyword: "",
@@ -39,7 +39,7 @@ function CreateForum() {
     // Get the file obj from the file list
     const file = e.fileList[0].originFileObj;
     const file_base64 = await convertBase64(file);
-    setFrom({...form, multimedia: file_base64});
+    setForm({...form, multimedia: file_base64});
     console.log(file_base64);
   }
 

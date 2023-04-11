@@ -11,20 +11,16 @@ import { BrowserRouter } from 'react-router-dom';
 import Loginpage from './pages/Loginpage';
 import Registrationpage from './pages/Registrationpage';
 import Dashboard from './pages/Dashboard';
-import DashboardLecturer from './pages/DashboardLecturer';
-// import Forum from "./pages/Forum";
-// import CreateForum from './pages/CreateForum';
+import DashboardLecturer from './pages/DashboardLecturer_3';
+import Forum from "./pages/Forum";
+import CreateForum from './pages/CreateForum';
 // import EditForum from './pages/EditForum';
-// import ForumDetailStudent from './pages/ForumDetail-student';
+import ForumDetailStudent from './pages/ForumDetail-student';
 //Course main page for lecturer.
 import Coursemainpage from "./pages/Coursemainpage";
-import QuizLecturer from "./pages/QuizLecturer";
-import AssignmentLecturer from "./pages/AssignmentLecturer";
+import Quiz from "./pages/Quiz";
+import Assignment from "./pages/Assignment";
 import AnnouncementLecturer from "./pages/AnnouncementLecturer";
-
-//Course main page for student.
-import QuizStudent from "./pages/QuizStudent";
-import AssignmentStudent from "./pages/AssignmentStudent";
 // import Grade from './pages/Grade';
 
 // Material page for lecturer.
@@ -47,17 +43,14 @@ function App() {
                 <Route path="/editavatar" element={<EditAvatar/>}/>
                 <Route path="/resetpassword/1" element={<ResetPassword1/>}/>
                 <Route path="/resetpassword/2" element={<ResetPassword2/>}/>
-                {/* <Route path="/forum" element={<Forum/>}/> */}
-                {/* <Route path="/createforum" element={<CreateForum/>}/> */}
+                <Route path="/forum" element={<Forum/>}/>
+                <Route path="/createforum" element={<CreateForum/>}/>
                 {/* <Route path="/editforum" element={<EditForum/>}/> */}
-                {/* <Route path="/forumdetailstudent/:id" element={<ForumDetailStudent/>}/> */}
-                <Route path="/coursemainpage/quizLecturer" element={<QuizLecturer/>}/>
-                <Route path="/coursemainpage/assignmentLecturer" element={<AssignmentLecturer/>}/>
+                <Route path="/forum/:pid" element={<ForumDetailStudent/>}/>
+                <Route path="/coursemainpage/quiz" element={<Quiz/>}/>
+                <Route path="/coursemainpage/assignment" element={<Assignment/>}/>
                 <Route path="/coursemainpage/announcementsLecturer" element={<AnnouncementLecturer/>}/>
-
-                <Route path="/coursemainpage/quizStudent" element={<QuizStudent/>}/>
-                <Route path="/coursemainpage/assignmentStudent" element={<AssignmentStudent/>}/>
-                {/* <Route path="/CoursemainpageStudent/grade" element={<Grade/>}/> */}
+                {/* <Route path="/Coursemainpage/grade" element={<Grade/>}/> */}
                 <Route path="/coursemainpage/material" element={<Material/>}/>
                 <Route path="/coursemainpage/videoPlayer" element={<VideoPlayer/>}/>
             </Routes>

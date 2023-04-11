@@ -1,0 +1,12 @@
+Sprint 1
+1.1 Create Course main page for dashboard.
+1.2 Create navigation bar component.
+
+Sprint 2
+2.1 Modify Course main page which can render different components for different logined role.
+2.2 Modify the navigation bar component, which is distinguished by lecturers and students.
+2.3 Create Assignment and Quiz pages for lecturers and students.
+2.4 Accomplish new assignments and new quizzes creation function for lecturers.
+2.5 Accomplish assignments and quizzes submission function for students.
+
+Sprint 3
