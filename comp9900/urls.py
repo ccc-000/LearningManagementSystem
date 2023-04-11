@@ -25,7 +25,7 @@ urlpatterns = [
 
     path("createcourses/", views.createcourses),
     path("enrollcourses/", views.enrollcourses),
-    path("courses/", views.unenrolledcourses),
+    path("courses/", views.courses),
     path("createdcourses/", views.createdcourses),
     path("dropcourses/", views.dropcourses),
     path("enrolledcourses/", views.enrolledcourses),
