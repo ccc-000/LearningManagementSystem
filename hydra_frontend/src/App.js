@@ -15,7 +15,7 @@ import DashboardLecturer from './pages/DashboardLecturer_3';
 import Forum from "./pages/Forum";
 import CreateForum from './pages/CreateForum';
 // import EditForum from './pages/EditForum';
-// import ForumDetailStudent from './pages/ForumDetail-student';
+import ForumDetailStudent from './pages/ForumDetail-student';
 //Course main page for lecturer.
 import Coursemainpage from "./pages/Coursemainpage";
 import Quiz from "./pages/Quiz";
@@ -46,7 +46,7 @@ function App() {
                 <Route path="/forum" element={<Forum/>}/>
                 <Route path="/createforum" element={<CreateForum/>}/>
                 {/* <Route path="/editforum" element={<EditForum/>}/> */}
-                {/* <Route path="/forumdetailstudent/:id" element={<ForumDetailStudent/>}/> */}
+                <Route path="/forum/:pid" element={<ForumDetailStudent/>}/>
                 <Route path="/coursemainpage/quiz" element={<Quiz/>}/>
                 <Route path="/coursemainpage/assignment" element={<Assignment/>}/>
                 <Route path="/coursemainpage/announcementsLecturer" element={<AnnouncementLecturer/>}/>
