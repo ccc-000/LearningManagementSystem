@@ -152,7 +152,13 @@ def createdcourses(request):
             course.append(tmp)
         return JsonResponse({"courses": course})
 
-
+@csrf_exempt
+def courses(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        courses = Courses.objects.all()
+        corurses = serializers.serialize("python", courses)
+        return courses
 @csrf_exempt
 def dropcourses(request):
     if request.method == "POST":
