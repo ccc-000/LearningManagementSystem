@@ -80,16 +80,15 @@ def editprofile(request):
         gender = data["gender"]
         birthday = data["birthday"]
         email = data["email"]
-        preferedlanguage = data["preferedlanguage"]
-        print(uid, firstname, lastname, gender,birthday,email, preferedlanguage)
+        language = data["preferedlanguage"]
         user = Users.objects.get(uid=uid)
         user.firstname = firstname
         user.lastname = lastname
         user.gender = gender
         user.birthday = birthday
         user.email = email
-        user.preferedlanguage = preferedlanguage
-        print(user.firstname)
+        user.preferredlanguage = language
+        user.save()
         return JsonResponse({"status": 200})
 
 
