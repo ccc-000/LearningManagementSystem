@@ -257,12 +257,10 @@ def postes(request):
     if request.method == "POST":
         data = json.loads(request.body)
         pid = data['pid']
-        reply = Replies.objects.filter(pid=pid)
-        reply_info = serializers.serialize('python', reply)
-        r = []
-        for i in reply_info:
-            print(i)
-        return JsonResponse({"reply": reply})
+        post = Posts.objects.get(pid=pid)
+        post = serializers.serialize("json",[post])
+        print(post)
+        return JsonResponse({"post_info":post})
 
 
 @csrf_exempt
