@@ -232,7 +232,7 @@ def createass(request):
         data = json.loads(request.body)
         title = data["title"]
         cid = data["cid"]
-        course = Courses.objects.get(cid = cid)
+        course = Courses.objects.get(cid=cid)
         url = data["url"]
         assdescription = data["assdescription"]
         ass = Assignments.objects.create(cid=course, url=url, title=title, assignmentdescription=assdescription)
