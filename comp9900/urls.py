@@ -38,6 +38,7 @@ urlpatterns = [
     path("createass/", views.createass),
     path("submitass/", views.submitass),
     path("markass/", views.markass),
+    path("showass/", views.showass)
 
     path("grade/", views.grade),
 

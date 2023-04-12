@@ -250,6 +250,14 @@ def createass(request):
         else:
             return JsonResponse({'status': 403})
 
+@csrf_exempt
+def showass(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        cid = data["cid"]
+        asses = Assignments.objects.filter(cid=cid)
+        asses = serializers.serialize("python", asses)
+        return JsonResponse({"asses":asses})
 
 @csrf_exempt
 def submitass(request):
