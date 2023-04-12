@@ -97,6 +97,7 @@ function EditProfile() {
     };
     console.log('Received values of form: ', values);
 
+    api.destroy();
     messageApi.open({
       type: 'loading',
       content: 'Updating...',

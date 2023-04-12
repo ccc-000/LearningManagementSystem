@@ -14,3 +14,10 @@
 4.11
 1. forum page: filter posts by selecting posttime
 2. forum page: filter posts by selceting flagged checkbox
+
+4.12
+1. forumdetail page: delete post using pid and uid
+2. forumdetail page: show number of likes, if liked and if flagged
+3. forumdetail page: show if edited
+4. forumdetail page: navigate to edit page using pid
+5. editforum page: edit post(half)

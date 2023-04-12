@@ -110,7 +110,7 @@ function CreateForum() {
 
   return (
     <div className="CreateForum-Total">
-      <Link to="/forum"><LeftCircleOutlined style={{ fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey' }} /></Link>
+      {/* <Link to="/forum"><LeftCircleOutlined style={{ fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey' }} /></Link> */}
       <div className="CreateForum-Content">
         <div className="Create-Title">
           <span style={{ marginRight: 20 }}>Title</span>
