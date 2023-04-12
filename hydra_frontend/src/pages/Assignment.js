@@ -10,6 +10,7 @@ const { Header, Content, Footer, Sider } = Layout;
 const { TextArea } = Input;
 
 const role = localStorage.getItem('role');
+const cid = localStorage.getItem('cid');
 
 export default function Assignment() {
     //Create Assignment Modal   
