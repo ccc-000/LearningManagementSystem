@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LikeOutlined, PushpinOutlined } from '@ant-design/icons';
 import { Input, Button, Descriptions, Badge, message, notification, Space } from 'antd';
 import { useNavigate, Link, useParams } from 'react-router-dom';
@@ -31,31 +31,129 @@ function ForumDetailStudent() {
       });
   }, [pid]);
 
+  //set components
+  const propsEdit = {
+    display: 'none'
+  }
+
+  let propsLike = {
+    fontSize: 23,
+    cursor: 'pointer',
+  }
+  
+  let propsFlag = {
+    fontSize: 23, 
+    marginLeft: 30, 
+    cursor: 'pointer',
+  }
+
+  if (data) {
+    if (data.editted) {
+      propsEdit.display = 'block';
+    }
+    if (data.likes.likes.includes(localStorage.getItem('uid'))) {
+      propsLike.color = 'red';
+    }
+    if (data.flagged.flagged.includes(localStorage.getItem('uid'))) {
+      propsFlag.color = 'blue';
+    }
+  }
+
+  function handleLike() {
+    fetch('http://localhost:8000/likeposts/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        pid: pid,
+        uid: localStorage.getItem('uid')
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if(data.status === 200){
+          window.location.reload();
+        }
+      });
+  }
+
+  function handleFlag() {
+    // if (data.flagged.flagged.includes(localStorage.getItem('uid'))) {
+    //   let flagdata = data;
+    //   flagdata.flagged.flagged = data.flagged.flagged.filter(uid => uid !== localStorage.getItem('uid'))
+    //   console.log("flagged: ", flagdata);
+    //   propsFlag.color = 'black';
+    // }else{
+    //   // propsFlag.color = 'blue';
+    // }
+    fetch('http://localhost:8000/flagposts/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        pid: pid,
+        uid: localStorage.getItem('uid')
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if(data.status === 200){
+          window.location.reload();
+        }
+      });
+  }
+
   const navigate = useNavigate();
 
   // TODO: make the post private
   function makePrivate() {
     console.log("makePrivate");
   }
-  // TODO: delete the post
-  function deleteForum() {
-    console.log("deleteForum");
+
+  function deletePost() {
+    console.log("deletePost");
+    api1.destroy();
     messageApi1.open({
       type: 'loading',
       content: 'Deleting...',
-      duration: 2,
     });
-    setTimeout(() => {
-      messageApi1.open({
-        type: 'success',
-        content: 'Deleted!',
-        duration: 2,
-      });
-    }, 2100);
-    setTimeout(() => {
-      navigate('/forum');
-    }, 3500);
+    fetch ('http://localhost:8000/deleteposts/', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        pid: pid,
+        uid: localStorage.getItem('uid')
+      }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      if (data.status === 200) {
+        messageApi1.destroy();
+        messageApi1.open({
+          type: 'success',
+          content: 'Deleted!',
+          duration: 2,
+        });
+        setTimeout(() => {
+          navigate('/forum');
+        }, 2100);
+      }
+    })
+    .catch((error) => {
+      messageApi1.destroy();
+      messageApi1.error("Cannot connect to the server")
+      console.error(error);
+    })
   }
+
+  //delete post confirm
   function handleDelete() {
     const key = `open${Date.now()}`;
     const btn = (
@@ -64,7 +162,7 @@ function ForumDetailStudent() {
           Continue
         </Button>
         {contextHolder1}
-        <Button size="medium" onClick={deleteForum} style={{ width: 100 }}>
+        <Button size="medium" onClick={deletePost} style={{ width: 100 }}>
           Delete
         </Button>
       </Space>
@@ -77,6 +175,13 @@ function ForumDetailStudent() {
       key,
     });
   }
+
+  //edit post
+  function handleEdit() {
+    console.log("edit");
+    navigate('/editforum/' + pid);
+  }
+
   return (
     <div className="ForumDetail-Total">
       <div className="ForumDetail-Post">
@@ -97,27 +202,22 @@ function ForumDetailStudent() {
               }
             }}
           </Descriptions.Item>
-          <Descriptions.Item span={1} style={{ float: 'right' }}>
-            {() => {
-              if (data && data.edited) {
-                return "edited"
-              }
-              return ""
-            }}
+          <Descriptions.Item span={1} style={{ float: 'right', marginRight: 30 }}>
+            <p style={propsEdit}>edited</p>
           </Descriptions.Item>
           <Descriptions.Item span={2}>
-            <Badge size="small" count={data ? data.likes.length : 0}>
+            <Badge size="small" count={data ? data.likes.likes.length : 0}>
               {/* TODO: the like and pin button should change with the state */}
-              <LikeOutlined style={{ fontSize: 23, cursor: 'pointer', color: 'red' }} />
+              <LikeOutlined style={propsLike} onClick={handleLike}/>
             </Badge>
-            <PushpinOutlined style={{ fontSize: 23, marginLeft: 30, cursor: 'pointer', color: 'blue' }} />
+            <PushpinOutlined style={propsFlag} onClick={handleFlag}/>
           </Descriptions.Item>
           <Descriptions.Item >
             {contextHolder2}
             <Button type="primary" htmlType="submit" size="medium" style={{ width: 80, marginRight: 30 }} onClick={handleDelete}>Delete</Button>
             <Button type="primary" htmlType="submit" size="medium" style={{ width: 80, marginRight: 30 }} onClick={makePrivate}>Private</Button>
             <Link to="/editforum">
-              <Button type="primary" htmlType="submit" size="medium" style={{ width: 80, marginRight: 30 }}>Edit</Button>
+              <Button type="primary" htmlType="submit" size="medium" style={{ width: 80, marginRight: 30 }} onClick={handleEdit}>Edit</Button>
             </Link>
           </Descriptions.Item>
         </Descriptions>

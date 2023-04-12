@@ -1,16 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input, Button, Upload, message, notification, Space} from 'antd';
 import { UploadOutlined, LeftCircleOutlined } from '@ant-design/icons';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/EditForum.css';
 const { TextArea } = Input;
 
 
 function EditForum() {
-    //连接服务器，实现上传文件
-    //multimedia file
-    //默认图片
     const fileList = [
       {
         uid: '-1',
@@ -24,35 +21,76 @@ function EditForum() {
     //edit a post
     const [messageApi, contextHolder1] = message.useMessage();
     const [api, contextHolder2] = notification.useNotification();
-    const navigate = useNavigate();
-    const onFinish = () => {
-      //Zaffi: 将post的内容修改到数据库中
-      //获取ForumDetail页面传输的所有post信息
-      //获取当前时间
-      //获取修改的post内容
-      // console.log('Received values of post: ', currentTime);
+    const [data, setData] = useState();
+    const { pid } = useParams();
 
+    const navigate = useNavigate();
+
+    //get post data from backend
+    useEffect(() => {
+      fetch('http://localhost:8000/posts/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          pid: pid
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setData(data);
+        });
+    }, [pid]);
+
+    const onFinish = () => {
+      api.destroy();
       messageApi.open({
         type: 'loading',
         content: 'Editing...',
-        duration: 2,
       });
-      setTimeout(() => {
-        messageApi.open({
-          type: 'success',
-          content: 'Edited!',
-          duration: 2,
-        });
-      }, 2100);
-      setTimeout(() => {
-        navigate('/forumdetailstudent');
-      }, 3500);
+
+      fetch('http://localhost:8000/editpost/', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        pid: pid,
+        // title: form.title,
+        // content: form.content,
+        // keyword: form.keyword,
+        // multimedia: form.multimedia
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data.status === 200) {
+          messageApi.destroy();
+          messageApi.open({
+            type: 'success',
+            content: 'Updated!',
+            duration: 2,
+          });
+          setTimeout(() => {
+            navigate('/forum/' + pid);
+          }, 2100);
+        }
+      })
+      .catch((error) => {
+        messageApi.destroy();
+        messageApi.error("Cannot connect to the server")
+        console.error(error);
+      })
     };
 
     //cancel edit
     const confirmCancel = () => {
-      navigate('/forumdetailstudent');
+      navigate('/forum/' + pid);
     };
+
     function handleCancel(){
       const key = `open${Date.now()}`;
       const btn = (
@@ -73,16 +111,17 @@ function EditForum() {
         key,
       });
     }
+
     return (
       <div className="EditForum-Total">
-        <Link to="/forumdetailstudent"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey'}}/></Link>
+        {/* <Link to="/forumdetailstudent"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey'}}/></Link> */}
         <div className="EditForum-Content">
           <div className="Edit-Title">
               <span style={{marginRight: 20}}>Title</span>
-              <Input placeholder="Please input a post title" />
+              <Input placeholder="Please input a post title" defaultValue={data? data.title : "No data"}/>
           </div>
           <div className="Edit-Content">
-              <TextArea rows={8} placeholder="Please input post content"/>
+              <TextArea rows={8} placeholder="Please input post content" defaultValue={data? data.content : "No data"}/>
           </div>
           <div className="Edit-File">
               <Upload
@@ -97,7 +136,7 @@ function EditForum() {
           </div>
           <div className="Edit-Button">
               <span style={{marginRight: 20}}>Keyword</span>
-              <Input placeholder="Please input a keyword" style={{width: 180}}/>
+              <Input placeholder="Please input a keyword" style={{width: 180}} defaultValue={data? data.keyword : "No data"}/>
               {contextHolder2}
               <Button size="large" style={{width: 100, float: 'right', marginRight: 20, marginTop: -10}} onClick={handleCancel}>Cancel</Button>
               {contextHolder1}

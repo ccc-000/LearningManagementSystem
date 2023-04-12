@@ -15,7 +15,7 @@ import DashboardLecturer from './pages/DashboardLecturer_3';
 import CourseEnrolment from './pages/CourseEnrolment';
 import Forum from "./pages/Forum";
 import CreateForum from './pages/CreateForum';
-// import EditForum from './pages/EditForum';
+import EditForum from './pages/EditForum';
 import ForumDetailStudent from './pages/ForumDetail-student';
 //Course main page for lecturer.
 import Coursemainpage from "./pages/Coursemainpage";
@@ -47,7 +47,7 @@ function App() {
                 <Route path="/resetpassword/2" element={<ResetPassword2/>}/>
                 <Route path="/forum" element={<Forum/>}/>
                 <Route path="/createforum" element={<CreateForum/>}/>
-                {/* <Route path="/editforum" element={<EditForum/>}/> */}
+                <Route path="/editforum/:pid" element={<EditForum/>}/>
                 <Route path="/forum/:pid" element={<ForumDetailStudent/>}/>
                 <Route path="/coursemainpage/quiz" element={<Quiz/>}/>
                 <Route path="/coursemainpage/assignment" element={<Assignment/>}/>
