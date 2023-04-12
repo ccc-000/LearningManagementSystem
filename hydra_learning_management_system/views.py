@@ -110,7 +110,6 @@ def createcourses(request):
         gradedistribution = course_info['gradedistribution']
         course = Courses.objects.create(coursename=coursename, creatorid=creatorid, enrolllist=enrolllist,
                                         coursedescription=coursedecription, gradedistribution=gradedistribution)
-
         if course:
             return JsonResponse({'status': 200})
         else:
@@ -265,7 +264,15 @@ def showass(request):
         cid = data["cid"]
         asses = Assignments.objects.filter(cid=cid)
         asses = serializers.serialize("python", asses)
-        return JsonResponse({"asses":asses})
+        ass = []
+        for i in asses:
+            tmp = {}
+            tmp["assignemntdescription"] = i["fields"]["assignmentdescription"]
+            tmp["cid"] = i["pk"]
+            tmp["title"] = i["fields"]["title"]
+            tmp["url"] = i["fields"]["url"]
+            ass.append(tmp)
+        return JsonResponse({"asses":ass})
 
 @csrf_exempt
 def submitass(request):
