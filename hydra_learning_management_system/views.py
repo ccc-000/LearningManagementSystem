@@ -172,6 +172,14 @@ def dropcourses(request):
         enrollment.delete()
         return JsonResponse({'status': 200})
 
+@csrf_exempt
+def showcourses(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data['uid']
+        courses = Courses.objects.all()
+        courses = serializers.serialize("python", courses)
+        return JsonResponse({'courses': courses})
 
 @csrf_exempt
 def enrolledcourses(request):
