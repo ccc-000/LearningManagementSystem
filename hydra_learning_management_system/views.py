@@ -159,12 +159,15 @@ def showcourses(request):
         uid = data['uid']
         courses = Courses.objects.all()
         courses = serializers.serialize("python", courses)
+        course = []
         for i in courses:
+            creatorid = i["fields"]["creatorid"]
+            creatorname = Users.objects.get(uid=creatorid).username
+            i["fields"]["creatorname"] = creatorname
             i = i["fields"]
-            creatorid = i["creatorid"]
-            creatorname = Users.objects.get(creatorid=creatorid).username
-            i["creatorname"] = creatorname
-        return JsonResponse({'courses': courses})
+            course.append(i)
+        print(course)
+        return JsonResponse({"courses": course})
 
 @csrf_exempt
 def dropcourses(request):
