@@ -50,16 +50,15 @@ const CourseEnrolment = () => {
     console.log('handleSelect', key);
     const index = selectedRows.indexOf(key);
     if (index === -1) {
-      setSelectedRows([...selectedRows, key]);
+      setSelectedRows([...selectedRows, key.coursename]);
     } else {
       setSelectedRows(selectedRows.filter((item) => item !== key));
     }
   };
 
   const handleSubmit = () => {
-    
-    console.log('Selected Rows:', selectedRows);
-    const request = {selectedCourses: selectedRows, uid: uid};
+    console.log('Enrol courses:', selectedRows);
+    const request = {coursename: selectedRows, uid: uid};
     fetch(`http://localhost:8000/enrollcourses/`, {
             method: 'POST',
             headers: {
@@ -108,11 +107,11 @@ const CourseEnrolment = () => {
         dataSource={filteredData}
         columns={columns}
 
-        onRow={(record, rowIndex) => {
-          return {
-            onClick: () => handleSelect(record.key),
-          };
-        }}
+        // onRow={(record, rowIndex) => {
+        //   return {
+        //     onClick: () => handleSelect(record.key),
+        //   };
+        // }}
       />
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10 }}>
         <Button type='primary' onClick={handleSubmit}>Submit</Button>
