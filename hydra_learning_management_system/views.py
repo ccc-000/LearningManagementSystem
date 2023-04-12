@@ -126,21 +126,22 @@ def enrollcourses(request):
         uid = data['uid']
         coursename = data['coursename']
         for i in coursename:
-            course = Courses.objects.get(coursename=coursename)
+            course = Courses.objects.get(coursename=i)
             cid = course.cid
-        enrolllist = Courses.objects.get(cid=cid).enrolllist
-        enrolllist = json.loads(enrolllist)["enrolllist"]
-        print(enrolllist)
-        available = MAX_SEAT - len(enrolllist)
-        if available > 0:
-            enrollment = Enrollments.objects.create(cid=cid, uid=uid)
-            enrolllist.append(uid)
-            course.enrolllist = json.dumps({"enrolllist":enrolllist})
-            course.save()
-            return JsonResponse({'status': 200})
-        else:
-            return JsonResponse({'status': 500})
-
+            enrolllist = course.enrolllist
+            enrolllist = json.loads(enrolllist)["enrolllist"]
+            print(enrolllist)
+            available = MAX_SEAT - len(enrolllist)
+            if available > 0:
+                course = Courses.objects.get(cid=cid)
+                user = Users.objects.get(uid=uid)
+                enrollment = Enrollments.objects.create(cid=course, uid=user)
+                enrolllist.append(uid)
+                course.enrolllist = json.dumps({"enrolllist": enrolllist})
+                course.save()
+            else:
+                return JsonResponse({"status": 500, "msg": f"The enrollment of {i} failed"})
+        return JsonResponse({'status': 200})
 
 @csrf_exempt
 def createdcourses(request):
