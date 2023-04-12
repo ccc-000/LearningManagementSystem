@@ -110,7 +110,6 @@ def createcourses(request):
         gradedistribution = course_info['gradedistribution']
         course = Courses.objects.create(coursename=coursename, creatorid=creatorid, enrolllist=enrolllist,
                                         coursedescription=coursedecription, gradedistribution=gradedistribution)
-
         if course:
             return JsonResponse({'status': 200})
         else:
@@ -126,18 +125,18 @@ def enrollcourses(request):
         uid = data['uid']
         coursename = data['coursename']
         for i in coursename:
-            course = Courses.objects.get(coursename=coursename)
+            course = Courses.objects.get(coursename=i)
             cid = course.cid
-        enrolllist = Courses.objects.get(cid=cid).enrolllist
-        enrolllist = json.loads(enrolllist)["enrolllist"]
-        print(enrolllist)
-        available = MAX_SEAT - len(enrolllist)
-        if available > 0:
-            enrollment = Enrollments.objects.create(cid=cid, uid=uid)
-            enrolllist.append(uid)
-            course.enrolllist = json.dumps({"enrolllist":enrolllist})
-            course.save()
-            return JsonResponse({'status': 200})
+            enrolllist = Courses.objects.get(cid=cid).enrolllist
+            enrolllist = json.loads(enrolllist)["enrolllist"]
+            print(enrolllist)
+            available = MAX_SEAT - len(enrolllist)
+            if available > 0:
+                enrollment = Enrollments.objects.create(cid=cid, uid=uid)
+                enrolllist.append(uid)
+                course.enrolllist = json.dumps({"enrolllist":enrolllist})
+                course.save()
+        return JsonResponse({'status': 200})
         else:
             return JsonResponse({'status': 500})
 
@@ -264,7 +263,15 @@ def showass(request):
         cid = data["cid"]
         asses = Assignments.objects.filter(cid=cid)
         asses = serializers.serialize("python", asses)
-        return JsonResponse({"asses":asses})
+        ass = []
+        for i in asses:
+            tmp = {}
+            tmp["assignemntdescription"] = i["fields"]["assignmentdescription"]
+            tmp["cid"] = i["pk"]
+            tmp["title"] = i["fields"]["title"]
+            tmp["url"] = i["fields"]["url"]
+            ass.append(tmp)
+        return JsonResponse({"asses":ass})
 
 @csrf_exempt
 def submitass(request):
