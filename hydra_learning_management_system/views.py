@@ -153,12 +153,13 @@ def createdcourses(request):
         return JsonResponse({"courses": course})
 
 @csrf_exempt
-def courses(request):
+def showcourses(request):
     if request.method == "POST":
         data = json.loads(request.body)
+        uid = data['uid']
         courses = Courses.objects.all()
-        corurses = serializers.serialize("python", courses)
-        return courses
+        courses = serializers.serialize("python", courses)
+        return JsonResponse({'courses': courses})
 
 @csrf_exempt
 def dropcourses(request):
@@ -171,15 +172,6 @@ def dropcourses(request):
         enrollment = Enrollments.objects.get(cid=cid)
         enrollment.delete()
         return JsonResponse({'status': 200})
-
-@csrf_exempt
-def showcourses(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        uid = data['uid']
-        courses = Courses.objects.all()
-        courses = serializers.serialize("python", courses)
-        return JsonResponse({'courses': courses})
 
 @csrf_exempt
 def enrolledcourses(request):
