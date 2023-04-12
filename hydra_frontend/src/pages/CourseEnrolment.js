@@ -1,49 +1,27 @@
 import { Table, Checkbox, Input, Button, message } from 'antd';
 import { useState, useEffect } from 'react';
 
-// const dataSource = [
-//   {
-//     key: '1',
-//     coursename: 'comp9318',
-//     creatorname: 'Edward',
-//     coursedescription: 'London No.1 Lake Park',
-//   },
-//   {
-//     key: '2',
-//     coursename: 'comp9414',
-//     creatorname: 'Alexandra',
-//     coursedescription: 'London No.7 Lake Park',
-//   },
-//   {
-//     key: '3',
-//     coursename: 'comp9418',
-//     creatorname: 'Sally',
-//     coursedescription: 'London No. 5 Lake Park',
-//   },
-//   {
-//     key: '4',
-//     coursename: 'comp9417',
-//     creatorname: 'Eric',
-//     coursedescription: 'London No. 2 Lake Park',
-//   },
-// ];
-
 const uid = localStorage.getItem('uid');
 
 const CourseEnrolment = () => {
   const columns = [
+    // {
+    //   title: 'Course Name',
+    //   dataIndex: 'coursename',
+    //   key: 'coursename',
+    //   sorter: (a, b) => a.coursename.localeCompare(b.coursename),
+    // },
     {
-      title: 'Select',
-      key: 'action',
-      render: (_, record) => (
-        <Checkbox onChange={() => handleSelect(record.key)}></Checkbox>
-      ),
-    },
-    {
-      title: 'Course Name',
-      dataIndex: 'coursename',
-      key: 'coursename',
-      sorter: (a, b) => a.coursename.localeCompare(b.coursename),
+        title: 'Course Name',
+        dataIndex: 'coursename',
+        key: 'coursename',
+        sorter: (a, b) => a.coursename.localeCompare(b.coursename),
+        render: (text, record) => (
+          <div onClick={() => handleSelect(record)}>
+            {record.selected ? <Checkbox checked /> : <Checkbox />}
+            {text}
+          </div>
+        ),
     },
     {
       title: 'Lecturer',
@@ -69,6 +47,7 @@ const CourseEnrolment = () => {
   };
 
   const handleSelect = (key) => {
+    console.log('handleSelect', key);
     const index = selectedRows.indexOf(key);
     if (index === -1) {
       setSelectedRows([...selectedRows, key]);
@@ -81,7 +60,7 @@ const CourseEnrolment = () => {
     
     console.log('Selected Rows:', selectedRows);
     const request = {selectedCourses: selectedRows, uid: uid};
-    fetch(`http://localhost:8000/courses/`, {
+    fetch(`http://localhost:8000/enrollcourses/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
