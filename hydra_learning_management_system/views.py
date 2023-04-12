@@ -285,16 +285,17 @@ def postes(request):
         data = json.loads(request.body)
         pid = data['pid']
         post = Posts.objects.get(pid=pid)
-        post = serializers.serialize("python",[post])
+        post = serializers.serialize("python", [post])
         post = post[0]
         uid = post["fields"]["creatorid"]
         creatorname = Users.objects.get(uid=uid).username
         post["fields"]["creatorname"] = creatorname
         post["fields"]["reply"] = json.loads(post["fields"]["reply"])
         post["fields"]["likes"] = json.loads(post["fields"]["likes"])
-        post["fields"]["flagged"] = json.loads(post["fields"]["flagged"])
-        post["fields"]["privacy"] = json.loads(post["fields"]["privacy"])
+        post["fields"]["flagged"] = json.loads(post["fields"]["flagged"])["flagged"]
+        post["fields"]["privacy"] = json.loads(post["fields"]["privacy"])["likes"]
         post = post["fields"]
+        #print(post)
         return JsonResponse(post)
 
 
