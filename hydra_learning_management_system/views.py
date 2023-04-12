@@ -123,13 +123,20 @@ def enrollcourses(request):
     MAX_SEAT = 46
     if request.method == "POST":
         data = json.loads(request.body)
-        cid = data['cid']
         uid = data['uid']
-        enrolllist = Courses.objects.get(cid=cid)['']
-        enrolllist = json.loads(enrolllist)
+        coursename = data['coursename']
+        for i in coursename:
+            course = Courses.objects.get(coursename=coursename)
+            cid = course.cid
+        enrolllist = Courses.objects.get(cid=cid).enrolllist
+        enrolllist = json.loads(enrolllist)["enrolllist"]
+        print(enrolllist)
         available = MAX_SEAT - len(enrolllist)
         if available > 0:
             enrollment = Enrollments.objects.create(cid=cid, uid=uid)
+            enrolllist.append(uid)
+            course.enrolllist = json.dumps({"enrolllist":enrolllist})
+            course.save()
             return JsonResponse({'status': 200})
         else:
             return JsonResponse({'status': 500})
@@ -166,7 +173,7 @@ def showcourses(request):
             i["fields"]["creatorname"] = creatorname
             i = i["fields"]
             course.append(i)
-        print(course)
+        #print(course)
         return JsonResponse({"courses": course})
 
 @csrf_exempt
