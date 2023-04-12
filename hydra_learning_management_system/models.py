@@ -1,8 +1,5 @@
 from django.db import models
-
-
 # Create your models here.
-
 class Users(models.Model):
     uid = models.AutoField(primary_key=True)
     username = models.CharField(max_length=50)
@@ -15,7 +12,6 @@ class Users(models.Model):
     birthday = models.TextField(default='')
     preferredlanguage = models.TextField(default='')
 
-
 class Courses(models.Model):
     cid = models.AutoField(primary_key=True)
     coursename = models.CharField(max_length=60)
@@ -24,11 +20,9 @@ class Courses(models.Model):
     coursedescription = models.TextField()
     gradedistribution = models.TextField()
 
-
 class Enrollments(models.Model):
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
     uid = models.ForeignKey(Users, on_delete=models.CASCADE)
-
 
 class Assessments(models.Model):
     ####################################################################
@@ -37,7 +31,6 @@ class Assessments(models.Model):
     uid = models.ForeignKey(Users, on_delete=models.CASCADE)
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
     grade = models.TextField()
-
 
 class Quizzes(models.Model):
     qid = models.AutoField(primary_key=True)
@@ -48,7 +41,6 @@ class Quizzes(models.Model):
     q3 = models.TextField()
     ans = models.TextField()
 
-
 class Assignments(models.Model):
     aid = models.AutoField(primary_key=True)
     title = models.TextField(default='')
@@ -56,13 +48,11 @@ class Assignments(models.Model):
     assignmentdescription = models.TextField(default='')
     url = models.TextField()
 
-
 class Materials(models.Model):
     mid = models.AutoField(primary_key=True)
     type = models.TextField()
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
     filepath = models.TextField()
-
 
 class Posts(models.Model):
     pid = models.AutoField(primary_key=True)
@@ -78,7 +68,6 @@ class Posts(models.Model):
     editted = models.BooleanField()
     flagged = models.TextField()
     privacy = models.TextField()
-
 
 class Replies(models.Model):
     pid = models.ForeignKey(Posts, on_delete=models.CASCADE)

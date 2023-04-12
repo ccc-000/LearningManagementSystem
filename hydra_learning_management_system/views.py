@@ -152,6 +152,13 @@ def createdcourses(request):
             course.append(tmp)
         return JsonResponse({"courses": course})
 
+@csrf_exempt
+def courses(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        courses = Courses.objects.all()
+        corurses = serializers.serialize("python", courses)
+        return courses
 
 @csrf_exempt
 def dropcourses(request):
@@ -165,6 +172,14 @@ def dropcourses(request):
         enrollment.delete()
         return JsonResponse({'status': 200})
 
+@csrf_exempt
+def showcourses(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data['uid']
+        courses = Courses.objects.all()
+        courses = serializers.serialize("python", courses)
+        return JsonResponse({'courses': courses})
 
 @csrf_exempt
 def enrolledcourses(request):
@@ -221,18 +236,28 @@ def reviewquiz(request):
 
 @csrf_exempt
 def createass(request):
+    #git status
     if request.method == "POST":
         data = json.loads(request.body)
         title = data["title"]
         cid = data["cid"]
+        course = Courses.objects.get(cid=cid)
         url = data["url"]
         assdescription = data["assdescription"]
-        ass = Assignments.objects.create(cid=cid, url=url, title=title, assignmentdescription=assdescription)
+        ass = Assignments.objects.create(cid=course, url=url, title=title, assignmentdescription=assdescription)
         if ass is not None:
             return JsonResponse({'status': 200})
         else:
             return JsonResponse({'status': 403})
 
+@csrf_exempt
+def showass(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        cid = data["cid"]
+        asses = Assignments.objects.filter(cid=cid)
+        asses = serializers.serialize("python", asses)
+        return JsonResponse({"asses":asses})
 
 @csrf_exempt
 def submitass(request):

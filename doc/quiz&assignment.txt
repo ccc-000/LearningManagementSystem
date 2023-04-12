@@ -74,7 +74,7 @@ send:{
 return success or failed.
 
 1.5 show ass
-fetch(showass/)
+fetch(/showass)
 send{
     cid
 }
