@@ -137,8 +137,7 @@ def enrollcourses(request):
                 course.enrolllist = json.dumps({"enrolllist":enrolllist})
                 course.save()
         return JsonResponse({'status': 200})
-        else:
-            return JsonResponse({'status': 500})
+
 
 
 @csrf_exempt
