@@ -10,3 +10,7 @@
 4.10
 1. editprofile page: show profile detail using uid in localStorage
 2. profile page & coursehistory page: show enrollment history using uid in localStorage
+
+4.11
+1. forum page: filter posts by selecting posttime
+2. forum page: filter posts by selceting flagged checkbox

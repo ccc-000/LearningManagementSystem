@@ -10,8 +10,9 @@ import { Route, Routes } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
 import Loginpage from './pages/Loginpage';
 import Registrationpage from './pages/Registrationpage';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard_2';
 import DashboardLecturer from './pages/DashboardLecturer_3';
+import CourseEnrolment from './pages/CourseEnrolment';
 import Forum from "./pages/Forum";
 import CreateForum from './pages/CreateForum';
 // import EditForum from './pages/EditForum';
@@ -36,6 +37,7 @@ function App() {
                 <Route path="/register" element={<Registrationpage/>}/>
                 <Route path="/dashboard" element={<Dashboard/>}/>
                 <Route path="/dashboardlecturer" element={<DashboardLecturer/>}/>
+                <Route path="/dashboard/enrolment" element={<CourseEnrolment/>}/>
                 <Route path="/coursemainpage" element={<Coursemainpage/>}/>
                 <Route path="/editprofile" element={<EditProfile/>}/>
                 <Route path="/enrolmenthistory" element={<CourseHistory/>}/>
