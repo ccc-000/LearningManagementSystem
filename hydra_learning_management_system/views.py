@@ -110,7 +110,6 @@ def createcourses(request):
         gradedistribution = course_info['gradedistribution']
         course = Courses.objects.create(coursename=coursename, creatorid=creatorid, enrolllist=enrolllist,
                                         coursedescription=coursedecription, gradedistribution=gradedistribution)
-
         if course:
             return JsonResponse({'status': 200})
         else:
@@ -123,17 +122,25 @@ def enrollcourses(request):
     MAX_SEAT = 46
     if request.method == "POST":
         data = json.loads(request.body)
-        cid = data['cid']
         uid = data['uid']
-        enrolllist = Courses.objects.get(cid=cid)['']
-        enrolllist = json.loads(enrolllist)
-        available = MAX_SEAT - len(enrolllist)
-        if available > 0:
-            enrollment = Enrollments.objects.create(cid=cid, uid=uid)
-            return JsonResponse({'status': 200})
-        else:
-            return JsonResponse({'status': 500})
-
+        coursename = data['coursename']
+        for i in coursename:
+            course = Courses.objects.get(coursename=i)
+            cid = course.cid
+            enrolllist = course.enrolllist
+            enrolllist = json.loads(enrolllist)["enrolllist"]
+            print(enrolllist)
+            available = MAX_SEAT - len(enrolllist)
+            if available > 0:
+                course = Courses.objects.get(cid=cid)
+                user = Users.objects.get(uid=uid)
+                enrollment = Enrollments.objects.create(cid=course, uid=user)
+                enrolllist.append(uid)
+                course.enrolllist = json.dumps({"enrolllist": enrolllist})
+                course.save()
+            else:
+                return JsonResponse({"status": 500, "msg": f"The enrollment of {i} failed"})
+        return JsonResponse({'status': 200})
 
 @csrf_exempt
 def createdcourses(request):
@@ -153,12 +160,21 @@ def createdcourses(request):
         return JsonResponse({"courses": course})
 
 @csrf_exempt
-def courses(request):
+def showcourses(request):
     if request.method == "POST":
         data = json.loads(request.body)
+        uid = data['uid']
         courses = Courses.objects.all()
-        corurses = serializers.serialize("python", courses)
-        return courses
+        courses = serializers.serialize("python", courses)
+        course = []
+        for i in courses:
+            creatorid = i["fields"]["creatorid"]
+            creatorname = Users.objects.get(uid=creatorid).username
+            i["fields"]["creatorname"] = creatorname
+            i = i["fields"]
+            course.append(i)
+        #print(course)
+        return JsonResponse({"courses": course})
 
 @csrf_exempt
 def dropcourses(request):
@@ -171,15 +187,6 @@ def dropcourses(request):
         enrollment = Enrollments.objects.get(cid=cid)
         enrollment.delete()
         return JsonResponse({'status': 200})
-
-@csrf_exempt
-def showcourses(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        uid = data['uid']
-        courses = Courses.objects.all()
-        courses = serializers.serialize("python", courses)
-        return JsonResponse({'courses': courses})
 
 @csrf_exempt
 def enrolledcourses(request):
@@ -257,7 +264,15 @@ def showass(request):
         cid = data["cid"]
         asses = Assignments.objects.filter(cid=cid)
         asses = serializers.serialize("python", asses)
-        return JsonResponse({"asses":asses})
+        ass = []
+        for i in asses:
+            tmp = {}
+            tmp["assignemntdescription"] = i["fields"]["assignmentdescription"]
+            tmp["cid"] = i["pk"]
+            tmp["title"] = i["fields"]["title"]
+            tmp["url"] = i["fields"]["url"]
+            ass.append(tmp)
+        return JsonResponse({"asses":ass})
 
 @csrf_exempt
 def submitass(request):
@@ -285,16 +300,17 @@ def postes(request):
         data = json.loads(request.body)
         pid = data['pid']
         post = Posts.objects.get(pid=pid)
-        post = serializers.serialize("python",[post])
+        post = serializers.serialize("python", [post])
         post = post[0]
         uid = post["fields"]["creatorid"]
         creatorname = Users.objects.get(uid=uid).username
         post["fields"]["creatorname"] = creatorname
         post["fields"]["reply"] = json.loads(post["fields"]["reply"])
         post["fields"]["likes"] = json.loads(post["fields"]["likes"])
-        post["fields"]["flagged"] = json.loads(post["fields"]["flagged"])
-        post["fields"]["privacy"] = json.loads(post["fields"]["privacy"])
+        post["fields"]["flagged"] = json.loads(post["fields"]["flagged"])["flagged"]
+        post["fields"]["privacy"] = json.loads(post["fields"]["privacy"])["likes"]
         post = post["fields"]
+        #print(post)
         return JsonResponse(post)
 
 
