@@ -1,0 +1,21 @@
+.container {
+    display: inline-flex;
+  }
+  
+.box {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+  margin-left: 30px;
+}
+
+.box:nth-child(2) {
+  left: 200px;
+}
+
+.box:nth-child(3) {
+  left: 400px;
+}
+
+  
