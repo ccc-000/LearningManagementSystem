@@ -3,8 +3,9 @@ import Navibar from '../components/Navibar';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Divider, Layout, Tooltip, Upload } from 'antd';
-import { Button, Modal, Space, Input, message } from 'antd';
+import { Button, Modal, Space, Input, message, List } from 'antd';
 import { RollbackOutlined, UploadOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { TextArea } = Input;
@@ -25,6 +26,9 @@ export default function Assignment() {
         setLoading(false);
         setOpen(false);
         }, 1000);
+    };
+    const handleMark = () => {
+
     };
     const handleCancel = () => {
         setOpen(false);
@@ -58,6 +62,19 @@ export default function Assignment() {
             }
         })
     };
+
+    //Lecturer Assignment List
+    const [assList, setAssList] = useState([]);
+    useEffect(() => {
+        axios.post('http://localhost:8000/showass/', {
+            cid: 1
+        })
+        .then((response) => {
+            setAssList(response.data.asses);
+            console.log(response.data.asses);
+        })
+    }, []);
+
 
     //Submit Assignment Modal
     //Upload file
@@ -128,27 +145,17 @@ export default function Assignment() {
 
                 </Modal>
             </Space>
-            {/* <div>
-                <ul>
-                    {data.map((data, index) => (
-                        <li key={data.aid}>Assignment{index}</li>
-                    ))}
-                </ul>
-            </div> */}
-            {/* <List
-                itemLayout="horizontal"
-                dataSource={data}
-                // renderItem={(item, index) => (
-                    // <List.Item>
-                        // <List.Item.Meta
-                            {...data.map((data, index) => (
-                                <a href={data.url} key={data.aid}>Assignment{index} 
-                                </a>
-                            ))}
-                        // />
-                    // </List.Item>
-                // )}
-            /> */}
+            
+            <List itemLayout="horizontal"> 
+                {assList.map((ass) => (
+                    <div key={ass.pk}>
+                    <p>{ass.title}</p>
+                    <a href={ass.url}>{ass.title}</a>
+                    <p>{ass.assdescription}</p>
+                    </div>
+                ))}
+            </List>
+
             <Navibar />
             <Footer
                 style={{
@@ -161,7 +168,7 @@ export default function Assignment() {
             </Layout>
             </>
             
-        )} else {
+        )} else { //role = student
             return (
                 <>
                 <Layout
@@ -189,6 +196,7 @@ export default function Assignment() {
                 </div>
                 <div style={{marginLeft:'50px', marginBottom:'15px'}}>
                     <span style={{fontSize:'18px'}}>Assignment Submit:</span>
+                    <p>Please name file as 'xxx.pdf' ('xxx' is your student id)</p>
                     <Button type="primary" onClick={showModal}>Submit</Button>
                     <Modal
                         open={open}
