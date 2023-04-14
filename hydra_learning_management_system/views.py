@@ -221,6 +221,8 @@ def createquiz(request):
     if request.method == "POST":
         data = json.loads(request.body)
         ddl = data["ddl"]
+        ##data["q1"] = str "{description: 1+1, A:2,b:3,c:4,d:5,ans: A}"
+        ##data["q2"] = str "{description: 1+1, A:2,b:3,c:4,d:5,ans: AB}"
         q1 = data["q1"]
         q2 = data["q2"]
         q3 = data["q3"]
@@ -236,8 +238,9 @@ def createquiz(request):
 def attendquiz(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        qid = data['q1']
-        # {q1:A}
+        uid = data['uid']
+        cid = data["cid"]
+        qid = data['qid']
         q1 = data["q1"]
         q2 = data["q2"]
         q3 = data["q3"]
@@ -247,12 +250,36 @@ def attendquiz(request):
         for i in range(len(ans)):
             if ans[i] == rightans[i]:
                 score += 1
-        return JsonResponse({"grade": score})
+        #存分
+        course = Courses.objects.get(cid=cid)
+        user = Users.objects.get(uid=uid)
+        assessment = Assessments.objects.get(cid=course,uid=user)
+        grade = assessment.grade
+        grade = json.loads(grade)
+        grade["quiz"]["qid"] = score
+        grade = json.dumps(grade)
+        assessment.grade = grade
+        assessment.save()
+        return JsonResponse({"status": 200})
 
 
 @csrf_exempt
 def reviewquiz(request):
-    return HttpResponse()
+    #在此查看quiz
+    #CID UID QID
+    #quiz info right ans
+    if request.method == "POST":
+        data = json.loads(request.body)
+        cid = data["cid"]
+        uid = data["uid"]
+        qid = data["uid"]
+        quiz = Quizzes.objects.get(qid=qid)
+        quiz = serializers.serialize("python",quiz)
+        quizes = []
+        for i in quiz:
+            tmp = i["fields"]
+            quizes.append(tmp)
+    return JsonResponse({"quiz":quizes})
 
 
 @csrf_exempt
@@ -295,7 +322,7 @@ def submitass(request):
         uid = data["uid"]
         cid = data["cid"]
         aid = data['aid']
-        ass = data["ass"]
+        ass = data["ass"]##link
         user = Users.objects.get(uid=uid)
         course = Courses.objects.get(cid=cid)
         assessment = Assessments.objects.get(uid=user,cid=course)
@@ -315,21 +342,6 @@ def markass(request):
         uid = data["uid"]
         cid = data["cid"]
         aid = data["aid"]
-        user = Users.objects.get(uid=uid)
-        course = Courses.objects.get(cid=cid)
-        assessment = Assessments.objects.get(uid=user, cid=course)
-        worklink = assessment.worklink
-        worklink = json.loads(worklink)
-        asslink = worklink["aid"]
-        return JsonResponse({"asslink": asslink})
-
-@csrf_exempt
-def submitassmark(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        uid = data["uid"]
-        cid = data["cid"]
-        aid = data["aid"]
         mark = data["mark"]
         user = Users.objects.get(uid=uid)
         course = Courses.objects.get(cid=cid)
@@ -337,10 +349,10 @@ def submitassmark(request):
         grade = assessment.grade
         grade = json.loads(grade)
         grade["ass"]["aid"] = mark
-        grade = json.dumps(grade)
+        grade = grade.dumps(grade)
         assessment.grade = grade
         assessment.save()
-        return JsonResponse({"statys": 200})
+        return JsonResponse({"status": 200})
 
 
 @csrf_exempt
