@@ -20,6 +20,7 @@ import ShowCourse from '../components/CourseCard';
 
 const {Content, Footer, Sider} = Layout;
 const uid=localStorage.getItem('uid');
+const role=localStorage.getItem('role');
  
 const items = [
     UserOutlined,
@@ -198,7 +199,7 @@ function DashboardLecturer() {
                             Create Courses
                         </Button>
                         <div className='cardBox'>
-                            <ShowCourse uid={uid}/>
+                            <ShowCourse uid={uid} role='lecturer'/>
                             
                        </div>
 

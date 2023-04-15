@@ -208,8 +208,12 @@ def enrolledcourses(request):
         data = json.loads(request.body)
         uid = data['uid']
         cid = Enrollments.objects.filter(uid=uid)
-        courses = []
+        cid = serializers.serialize("python", cid)
+        cids = []
         for i in cid:
+            tmp = i["pk"]
+            cids.append(tmp)
+        for i in cids:
             course = Courses.objects.get(cid=i)
             courses.append(course)
         courses = serializers.serialize("python", courses)
