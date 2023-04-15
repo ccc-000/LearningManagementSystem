@@ -221,7 +221,6 @@ def enrolledcourses(request):
             course = serializers.serialize('python', [course])
             tmp = course[0]["fields"]
             tmp["cid"] = course[0]['pk']
-            tmp = json.dumps(tmp)
             courses.append(tmp)
         print(courses)
         return JsonResponse({"courses": courses})
