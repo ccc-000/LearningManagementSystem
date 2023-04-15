@@ -209,14 +209,21 @@ def enrolledcourses(request):
         uid = data['uid']
         cid = Enrollments.objects.filter(uid=uid)
         cid = serializers.serialize("python", cid)
+        #print(cid)
         cids = []
         for i in cid:
-            tmp = i["pk"]
+            tmp = i["fields"]["cid"]
             cids.append(tmp)
+        #print(cids)
+        courses = []
         for i in cids:
             course = Courses.objects.get(cid=i)
-            courses.append(course)
-        courses = serializers.serialize("python", courses)
+            course = serializers.serialize('python', [course])
+            tmp = course[0]["fields"]
+            tmp["cid"] = course[0]['pk']
+            tmp = json.dumps(tmp)
+            courses.append(tmp)
+        print(courses)
         return JsonResponse({"courses": courses})
 
 
