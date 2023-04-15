@@ -5,7 +5,14 @@ import pic from '../img/unsw.jpeg';
 import '../styles/CourseCard.css';
 
 const { Meta } = Card;
-const ShowCourse = ({uid}) => {
+const ShowCourse = ({uid, role}) => {
+  let fetchUrl;
+  if (role === 'lecturer') {
+    fetchUrl = 'createdcourses';
+  }
+  else if (role === 'student'){
+    fetchUrl = 'enrolledcourses';
+  }
   console.log('show course',uid);
   const navigate = useNavigate();
   const [courseList, setCourseList] = useState([]);
@@ -14,7 +21,7 @@ const ShowCourse = ({uid}) => {
     navigate('/coursemainpage');
   };
   const getCourses = () => {
-    fetch(`http://localhost:8000/createdcourses/`, {
+    fetch(`http://localhost:8000/${fetchUrl}/`, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
