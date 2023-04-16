@@ -62,7 +62,7 @@ class Posts(models.Model):
     keyword = models.TextField()
     title = models.TextField()
     content = models.TextField()
-    multimedia = models.TextField()
+    multimedia = models.TextField(default='')
     reply = models.TextField()
     likes = models.TextField()
     editted = models.BooleanField()
