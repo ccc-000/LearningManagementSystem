@@ -95,6 +95,7 @@ function Forum() {
   // Function that convert json data into post list
   const jsonToPost = (posts_data) => {
     const post_list = posts_data.map(p => {
+      //TODO: if the post is private
       return {
         postid: p.pid,
         posttitle: p.title,
