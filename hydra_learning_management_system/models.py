@@ -16,7 +16,6 @@ class Courses(models.Model):
     cid = models.AutoField(primary_key=True)
     coursename = models.CharField(max_length=60)
     creatorid = models.ForeignKey(Users, on_delete=models.CASCADE)
-    enrolllist = models.TextField()
     coursedescription = models.TextField()
     gradedistribution = models.TextField()
 
@@ -30,7 +29,8 @@ class Assessments(models.Model):
     ###################################################################
     uid = models.ForeignKey(Users, on_delete=models.CASCADE)
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
-    grade = models.TextField()
+    worklink = models.TextField(default = "{}")
+    grade = models.TextField(default = str({"quiz":{},"ass":{},"final exam":0}))
 
 class Quizzes(models.Model):
     qid = models.AutoField(primary_key=True)
@@ -67,7 +67,7 @@ class Posts(models.Model):
     likes = models.TextField()
     editted = models.BooleanField()
     flagged = models.TextField()
-    privacy = models.TextField()
+    privacy = models.BooleanField()
 
 class Replies(models.Model):
     pid = models.ForeignKey(Posts, on_delete=models.CASCADE)

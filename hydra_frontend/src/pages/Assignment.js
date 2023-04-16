@@ -1,13 +1,17 @@
 import React from 'react';
 import Navibar from '../components/Navibar';
+import pic from '../img/hydra1.png';
+import '../styles/Assignment.css';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { Divider, Layout, Tooltip, Upload } from 'antd';
-import { Button, Modal, Space, Input, message } from 'antd';
-import { RollbackOutlined, UploadOutlined } from '@ant-design/icons';
+import { Divider, Layout, Tooltip, Upload, Avatar, Card } from 'antd';
+import { Button, Modal, Space, Input, message, List } from 'antd';
+import { RollbackOutlined, UploadOutlined, FundOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { TextArea } = Input;
+const { Meta } = Card;
 
 const role = localStorage.getItem('role');
 const cid = localStorage.getItem('cid');
@@ -26,7 +30,27 @@ export default function Assignment() {
         setOpen(false);
         }, 1000);
     };
+    const handleMark = () => {
+        axios.post('http://localhost:8000/markass/', {
+            cid: 1
+        })
+        .then((response) => {
+            setAssList(response.data.asses);
+        })
+    };
     const handleCancel = () => {
+        setOpen(false);
+    };
+    //Open different modal
+    const [currentModal, setCurrentModal] = useState('');
+
+    const openModal = (modalId) => {
+        setCurrentModal(modalId);
+        setOpen(true);
+    };
+
+    const closeModal = () => {
+        setCurrentModal('');
         setOpen(false);
     };
 
@@ -47,7 +71,7 @@ export default function Assignment() {
             assdescription: des,
             url: url
         }),
-    })
+        })
         .then((response) => response.json())
         .then((data)=>{
             if (data.status === 200){
@@ -57,7 +81,20 @@ export default function Assignment() {
                 message.error('Failed to create assignment');
             }
         })
+        setOpen(false);
     };
+
+    //Lecturer Assignment List
+    const [assList, setAssList] = useState([]);
+    useEffect(() => {
+        axios.post('http://localhost:8000/showass/', {
+            cid: 1
+        })
+        .then((response) => {
+            setAssList(response.data.asses);
+        })
+    }, []);
+
 
     //Submit Assignment Modal
     //Upload file
@@ -102,9 +139,10 @@ export default function Assignment() {
             </Header>
             <Divider orientation="left" style={{fontSize:'25px'}}>Assignment</Divider>
             <Space style={{marginLeft:'15px', marginBottom:'15px'}}>
-                <Button type="primary" onClick={showModal}>Create a new assignment</Button>
+                <Button type="primary" onClick={() => openModal('modal1')} style={{marginLeft:'20px'}}>Create a new assignment</Button>
                 <Modal
-                    open={open}
+                    open={currentModal === 'modal1' && open}
+                    id='modal1'
                     title="New assignment"
                     onOk={handleCreate}
                     onCancel={handleCancel}
@@ -128,27 +166,53 @@ export default function Assignment() {
 
                 </Modal>
             </Space>
-            {/* <div>
-                <ul>
-                    {data.map((data, index) => (
-                        <li key={data.aid}>Assignment{index}</li>
-                    ))}
-                </ul>
-            </div> */}
-            {/* <List
-                itemLayout="horizontal"
-                dataSource={data}
-                // renderItem={(item, index) => (
-                    // <List.Item>
-                        // <List.Item.Meta
-                            {...data.map((data, index) => (
-                                <a href={data.url} key={data.aid}>Assignment{index} 
-                                </a>
-                            ))}
-                        // />
-                    // </List.Item>
-                // )}
-            /> */}
+            
+            <div class="container"> 
+                {assList.map((ass) => (
+                    <div key={ass.pk} class="box">
+                        <a href={ass.url}>
+                        <Card
+                            style={{
+                            width: 300,
+                            position: 'relative' 
+                            }}
+                            cover={
+                            <img
+                                alt="assignment"
+                                src={pic}
+                            />
+                            }
+                        >
+                            <Meta
+                            title={ass.title}
+                            description={ass.assignemntdescription}
+                            />
+                        <Button onClick={() => openModal('modal2')} icon={<FundOutlined />} style={{marginTop:'10px'}}>Mark {ass.title} </Button>
+                        <Modal
+                            open={currentModal === 'modal2'  && open}
+                            id='modal2'
+                            title="Mark assignment"
+                            onOk={handleMark}
+                            onCancel={closeModal}
+                            footer={[
+                            <Button key="back" onClick={handleCancel}> Cancel </Button>,
+                            <Button key="mark" type="primary" loading={loading} onClick={handleMark}> Mark </Button>,
+                            ]}>
+                            <div style={{fontWeight:'bold', marginLeft:'15px', marginTop:'15px', marginBottom:'20px'}}>
+                                Student ID:
+                                <Input allowClear  />
+                            <br />
+                            <br />
+                                Grade:
+                                <Input allowClear />
+                            </div>
+                        </Modal>
+                        </Card>
+                        </a>
+                    </div>
+                ))}
+            </div>
+
             <Navibar />
             <Footer
                 style={{
@@ -161,7 +225,7 @@ export default function Assignment() {
             </Layout>
             </>
             
-        )} else {
+        )} else { //role = student
             return (
                 <>
                 <Layout
@@ -189,6 +253,7 @@ export default function Assignment() {
                 </div>
                 <div style={{marginLeft:'50px', marginBottom:'15px'}}>
                     <span style={{fontSize:'18px'}}>Assignment Submit:</span>
+                    <p>Please name file as 'xxx.pdf' ('xxx' is your student id)</p>
                     <Button type="primary" onClick={showModal}>Submit</Button>
                     <Modal
                         open={open}
@@ -218,5 +283,6 @@ export default function Assignment() {
                 </>
             )
         }
+    
 }
 

@@ -2,14 +2,7 @@ import pic from '../img/unsw.jpeg';
 import avatar from '../img/avatar.png';
 import '../styles/DashboardPage.css';
 import {
-    AppstoreOutlined,
-    BarChartOutlined,
-    CloudOutlined,
-    ShopOutlined,
-    TeamOutlined,
-    UploadOutlined,
     UserOutlined,
-    VideoCameraOutlined,
     LogoutOutlined
 } from '@ant-design/icons';
 import {Form, Input, Button, Card, Layout, Menu, Modal, Avatar, message} from 'antd';
@@ -20,6 +13,7 @@ import ShowCourse from '../components/CourseCard';
 
 const {Content, Footer, Sider} = Layout;
 const uid=localStorage.getItem('uid');
+const role=localStorage.getItem('role');
 
 
 function DashboardLecturer() {
@@ -104,10 +98,10 @@ function DashboardLecturer() {
                                 }}>
                             Enrol Courses
                         </Button>
-                        {/* <div className='cardBox'>
-                            <ShowCourse uid={uid}/>
+                        <div className='cardBox'>
+                            <ShowCourse uid={uid} role={role}/>
                             
-                       </div> */}
+                        </div>
 
 
 
