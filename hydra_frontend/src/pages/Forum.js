@@ -17,13 +17,13 @@ function Forum() {
   const fetch_post_data = (postid, creatorid) => {
     console.log(postid);
     console.log(creatorid);
-    if (localStorage.getItem('uid') === creatorid.toString()) {
-      // TODO: should navigate to the owner page
-      console.log("same");
-    }
-    else {
-      navigate('/forum/' + postid);
-    }
+    // if (localStorage.getItem('uid') === creatorid.toString()) {
+    //   // TODO: should navigate to the owner page
+    //   console.log("same");
+    // }
+    // else {
+      navigate('/coursemainpage/forum/' + postid);
+    // }
   }
 
   const navigate = useNavigate();
@@ -119,8 +119,7 @@ function Forum() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        // This id is just for testing
-        cid: "1",
+        cid: localStorage.cid,
         uid: localStorage.uid
       }),
     })
@@ -192,7 +191,7 @@ function Forum() {
     <div className="Forum-Total">
       <div className="Forum-Content">
         <div className="Forum-Filter">
-          <Link to="/createforum">
+          <Link to="/coursemainpage/createforum">
             <Button type="primary" htmlType="submit" size="large" style={{ width: 160, marginRight: 50 }}>Create a Post</Button>
           </Link>
           <RangePicker presets={rangePresets} onChange={onRangeChange} style={{ width: 400, height: 35, marginRight: 50 }} />

@@ -45,10 +45,10 @@ function App() {
                 <Route path="/editavatar" element={<EditAvatar/>}/>
                 <Route path="/resetpassword/1" element={<ResetPassword1/>}/>
                 <Route path="/resetpassword/2" element={<ResetPassword2/>}/>
-                <Route path="/forum" element={<Forum/>}/>
-                <Route path="/createforum" element={<CreateForum/>}/>
-                <Route path="/editforum/:pid" element={<EditForum/>}/>
-                <Route path="/forum/:pid" element={<ForumDetailStudent/>}/>
+                <Route path="/coursemainpage/forum" element={<Forum/>}/>
+                <Route path="/coursemainpage/createforum" element={<CreateForum/>}/>
+                <Route path="/coursemainpage/editforum/:pid" element={<EditForum/>}/>
+                <Route path="/coursemainpage/forum/:pid" element={<ForumDetailStudent/>}/>
                 <Route path="/coursemainpage/quiz" element={<Quiz/>}/>
                 <Route path="/coursemainpage/assignment" element={<Assignment/>}/>
                 <Route path="/coursemainpage/announcementsLecturer" element={<AnnouncementLecturer/>}/>
