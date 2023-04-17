@@ -5,9 +5,6 @@ import {Link} from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/Profile.css';
 
-//通过uid获取用户信息并显示
-//将修改后的prefer language提交到数据库
-
 function Profile() {
     const [data1, setData1] = useState([]);
     const [data2, setData2] = useState([]);
@@ -16,11 +13,13 @@ function Profile() {
     const jsonToList = (data2) => {
       const enrollment_list = data2.courses.map((course) => {
         return {
-          children: course
+          children: course.coursename
         }
       });
-      console.log(enrollment_list);
-      return enrollment_list;
+      enrollment_list.sort(function(a, b) {
+        return b.children.localeCompare(a.children);
+      });
+      return enrollment_list.slice(0, 3);
     }
 
     useEffect(() => {
@@ -98,17 +97,7 @@ function Profile() {
             >
             <Timeline
                 pending="More"
-                items={[
-                {
-                    children: 'Term One, 2023 COMP9900',
-                },
-                {
-                    children: 'Term One, 2023 COMP9321',
-                },
-                {
-                    children: 'Term One, 2023 MATH5905',
-                },
-                ]}
+                items={data2}
             />
             <Link to="/enrolmenthistory">
               <div id="ProfileDetail-Button">
