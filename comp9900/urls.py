@@ -58,4 +58,6 @@ urlpatterns = [
 
     path("showprofile/",views.showprofile),
     path("editprofile/",views.editprofile),
+
+    path("translate/",views.translate),
 ]

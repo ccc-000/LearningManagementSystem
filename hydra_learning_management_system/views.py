@@ -617,3 +617,12 @@ def showmaterial(request):
             i = i["fields"]
             res.append(i)
         return JsonResponse({"material": res})
+
+@csrf_exempt
+def translate(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        user = Users.objects.get(uid=uid)
+        language = user.preferredlanguage
+        return JsonResponse({"language": language})
