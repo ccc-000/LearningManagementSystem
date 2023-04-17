@@ -449,14 +449,20 @@ def editposts(request):
     if request.method == "PUT":
         data = json.loads(request.body)
         pid = data["pid"]
+        uid = data['uid']
         post = Posts.objects.get(pid=pid)
-        post.title = data["title"]
-        post.content = data["content"]
-        post.keyword = data["keyword"]
-        post.multimedia = data["multimeida"]
-        post.editted = True
-        post.save()
-        return JsonResponse({"status": 200, "msg":"edit success"})
+        ownerid = post.creatorid.uid
+        uid = int(uid)
+        if uid == ownerid:
+            post.title = data["title"]
+            post.content = data["content"]
+            post.keyword = data["keyword"]
+            post.multimedia = data["multimeida"]
+            post.editted = True
+            post.save()
+            return JsonResponse({"status": 200, "msg":"edit success"})
+        else:
+            return JsonResponse({"status": 403})
 
 @csrf_exempt
 def flagposts(request):
