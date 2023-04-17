@@ -51,6 +51,7 @@ urlpatterns = [
     path("setprivate/", views.setprivate),
     path("deleteposts/", views.deleteposts),
     path("deletereplys/", views.deletereplys),
+    path("editposts/", views.editposts),
 
     path("uploadmaterial/", views.uploadmaterial),
     path("downloadmaterial/", views.downloadmaterial),
