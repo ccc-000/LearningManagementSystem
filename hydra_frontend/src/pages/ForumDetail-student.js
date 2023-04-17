@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { LikeOutlined, PushpinOutlined } from '@ant-design/icons';
 import { Input, Button, Descriptions, Badge, message, notification, Space } from 'antd';
-import { useNavigate, Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 // import { Translate } from "@google-cloud/translate";
 
 import 'antd/dist/reset.css';
@@ -13,6 +13,7 @@ function ForumDetailStudent() {
   const [messageApi1, contextHolder1] = message.useMessage();
   const [api1, contextHolder2] = notification.useNotification();
   const [data, setData] = useState(undefined);
+  const [reply, setReply] = useState("");
   // const [translatedText, setTranslatedText] = useState("");
 
   const { pid } = useParams();
@@ -247,6 +248,54 @@ function ForumDetailStudent() {
     // PostDetail = translatedText;
   }
 
+  // Handle submit reply
+  function handleSubmit() {
+    console.log(reply);
+    fetch('http://localhost:8000/replyposts/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        uid: localStorage.uid,
+        pid: pid,
+        content: reply
+      }),
+    })
+    .then(response => response.json())
+    .then((fetched_data) => {
+      if (fetched_data.status === 200) {
+        const new_data = {...data};
+        new_data.reply.reply.push({
+          [localStorage.getItem("uid")] : [reply]
+        })
+        setReply("")
+        setData(new_data)
+      }
+    })
+    .catch((e) => {
+      console.log(e)
+    })
+  }
+
+  // Generate reply list from data
+  const reply_components = []
+  if (data) {
+    data.reply.reply.forEach((e) => console.log(Object.keys(e)[0], Object.values(e)[0]))
+    data.reply.reply.forEach((e) => {
+      reply_components.push(
+        <div className="ForumDetail-Reply">
+          <Descriptions>
+              <Descriptions.Item label="Reply from" span={3}>{Object.keys(e)[0]}</Descriptions.Item>
+              <Descriptions.Item label="Content" span={3}>
+                {Object.values(e)[0]}
+              </Descriptions.Item>
+            </Descriptions>
+          </div>
+      )
+    })
+  }
+
   return (
     <div className="ForumDetail-Total">
       <div className="ForumDetail-Post">
@@ -263,11 +312,12 @@ function ForumDetailStudent() {
             {PostDetail}
           </Descriptions.Item>
           <Descriptions.Item span={2}>
-            {() => {
+            {/* TODO: Fix the follwing */}
+            {/* {() => {
               if (data) {
                 { data.multimedia ? <img src={data.multimedia} alt="avatar" style={{ width: '100%' }} /> : <></> }
               }
-            }}
+            }} */}
           </Descriptions.Item>
           <Descriptions.Item span={1} style={{ float: 'right', marginRight: 30 }}>
             <p style={propsEdit}>edited</p>
@@ -287,9 +337,11 @@ function ForumDetailStudent() {
           </Descriptions.Item>
         </Descriptions>
       </div>
+      {/* This section render the reply */}
+      {reply_components}
       <div className="ForumDetail-Reply">
-        <TextArea rows={2} placeholder="Please input the reply" />
-        <Button type="primary" htmlType="submit" size="medium" style={{ marginLeft: 30 }}>Reply</Button>
+        <TextArea rows={2} placeholder="Please input the reply" value={reply} onChange={(e) => {setReply(e.target.value)}}/>
+        <Button type="primary" htmlType="submit" size="medium" style={{ marginLeft: 30 }} onClick={handleSubmit}>Reply</Button>
       </div>
     </div>
   );

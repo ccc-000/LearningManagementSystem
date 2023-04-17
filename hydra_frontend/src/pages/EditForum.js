@@ -51,17 +51,18 @@ function EditForum() {
         content: 'Editing...',
       });
 
-      fetch('http://localhost:8000/editpost/', {
+      fetch('http://localhost:8000/editposts/', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        pid: pid,
-        // title: form.title,
-        // content: form.content,
-        // keyword: form.keyword,
-        // multimedia: form.multimedia
+        uid: localStorage.getItem("uid"),
+        pid: 6,
+        title: "hello",
+        content: "hello worlds",
+        keyword: "edit test",
+        multimedia: ""
       }),
     })
       .then(response => response.json())
