@@ -631,7 +631,7 @@ def translate(request):
         return JsonResponse({"language": language})
 
 @csrf_exempt
-def annoucement(request):
+def announcement(request):
     if request.method == "POST":
         data = json.loads(request.body)
         cid = data['cid']

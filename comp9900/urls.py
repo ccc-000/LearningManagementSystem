@@ -60,4 +60,5 @@ urlpatterns = [
     path("editprofile/",views.editprofile),
 
     path("translate/",views.translate),
+    path("announcement/",views.announcement),
 ]
