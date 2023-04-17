@@ -408,7 +408,6 @@ def forum(request):
             i = i["fields"]
             i["flagged"] = json.loads(i["flagged"])
             i["likes"] = json.loads(i["likes"])
-            #i["privacy"] = json.loads(i["privacy"])
             i["reply"] = json.loads(i["reply"])
             uid = i["creatorid"]
             creatorname = Users.objects.get(uid=uid).username
@@ -432,12 +431,9 @@ def createposts(request):
         keyword = data['keyword']
         multimedia = data['multimedia']
         reply = json.dumps({"reply": {}})
-        #1: good, 2:bad
         likes = json.dumps({"likes": []})
-        # likes:[1,2,3]
         editted = False
         flagged = json.dumps({"flagged": []})
-        # flagged[1,2,3]
         privacy = False
         post = Posts.objects.create(creatorid=creatorid, cid=cid, createtime=createtime, keyword=keyword, title=title
                                     , content=content, multimedia=multimedia, reply=reply, likes=likes,
@@ -536,7 +532,7 @@ def setprivate(request):
         uid = data["uid"]
         post = Posts.objects.get(pid=pid)
         ownerid = post.creatorid
-        cid = post.cid
+        cid = post.cid.cid
         course = Courses.objects.get(cid=cid)
         lectorid = course.creatorid
         if uid == ownerid or uid == lectorid:
