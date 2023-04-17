@@ -430,7 +430,7 @@ def createposts(request):
         createtime = now
         keyword = data['keyword']
         multimedia = data['multimedia']
-        reply = json.dumps({"reply": {}})
+        reply = json.dumps({"reply": []})
         likes = json.dumps({"likes": []})
         editted = False
         flagged = json.dumps({"flagged": []})
@@ -495,9 +495,10 @@ def replyposts(request):
         user = Users.objects.get(uid=uid)
         post = Posts.objects.get(pid=pid)
         reply = Replies.objects.create(pid=pid, creator_id=user, content=content)
+        username = user.username
         replylist = post.reply
         replylist = json.loads(replylist)
-        replylist["reply"]["uid"] = content
+        replylist["reply"].append({f'{username}': content})
         replylist = json.dumps(replylist)
         post.reply = replylist
         post.save()
