@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 # Create your models here.
 class Users(models.Model):
@@ -30,7 +32,7 @@ class Assessments(models.Model):
     uid = models.ForeignKey(Users, on_delete=models.CASCADE)
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
     worklink = models.TextField(default = "{}")
-    grade = models.TextField(default = str({"quiz":{},"ass":{},"final exam":0}))
+    grade = models.TextField(default = json.dumps({"quiz":{},"ass":{},"final exam":0}))
 
 class Quizzes(models.Model):
     qid = models.AutoField(primary_key=True)
