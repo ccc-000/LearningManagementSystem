@@ -29,7 +29,7 @@ function Material() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          cid: 1,
+          cid: localStorage.cid,
           uid: localStorage.uid
         }),
       })
@@ -102,7 +102,7 @@ function Material() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          cid: 1,
+          cid: localStorage.cid,
           type: form.type,
           filepath: form.filepath
         }),

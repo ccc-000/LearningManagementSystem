@@ -75,7 +75,7 @@ function EditForum() {
             duration: 2,
           });
           setTimeout(() => {
-            navigate('/forum/' + pid);
+            navigate('/coursemainpage/forum/' + pid);
           }, 2100);
         }
       })
@@ -88,7 +88,7 @@ function EditForum() {
 
     //cancel edit
     const confirmCancel = () => {
-      navigate('/forum/' + pid);
+      navigate('/coursemainpage/forum/' + pid);
     };
 
     function handleCancel(){

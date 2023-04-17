@@ -57,12 +57,11 @@ function CreateForum() {
       },
       body: JSON.stringify({
         creatorid: localStorage.uid,
-        // TODO: the course ID should obtain from the url
-        cid: "1",
+        cid: localStorage.cid,
         title: form.title,
         content: form.content,
         keyword: form.keyword,
-        multimedia: form.multimedia
+        multimedia: form.multimedia,
       }),
     })
       .then(response => response.json())

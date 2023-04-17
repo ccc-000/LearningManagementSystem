@@ -11,18 +11,17 @@ import '../styles/Profile.css';
 function Profile() {
     const [data1, setData1] = useState([]);
     const [data2, setData2] = useState([]);
-    // console.log(data2.courses);
+    console.log(data2.courses);
 
-    // const jsonToList = (data2) => {
-    //   const enrollment_list = [];
-    //   data2.courses.map((course) => {
-    //     enrollment_list.push({
-    //       children: {course}
-    //     });
-    //   }
-    //   console.log(enrollment_list);
-    //   return data2;
-    // }
+    const jsonToList = (data2) => {
+      const enrollment_list = data2.courses.map((course) => {
+        return {
+          children: course
+        }
+      });
+      console.log(enrollment_list);
+      return enrollment_list;
+    }
 
     useEffect(() => {
       fetch('http://localhost:8000/showprofile/', {
@@ -39,19 +38,19 @@ function Profile() {
           setData1(data1);
         });
 
-      // fetch('http://localhost:8000/enrolledcourses/', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     uid: localStorage.uid
-      //   }),
-      // })
-      //   .then(response => response.json())
-      //   .then(data2 => {
-      //     setData2(data2);
-      //   });
+      fetch('http://localhost:8000/enrolledcourses/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: localStorage.uid
+        }),
+      })
+        .then(response => response.json())
+        .then(data2 => {
+          setData2(jsonToList(data2));
+        });
     }, []);
 
     return (

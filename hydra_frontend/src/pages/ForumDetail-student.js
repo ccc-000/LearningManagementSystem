@@ -36,16 +36,18 @@ function ForumDetailStudent() {
     display: 'none'
   }
 
-  let propsLike = {
+  const propsLike = {
     fontSize: 23,
     cursor: 'pointer',
   }
   
-  let propsFlag = {
+  const propsFlag = {
     fontSize: 23, 
     marginLeft: 30, 
     cursor: 'pointer',
   }
+
+  let privatecontent = ""
 
   if (data) {
     if (data.editted) {
@@ -57,9 +59,21 @@ function ForumDetailStudent() {
     if (data.flagged.flagged.includes(localStorage.getItem('uid'))) {
       propsFlag.color = 'blue';
     }
+    // if (data.privacy) {
+    privatecontent = "Private"
+    // }
   }
 
   function handleLike() {
+    if (data.likes.likes.includes(localStorage.getItem('uid'))) {
+      let likedata = {...data};
+      likedata.likes.likes = data.likes.likes.filter(uid => uid !== localStorage.getItem('uid'))
+      setData(likedata)
+    }else{
+      let likedata = {...data};
+      likedata.likes.likes.push(localStorage.getItem('uid'))
+      setData(likedata)
+    }
     fetch('http://localhost:8000/likeposts/', {
       method: 'POST',
       headers: {
@@ -72,22 +86,22 @@ function ForumDetailStudent() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if(data.status === 200){
-          window.location.reload();
+          console.log(data);
         }
       });
   }
 
   function handleFlag() {
-    // if (data.flagged.flagged.includes(localStorage.getItem('uid'))) {
-    //   let flagdata = data;
-    //   flagdata.flagged.flagged = data.flagged.flagged.filter(uid => uid !== localStorage.getItem('uid'))
-    //   console.log("flagged: ", flagdata);
-    //   propsFlag.color = 'black';
-    // }else{
-    //   // propsFlag.color = 'blue';
-    // }
+    if (data.flagged.flagged.includes(localStorage.getItem('uid'))) {
+      let flagdata = {...data};
+      flagdata.flagged.flagged = data.flagged.flagged.filter(uid => uid !== localStorage.getItem('uid'))
+      setData(flagdata)
+    }else{
+      let flagdata = {...data};
+      flagdata.flagged.flagged.push(localStorage.getItem('uid'))
+      setData(flagdata)
+    }
     fetch('http://localhost:8000/flagposts/', {
       method: 'POST',
       headers: {
@@ -100,18 +114,33 @@ function ForumDetailStudent() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if(data.status === 200){
-          window.location.reload();
+          console.log(data);
         }
       });
   }
 
   const navigate = useNavigate();
 
-  // TODO: make the post private
   function makePrivate() {
+    
     console.log("makePrivate");
+    fetch('http://localhost:8000/setprivate/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        pid: pid,
+        uid: localStorage.getItem('uid')
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if(data.status === 200){
+          console.log(data);
+        }
+      });
   }
 
   function deletePost() {
@@ -215,10 +244,8 @@ function ForumDetailStudent() {
           <Descriptions.Item >
             {contextHolder2}
             <Button type="primary" htmlType="submit" size="medium" style={{ width: 80, marginRight: 30 }} onClick={handleDelete}>Delete</Button>
-            <Button type="primary" htmlType="submit" size="medium" style={{ width: 80, marginRight: 30 }} onClick={makePrivate}>Private</Button>
-            <Link to="/editforum">
-              <Button type="primary" htmlType="submit" size="medium" style={{ width: 80, marginRight: 30 }} onClick={handleEdit}>Edit</Button>
-            </Link>
+            <Button type="primary" htmlType="submit" size="medium" style={{ width: 80, marginRight: 30 }} onClick={makePrivate}>{privatecontent}</Button>
+            <Button type="primary" htmlType="submit" size="medium" style={{ width: 80, marginRight: 30 }} onClick={handleEdit}>Edit</Button>
           </Descriptions.Item>
         </Descriptions>
       </div>
