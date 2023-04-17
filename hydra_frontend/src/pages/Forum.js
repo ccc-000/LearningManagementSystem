@@ -6,24 +6,10 @@ import 'antd/dist/reset.css';
 import '../styles/Forum.css';
 const { RangePicker } = DatePicker;
 
-function Forum() {
-
-  //Zaffi: 判断userid与creatorid是否相同，相同则跳转到ForumDetail-ownpage页面，不同则跳转到ForumDetail-student页面
-  // // navigate('/ForumDetailLecturer', {state: {postid: record.postid}});
-  // navigate('/forumdetailstudent', {state: {postid: record.postid}});
-  // // navigate('/ForumDetailOwnPage', {state: {postid: record.postid}});
-  
+function Forum() {  
   // FUnction to fetch meta data of all post from server
   const fetch_post_data = (postid, creatorid) => {
-    console.log(postid);
-    console.log(creatorid);
-    // if (localStorage.getItem('uid') === creatorid.toString()) {
-    //   // TODO: should navigate to the owner page
-    //   console.log("same");
-    // }
-    // else {
-      navigate('/coursemainpage/forum/' + postid);
-    // }
+    navigate('/coursemainpage/forum/' + postid);
   }
 
   const navigate = useNavigate();
