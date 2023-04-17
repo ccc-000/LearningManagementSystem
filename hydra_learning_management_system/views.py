@@ -194,11 +194,13 @@ def showcourses(request):
 def dropcourses(request):
     if request.method == "POST":
         data = json.loads(request.body)
+        #print(data)
         cid = data['cid']
         uid = data['uid']
         course = Courses.objects.get(cid=cid)
-        course.delete()
-        enrollment = Enrollments.objects.get(cid=cid)
+        user = Users.objects.get(uid=uid)
+        #course.delete()
+        enrollment = Enrollments.objects.get(cid=course,uid=user)
         enrollment.delete()
         return JsonResponse({'status': 200})
 
@@ -206,6 +208,7 @@ def dropcourses(request):
 def enrolledcourses(request):
     if request.method == "POST":
         data = json.loads(request.body)
+        #print(data,"111")
         uid = data['uid']
         cid = Enrollments.objects.filter(uid=uid)
         cid = serializers.serialize("python", cid)
@@ -222,7 +225,7 @@ def enrolledcourses(request):
             tmp = course[0]["fields"]
             tmp["cid"] = course[0]['pk']
             courses.append(tmp)
-        print(courses)
+        #print(courses)
         return JsonResponse({"courses": courses})
 
 
