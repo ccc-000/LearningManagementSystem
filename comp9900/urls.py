@@ -46,6 +46,7 @@ urlpatterns = [
     path("posts/", views.postes),
     path("createposts/", views.createposts),
     path("replyposts/", views.replyposts),
+    path("flagposts/", views.flagposts),
     path("likeposts/", views.likeposts),
     path("setprivate/", views.setprivate),
     path("deleteposts/", views.deleteposts),

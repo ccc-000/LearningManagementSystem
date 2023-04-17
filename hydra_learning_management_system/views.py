@@ -383,7 +383,7 @@ def postes(request):
         post["fields"]["reply"] = json.loads(post["fields"]["reply"])
         post["fields"]["likes"] = json.loads(post["fields"]["likes"])
         post["fields"]["flagged"] = json.loads(post["fields"]["flagged"])["flagged"]
-        post["fields"]["privacy"] = json.loads(post["fields"]["privacy"])["privacy"]
+        #post["fields"]["privacy"] = json.loads(post["fields"]["privacy"])["privacy"]
         post = post["fields"]
         #print(post)
         return JsonResponse(post)
@@ -402,7 +402,7 @@ def forum(request):
             i = i["fields"]
             i["flagged"] = json.loads(i["flagged"])
             i["likes"] = json.loads(i["likes"])
-            i["privacy"] = json.loads(i["privacy"])
+            #i["privacy"] = json.loads(i["privacy"])
             i["reply"] = json.loads(i["reply"])
             uid = i["creatorid"]
             creatorname = Users.objects.get(uid=uid).username
@@ -471,7 +471,7 @@ def flagposts(request):
             post.flagged = flagged
             post.save()
             return JsonResponse({"status": 200, "msg":"flag removes"})
-        flagged["flagged"].appned(uid)
+        flagged["flagged"].append(uid)
         flagged = json.dumps(flagged)
         post.flagged = flagged
         post.save()
@@ -508,7 +508,7 @@ def likeposts(request):
         post = Posts.objects.get(pid=pid)
         likes =post.likes
         likes = json.loads(likes)
-        if uid in likes['like']:
+        if uid in likes['likes']:
             likes["likes"].remove(uid)
             likes = json.dumps(likes)
             post.likes = likes
