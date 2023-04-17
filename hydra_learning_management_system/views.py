@@ -364,7 +364,7 @@ def markass(request):
         assessment = Assessments.objects.get(uid=user, cid=course)
         grade = assessment.grade
         grade = json.loads(grade)
-        grade["ass"]["aid"] = mark
+        grade['ass'][f'{aid}'] = mark
         grade = grade.dumps(grade)
         assessment.grade = grade
         assessment.save()
@@ -629,3 +629,24 @@ def translate(request):
         user = Users.objects.get(uid=uid)
         language = user.preferredlanguage
         return JsonResponse({"language": language})
+
+@csrf_exempt
+def annoucement(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        cid = data['cid']
+        title = data["title"]
+        content = data["content"]
+        course = Courses.objects.get(cid=cid)
+        enrollment = Enrollments.objects.filter(cid=course)
+        enrollment = serializers.serialize("python", enrollment)
+        uids = []
+        for i in enrollment:
+            tmp = i["fields"]["uid"]
+            uids.append(tmp)
+        #send
+        return JsonResponse({"status":200})
+
+def sendemail(uids, title, content):
+
+    return
