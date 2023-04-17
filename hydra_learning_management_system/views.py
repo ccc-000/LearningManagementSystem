@@ -494,7 +494,7 @@ def replyposts(request):
         content = data['content']
         user = Users.objects.get(uid=uid)
         post = Posts.objects.get(pid=pid)
-        reply = Replies.objects.create(pid=pid, creator_id=user, content=content)
+        reply = Replies.objects.create(pid=post, creator_id=user, content=content)
         username = user.username
         replylist = post.reply
         replylist = json.loads(replylist)
