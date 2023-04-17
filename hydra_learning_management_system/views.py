@@ -531,13 +531,15 @@ def setprivate(request):
         pid = data["pid"]
         uid = data["uid"]
         post = Posts.objects.get(pid=pid)
-        ownerid = post.creatorid
-        cid = post.cid.cid
-        course = Courses.objects.get(cid=cid)
-        lectorid = course.creatorid
+        ownerid = post.creatorid.uid
+        lectorid = post.cid.creatorid.uid
+        uid = int(uid)
+        #print(uid, ownerid, lectorid)
+        #print(type(uid), type(ownerid), type(lectorid))
         if uid == ownerid or uid == lectorid:
-            privacy = not post.privacy
-            if privacy == True:
+            post.privacy = not post.privacy
+            post.save()
+            if post.privacy == True:
                 return JsonResponse({"status": 200, "msg": "privacy set"})
             else:
                 return JsonResponse({"status": 200, "msg": "privacy unset"})
@@ -570,7 +572,6 @@ def deletereplys(request):
         replylist = []
         if reply is not None:
             reply.delete()
-
             return JsonResponse({"status": 200})
         else:
             return JsonResponse({"status": 403})
