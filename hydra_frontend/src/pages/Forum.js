@@ -86,7 +86,7 @@ function Forum() {
     const post_list = posts_data.map(p => {
       //TODO: if the post is private
       console.log(p.privacy)
-      if (!p.privacy || p.creatorid === localStorage.getItem('uid') || localStorage.getItem('role') === 'lecturer') {
+      // if (!p.privacy || p.creatorid === localStorage.getItem('uid') || localStorage.getItem('role') === 'lecturer') {
         return {
           postid: p.pid,
           posttitle: p.title,
@@ -97,7 +97,9 @@ function Forum() {
           numberoflikes: p.likes.likes.length,
           flagged: p.flagged.flagged,
         }
-      }
+      // }else{
+      //   return null;
+      // }
     });
     console.log(post_list);
     return post_list;
