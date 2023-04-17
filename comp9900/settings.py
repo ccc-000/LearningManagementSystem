@@ -150,3 +150,12 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'randomzsh@gmail.com'
 EMAIL_HOST_PASSWORD = 'Zshh0724'
+
+# Google API Credentials
+GOOGLE_OAUTH_CLIENT_ID = '573648962323-55qjsf792hu9c6ehqb26e28bll7gqu2e.apps.googleusercontent.com'
+GOOGLE_OAUTH_CLIENT_SECRET = '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'
+GOOGLE_OAUTH_SCOPE = [
+    'https://www.googleapis.com/auth/calendar',
+    'https://www.googleapis.com/auth/gmail.compose'
+]
+GOOGLE_OAUTH_REDIRECT_URI = 'http://localhost:8000/auth/callback/'

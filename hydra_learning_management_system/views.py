@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
 
+from google.oauth2.credentials import Credentials
 
 # Create your views here.
 
@@ -35,6 +36,7 @@ def log_in(request):
         uid = Users.objects.get(username=username).uid
         rightpwd = Users.objects.get(username=username).password
         role = Users.objects.get(username=username).role
+
         if password == rightpwd:
             return JsonResponse({'status': 200, 'msg': 'Log in Success', 'uid': uid, "role": role})
         else:
@@ -325,6 +327,7 @@ def showass(request):
             tmp["cid"] = i["pk"]
             tmp["title"] = i["fields"]["title"]
             tmp["url"] = i["fields"]["url"]
+            tmp['aid'] = i['pk']
             ass.append(tmp)
         return JsonResponse({"asses":ass})
 
