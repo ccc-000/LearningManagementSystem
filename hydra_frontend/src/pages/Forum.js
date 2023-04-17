@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Button, DatePicker, Checkbox, Table } from 'antd';
+import { Button, DatePicker, Checkbox, Table, Layout, Tooltip } from 'antd';
 import { useNavigate, Link, json } from 'react-router-dom';
 import dayjs from 'dayjs';
 import 'antd/dist/reset.css';
 import '../styles/Forum.css';
+import Navibar from '../components/Navibar';
+import { RollbackOutlined } from '@ant-design/icons';
 const { RangePicker } = DatePicker;
+const { Header, Content, Footer, Sider } = Layout;
 
 function Forum() {  
   // FUnction to fetch meta data of all post from server
@@ -82,15 +85,18 @@ function Forum() {
   const jsonToPost = (posts_data) => {
     const post_list = posts_data.map(p => {
       //TODO: if the post is private
-      return {
-        postid: p.pid,
-        posttitle: p.title,
-        keyword: p.keyword,
-        creator: p.creatorname,
-        creatorid: p.creatorid,
-        posttime: p.createtime.slice(0, 10),
-        numberoflikes: p.likes.likes.length,
-        flagged: p.flagged.flagged,
+      console.log(p.privacy)
+      if (!p.privacy || p.creatorid === localStorage.getItem('uid') || localStorage.getItem('role') === 'lecturer') {
+        return {
+          postid: p.pid,
+          posttitle: p.title,
+          keyword: p.keyword,
+          creator: p.creatorname,
+          creatorid: p.creatorid,
+          posttime: p.createtime.slice(0, 10),
+          numberoflikes: p.likes.likes.length,
+          flagged: p.flagged.flagged,
+        }
       }
     });
     console.log(post_list);
@@ -174,33 +180,57 @@ function Forum() {
   };
 
   return (
-    <div className="Forum-Total">
-      <div className="Forum-Content">
-        <div className="Forum-Filter">
-          <Link to="/coursemainpage/createforum">
-            <Button type="primary" htmlType="submit" size="large" style={{ width: 160, marginRight: 50 }}>Create a Post</Button>
+    <Layout
+      className="site-layout"
+      style={{
+          minHeight: '100vh',
+          marginLeft: 200,
+      }}>
+        <Header style={{ padding: '2px 10px' }}>
+          <Link to='/dashboard'>
+            <Tooltip title="Back">
+              <Button type='link' shape="circle" icon={<RollbackOutlined />} />
+            </Tooltip>
           </Link>
-          <RangePicker presets={rangePresets} onChange={onRangeChange} style={{ width: 400, height: 35, marginRight: 50 }} />
-          <Checkbox onChange={onChange} style={{ fontSize: 15 }}>flagged</Checkbox>
-        </div>
-        <div className="Forum-List">
-          <Table
-            // The rowkey is to tell which property of data would be the key of the row
-            rowKey={"postid"}
-            columns={columns}
-            dataSource={tabledata}
-            onChange={onChangeFilter}
-            onRow={(record) => {
-              return {
-                onClick: () => {
-                  fetch_post_data(record.postid, record.creatorid)
-                },
-              };
-            }}
-          />
-        </div>
-      </div>
-    </div>
+        </Header>
+        <Content>
+          <div className="Forum-Total">
+            <div className="Forum-Content">
+              <div className="Forum-Filter">
+                <Link to="/coursemainpage/createforum">
+                  <Button type="primary" htmlType="submit" size="large" style={{ width: 160, marginRight: 50 }}>Create a Post</Button>
+                </Link>
+                <RangePicker presets={rangePresets} onChange={onRangeChange} style={{ width: 400, height: 35, marginRight: 50 }} />
+                <Checkbox onChange={onChange} style={{ fontSize: 15 }}>flagged</Checkbox>
+              </div>
+              <div className="Forum-List">
+                <Table
+                  // The rowkey is to tell which property of data would be the key of the row
+                  rowKey={"postid"}
+                  columns={columns}
+                  dataSource={tabledata}
+                  onChange={onChangeFilter}
+                  onRow={(record) => {
+                    return {
+                      onClick: () => {
+                        fetch_post_data(record.postid, record.creatorid)
+                      },
+                    };
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </Content>
+        <Navibar />   
+        <Footer
+        style={{
+            textAlign: 'center',
+        }}
+        >
+          Hydra Learning management system©2023 Created by COMP9900 HYDRA Group
+        </Footer>
+      </Layout>  
   );
 }
 export default Forum;

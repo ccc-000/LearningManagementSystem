@@ -66,9 +66,12 @@ function ForumDetailStudent() {
     if (data.flagged.includes(localStorage.getItem('uid'))) {
       propsFlag.color = 'blue';
     }
-    // if (data.privacy) {
+    if (!data.privacy) {
     privatecontent = "Private"
-    // }
+    }
+    if (data.privacy) {
+    privatecontent = "Public"
+    }
   }
 
   function handleLike() {
@@ -128,7 +131,15 @@ function ForumDetailStudent() {
   }
 
   function makePrivate() {
-    
+    if (data.privacy) {
+      let privatedata = {...data};
+      privatedata.privacy = "False"
+      setData(privatedata)
+    }else{
+      let privatedata = {...data};
+      privatedata.privacy = "True"
+      setData(privatedata)
+    }
     console.log("makePrivate");
     fetch('http://localhost:8000/setprivate/', {
       method: 'POST',
@@ -143,6 +154,8 @@ function ForumDetailStudent() {
       .then((response) => response.json())
       .then((data) => {
         if(data.status === 200){
+          console.log(data);
+        }else{
           console.log(data);
         }
       });
