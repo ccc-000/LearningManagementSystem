@@ -28,6 +28,9 @@ import AnnouncementLecturer from "./pages/AnnouncementLecturer";
 import Material from "./pages/Material";
 import VideoPlayer from './pages/VedioPlayer';
 
+//Online Lecture page
+import OnlineLecture from './pages/OnlineLecture';
+
 function App() {
 
     return (
@@ -55,6 +58,7 @@ function App() {
                 {/* <Route path="/Coursemainpage/grade" element={<Grade/>}/> */}
                 <Route path="/coursemainpage/material" element={<Material/>}/>
                 <Route path="/coursemainpage/videoPlayer" element={<VideoPlayer/>}/>
+                <Route path="/coursemainpage/onlinelecture" element={<OnlineLecture/>}/>
             </Routes>
         </>
     );
