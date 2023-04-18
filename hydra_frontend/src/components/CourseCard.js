@@ -30,6 +30,7 @@ const ShowCourse = ({uid, role}) => {
   
   
   const getCourses = () => {
+    console.log('uid should be 4', uid)
     fetch(`http://localhost:8000/${fetchUrl}/`, {
       method: 'POST',
       headers: {
@@ -37,14 +38,16 @@ const ShowCourse = ({uid, role}) => {
       },
       body: JSON.stringify({'uid': uid}),
     }).then(async(response) => {
-      const jsonRes = await response.json();
-      console.log(jsonRes);
-      if (response.status !== 200) {
-        message.error(jsonRes.error);
-        return;
-      }
-      console.log(jsonRes.courses);
-      setCourseList(jsonRes.courses);
+        const jsonRes = await response.json();
+        console.log(jsonRes);
+        if (response.status !== 200) {
+            message.error(jsonRes.error);
+            return;
+        }
+        message.success('Successful!');
+   
+        setCourseList(jsonRes.courses);
+     
     })
   };
   useEffect(() => {
@@ -75,7 +78,7 @@ const ShowCourse = ({uid, role}) => {
       {courseList.map(courses => (
         <Card
           hoverable
-          className='courseCard'
+          className='cards'
           cover={<img
             alt="course"
             src={pic} />}
@@ -92,10 +95,10 @@ const ShowCourse = ({uid, role}) => {
           ]}
         >
           <Meta
-            className='meta'
+            className='card-meta'
             title={courses.coursename}
-            description={courses.coursedescription} />
-          <div onClick={() => handleNavigate(courses.cid, courses.coursename, courses.coursedescription)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
+            description={<p className="custom-card-description">{courses.coursedescription}</p>} />
+          <div onClick={() => handleNavigate(courses.cid)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
         </Card>
       
       

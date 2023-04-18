@@ -5,7 +5,7 @@
 .content {
     min-height: calc(100vh - 64px);
     margin: 24px 16px 0;
-    overflow: initial;
+    overflow: scroll;
 }
 
 .footer {
@@ -39,4 +39,9 @@
 
 .meta {
     white-space: normal;
+}
+
+.avatar {
+    size: 40;
+    cursor: pointer;
 }
