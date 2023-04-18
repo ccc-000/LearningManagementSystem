@@ -8,7 +8,7 @@ const { Header, Content, Footer, Sider } = Layout;
 
 // localStorage.setItem('courseId', cid);
 const role = localStorage.getItem('role');
-console.log(role);
+// console.log(role);
 
 const Coursemainpage = () => {
   const {
