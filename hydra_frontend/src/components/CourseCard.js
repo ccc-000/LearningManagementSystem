@@ -20,31 +20,31 @@ const ShowCourse = ({uid, role}) => {
   console.log('show course',uid);
   const navigate = useNavigate();
   const [courseList, setCourseList] = useState([]);
-  const handleNavigate = (id) => {
+  const handleNavigate = (id, cname, cdes) => {
     localStorage.setItem('cid', id);
+    localStorage.setItem('cname', cname);
+    localStorage.setItem('cdes', cdes);
+    console.log(localStorage.getItem('cdes'));
     navigate('/coursemainpage');
   };
- 
+  
   
   const getCourses = () => {
     fetch(`http://localhost:8000/${fetchUrl}/`, {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({'uid': uid}),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({'uid': uid}),
     }).then(async(response) => {
-        const jsonRes = await response.json();
-        console.log(jsonRes);
-        if (response.status !== 200) {
-            message.error(jsonRes.error);
-            return;
-        }
-        message.success('Successful!');
-        console.log('show course list success');
-        console.log(jsonRes.courses);
-        setCourseList(jsonRes.courses);
-        console.log('course list cid', courseList[0].cid);
+      const jsonRes = await response.json();
+      console.log(jsonRes);
+      if (response.status !== 200) {
+        message.error(jsonRes.error);
+        return;
+      }
+      console.log(jsonRes.courses);
+      setCourseList(jsonRes.courses);
     })
   };
   useEffect(() => {
@@ -82,7 +82,7 @@ const ShowCourse = ({uid, role}) => {
           style={{ position: "relative" }}
           actions={[
             <Dropdown
-              overlay={<Menu onClick={() => dropCourse(courses.cid)}>
+              menu={<Menu onClick={() => dropCourse(courses.cid)}>
                 <Menu.Item key="1">Drop Course</Menu.Item>
               </Menu>}
               style={{ border: "none", position: "absolute", bottom: 0, right: 0 }}
@@ -95,7 +95,7 @@ const ShowCourse = ({uid, role}) => {
             className='meta'
             title={courses.coursename}
             description={courses.coursedescription} />
-          <div onClick={() => handleNavigate(courses.cid)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
+          <div onClick={() => handleNavigate(courses.cid, courses.coursename, courses.coursedescription)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
         </Card>
       
       

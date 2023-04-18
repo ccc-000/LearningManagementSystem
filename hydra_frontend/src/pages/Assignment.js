@@ -9,17 +9,15 @@ import { Button, Modal, Space, Input, message, List } from 'antd';
 import { RollbackOutlined, UploadOutlined, FundOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
-const { Header, Content, Footer, Sider } = Layout;
-const { TextArea } = Input;
-const { Meta } = Card;
-
-const role = localStorage.getItem('role');
-console.log('role', role);
-const cid = localStorage.getItem('cid');
-console.log('cid', cid);
-const aid = localStorage.getItem('aid');
-
 export default function Assignment() {
+    const { Header, Content, Footer, Sider } = Layout;
+    const { TextArea } = Input;
+    const { Meta } = Card;
+    const role = localStorage.getItem('role');    
+    const cid = localStorage.getItem('cid');    
+    const aid = localStorage.getItem('aid');
+    const cname = localStorage.getItem('cname');
+
     //Create Assignment Modal   
     const [loading, setLoading] = useState(false); 
     const [open, setOpen] = useState(false); 
@@ -145,14 +143,13 @@ export default function Assignment() {
                 minHeight: '100vh',
                 marginLeft: 200,
             }}>
-            {/* <Header courseName={getCourseName()} style={{padding:'5px 10px'}} > */}
             <Header style={{ padding: '2px 10px' }}>
-                <Link to='/DashboardLecturer'>
+            <Link to='/dashboardLecturer'>
                 <Tooltip title="Back">
-                    <Button type='link' shape="circle" icon={<RollbackOutlined />} />
+                <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                 </Tooltip>
-                </Link>
-                {/* <h2>{props.courseName}</h2> */}
+            </Link>
+            <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{cname}</h2>
             </Header>
             <Divider orientation="left" style={{fontSize:'25px'}}>Assignment</Divider>
             <Space style={{marginLeft:'15px', marginBottom:'15px'}}>
@@ -252,14 +249,13 @@ export default function Assignment() {
                 minHeight: '100vh',
                 marginLeft: 200,
             }}>
-            {/* <Header courseName={getCourseName()} style={{padding:'5px 10px'}} > */}
             <Header style={{padding:'2px 10px'}} >
                 <Link to='/Dashboard'>
                 <Tooltip title="Back">
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                 </Tooltip>
                 </Link>
-                {/* <h2>{props.courseName}</h2> */}
+                <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{cname}</h2>
             </Header>
             <Divider orientation="left" style={{fontSize:'25px'}}>Assignment</Divider>
             <div class="container"> 
