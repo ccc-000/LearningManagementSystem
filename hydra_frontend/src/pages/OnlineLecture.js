@@ -7,6 +7,10 @@ import '../styles/OnlineLecture.css';
 
 function OnlineLecture() {
     const navigate = useNavigate();
+
+    const role = localStorage.getItem('role');
+    console.log('role', role);
+
     //TODO: get data from backend
 
     //TODO: 数据库添加创建时间字段
@@ -150,21 +154,31 @@ function OnlineLecture() {
         setOpen(false);
     };
 
+    const CourseMsg = "This live is for lecture 1";
+
     return (
       <div className="OnlineLecture-Total">
         <div className="OnlineLecture-Content">
             <div className="OnlineLecture-Create">
-                <Tooltip placement="right" title="Don't forget to start record the online lecture!">
-                    <Button type="primary" htmlType="submit" size="large" style={{width: 160, marginRight: 50}}>Start a live stream</Button>
-                </Tooltip>
+                {role !== 'student' ?
+                    <Tooltip placement="right" title="Don't forget to start record the online lecture!">
+                        <Button type="primary" htmlType="submit" size="large" style={{width: 160, marginRight: 50}}>Start a live stream</Button>
+                    </Tooltip>
+                :
+                    <Tooltip placement="bottom" title={CourseMsg}>
+                        <Button type="primary" htmlType="submit" size="large" style={{width: 200, marginRight: 50}}>Join a live stream</Button>
+                    </Tooltip>
+                }    
             </div>
             <div className="OnlineLecture-List">
-                <Table 
-                    // rowKey={"lid"}
-                    columns={columns} 
-                    dataSource={data} 
-                    onChange={onChangeFilter}
-                />
+                {role !== 'student' &&
+                    <Table 
+                        // rowKey={"lid"}
+                        columns={columns} 
+                        dataSource={data} 
+                        onChange={onChangeFilter}
+                    />
+                }
                 <Modal
                     title="Student Attendance"
                     open={open}
