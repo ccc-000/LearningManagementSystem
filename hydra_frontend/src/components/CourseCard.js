@@ -98,7 +98,7 @@ const ShowCourse = ({uid, role}) => {
             className='card-meta'
             title={courses.coursename}
             description={<p className="custom-card-description">{courses.coursedescription}</p>} />
-          <div onClick={() => handleNavigate(courses.cid)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
+          <div onClick={() => handleNavigate(courses.cid, courses.coursename, courses.coursedescription)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
         </Card>
     
       
