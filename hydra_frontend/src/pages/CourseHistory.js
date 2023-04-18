@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Timeline } from 'antd';
+import { Card, Button, Timeline, Avatar, Layout, Menu, Tooltip } from 'antd';
+import { UserOutlined, LogoutOutlined, RollbackOutlined } from '@ant-design/icons';
+import { useNavigate, Link } from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/CourseHistory.css';
+import avatar from '../img/avatar.png';
+
+const {Header, Content, Footer, Sider} = Layout;
 
 function CourseHistory() {
     const [reverse, setReverse] = useState(false);
     const [data, setData] = useState([]);
+    const navigate = useNavigate();
 
     const role = localStorage.getItem('role');
-    console.log('role', role);
 
     //reverse timeline
     const handleClick = () => {
@@ -43,26 +48,102 @@ function CourseHistory() {
           });
       }, []);
 
+    const handleLogout = () => {
+      localStorage.clear();
+      navigate('/')
+    };
+    const handleProfile = () => {
+        navigate('/profile')
+    };
+    const handleEditAvatar = () => {
+        navigate('/editavatar')
+    };
+
     return (
-        <div className="EnrolmentHistory">
-            <Card
-                id="EnrolmentHistory-Card"
-                bordered={false}
+      <Layout hasSider>
+        <Sider
+            style={{
+                overflow: 'auto',
+                height: '100vh',
+                position: 'fixed',
+                left: 0,
+                top: 0,
+                bottom: 0,
+            }}
+        >
+            <div
                 style={{
-                width: 780,
-                height: 500,
+                    height: 32,
+                    margin: 16,
+
                 }}
+            />
+            <Menu theme="dark" mode="inline">
+                <Avatar 
+                style={{
+                    size: 40,
+                    cursor: 'pointer',
+                    marginLeft: '80px',
+                }}
+                src={avatar} onClick={handleEditAvatar}/>
+                <Menu.Item
+                    key="profile"
+                    icon={<UserOutlined />}
+                    onClick={handleProfile}
+                    >
+                    Profile
+                </Menu.Item>
+                <Menu.Item
+                    key="logout"
+                    icon={<LogoutOutlined />}
+                    style={{ position: 'absolute', bottom: 0 }}
+                    onClick={handleLogout}
+                    >
+                    Logout
+                </Menu.Item>
+            </Menu>
+        </Sider>
+        <Layout
+            className="site-layout"
+            style={{
+                marginLeft: 200,
+            }}
+        >
+            <Header style={{ padding: '2px 10px' }}>
+                <Link to='/profile'>
+                    <Tooltip title="Back">
+                    <Button type='link' shape="circle" icon={<RollbackOutlined />} />
+                    </Tooltip>
+                </Link>
+            </Header>
+            <Content>
+              <div className="EnrolmentHistory">
+                <Card
+                    id="EnrolmentHistory-Card"
+                    bordered={false}
+                    style={{
+                    width: 780,
+                    height: 500,
+                    }}
+                >
+                    {role === "student" ? <div id="EnrolmentHistory-Title"><span>Enrolment History</span></div> : <div id="EnrolmentHistory-Title"><span>Course History</span></div>}
+                    <div id="EnrolmentHistory-Content">
+                        <Timeline
+                            reverse={reverse}
+                            items={data}
+                        />
+                    </div>
+                    <div id="EnrolmentHistory-ToggleReverse"><Button type="primary" onClick={handleClick} size="large">Toggle Reverse</Button></div>
+                </Card>
+              </div>
+            </Content>
+            <Footer
+                className='footer'
             >
-                {role === "student" ? <div id="EnrolmentHistory-Title"><span>Enrolment History</span></div> : <div id="EnrolmentHistory-Title"><span>Course History</span></div>}
-                <div id="EnrolmentHistory-Content">
-                    <Timeline
-                        reverse={reverse}
-                        items={data}
-                    />
-                </div>
-                <div id="EnrolmentHistory-ToggleReverse"><Button type="primary" onClick={handleClick} size="large">Toggle Reverse</Button></div>
-            </Card>
-        </div>
+                Hydra Learning management system©2023 Created by COMP9900 HYDRA Group
+            </Footer>
+        </Layout>
+    </Layout>
     );
 }
 

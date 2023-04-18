@@ -1,14 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import { UserOutlined, LeftCircleOutlined } from '@ant-design/icons';
-import { Input, Button, Avatar, Form, Select, DatePicker, Card, message, notification, Space } from 'antd';
+import { UserOutlined, LogoutOutlined, RollbackOutlined } from '@ant-design/icons';
+import { Input, Button, Avatar, Form, Select, DatePicker, Card, message, notification, Space, Layout, Menu, Tooltip } from 'antd';
 import { useNavigate, Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import 'antd/dist/reset.css';
 import '../styles/EditProfile.css';
+import avatar from '../img/avatar.png';
 const { Option } = Select;
 
-//通过uid获取用户信息并显示
-//将修改后的信息提交到数据库
+const {Header, Content, Footer, Sider} = Layout;
 
 //form setting
 const formItemLayout = {
@@ -29,6 +29,7 @@ const formItemLayout = {
       },
     },
   };
+
   const tailFormItemLayout = {
     wrapperCol: {
       xs: {
@@ -144,6 +145,7 @@ function EditProfile() {
   const confirmCancel = () => {
     navigate('/profile');
   };
+
   function handleCancel(){
     const key = `open${Date.now()}`;
     const btn = (
@@ -165,131 +167,200 @@ function EditProfile() {
     });
   }
 
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/')
+  };
+  const handleProfile = () => {
+      navigate('/profile')
+  };
+  const handleEditAvatar = () => {
+      navigate('/editavatar')
+  };
+
   return (
-    <div className="EditProfile">
-        {/* <Link to="/profile"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey'}}/></Link> */}
-        <div id="EditProfile-Content">
-          <Card
-            bordered={false}
+    <Layout hasSider>
+        <Sider
             style={{
-            width: 780,
-            height: 600,
+                overflow: 'auto',
+                height: '100vh',
+                position: 'fixed',
+                left: 0,
+                top: 0,
+                bottom: 0,
             }}
-          >
-            <div id="EditProfile-Avatar">
-              <Avatar shape="square" size={110} icon={<UserOutlined />} />
-            </div>
-            <Form
-            {...formItemLayout}
-            form={form}
-            name="edit"
-            initialValues={initialValues}
-            onFinish={onFinish}
+        >
+            <div
+                style={{
+                    height: 32,
+                    margin: 16,
+
+                }}
+            />
+            <Menu theme="dark" mode="inline">
+                <Avatar 
+                style={{
+                    size: 40,
+                    cursor: 'pointer',
+                    marginLeft: '80px',
+                }}
+                src={avatar} onClick={handleEditAvatar}/>
+                <Menu.Item
+                    key="profile"
+                    icon={<UserOutlined />}
+                    onClick={handleProfile}
+                    >
+                    Profile
+                </Menu.Item>
+                <Menu.Item
+                    key="logout"
+                    icon={<LogoutOutlined />}
+                    style={{ position: 'absolute', bottom: 0 }}
+                    onClick={handleLogout}
+                    >
+                    Logout
+                </Menu.Item>
+            </Menu>
+        </Sider>
+        <Layout
+            className="site-layout"
             style={{
-                maxWidth: 600,
-                marginTop: 30,
+                marginLeft: 200,
             }}
-            scrollToFirstError
+        >
+            <Header style={{ padding: '2px 10px' }}>
+                <Link to='/profile'>
+                    <Tooltip title="Back">
+                    <Button type='link' shape="circle" icon={<RollbackOutlined />} />
+                    </Tooltip>
+                </Link>
+            </Header>
+            <Content>
+              <div id="EditProfile-Content">
+                <Card
+                  bordered={false}
+                  style={{
+                  width: 780,
+                  height: 480,
+                  }}
+                >
+                  <Form
+                  {...formItemLayout}
+                  form={form}
+                  name="edit"
+                  initialValues={initialValues}
+                  onFinish={onFinish}
+                  style={{
+                      maxWidth: 600,
+                      marginTop: 30,
+                  }}
+                  scrollToFirstError
+                  >
+                    <Form.Item
+                      name="firstname"
+                      label="Firstname"
+                      rules={[
+                      {
+                          required: true,
+                          message: 'Please input your firstname!',
+                          whitespace: true,
+                      },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                      name="lastname"
+                      label="Lastname"
+                      rules={[
+                      {
+                          required: true,
+                          message: 'Please input your lastname!',
+                          whitespace: true,
+                      },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                      name="gender"
+                      label="Gender"
+                      rules={[
+                      {
+                          required: true,
+                          message: 'Please select gender!',
+                      },
+                      ]}
+                    >
+                      <Select placeholder="select your gender">
+                      <Option value="Male">Male</Option>
+                      <Option value="Female">Female</Option>
+                      <Option value="Other">Other</Option>
+                      </Select>
+                    </Form.Item>
+
+                    <Form.Item name="birthday" label="Birthday" {...config}>
+                      <DatePicker />
+                    </Form.Item>
+
+                    <Form.Item
+                      name="email"
+                      label="E-mail"
+                      rules={[
+                      {
+                          type: 'email',
+                          message: 'The input is not valid E-mail!',
+                      },
+                      {
+                          required: true,
+                          message: 'Please input your E-mail!',
+                      },
+                      ]}
+                    >
+                      <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                      name="language"
+                      label="Language"
+                      rules={[
+                      {
+                          required: true,
+                          message: 'Please select preferred language!',
+                      },
+                      ]}
+                    >
+                      <Select placeholder="select preferred language">
+                        <Option value="Chinese">Chinese</Option>
+                        <Option value="English">English</Option>
+                        <Option value="French">French</Option>
+                        <Option value="German">German</Option>
+                        <Option value="Japanese">Japanese</Option>
+                        <Option value="Russian">Russian</Option>
+                      </Select>
+                    </Form.Item>
+
+                    <Form.Item {...tailFormItemLayout}>
+                      <div id="EditProfile-Submit">
+                        {contextHolder1}
+                        <Button type="primary" htmlType="submit" size="large" style={{width: 100}}>Update</Button>
+                        {contextHolder2}
+                        <Button id="EditProfile-Cancel" size="large" onClick={handleCancel}>Cancel</Button>
+                      </div>
+                    </Form.Item>
+                  </Form>
+                </Card>
+              </div>
+            </Content>
+            <Footer
+                className='footer'
             >
-              <Form.Item
-                name="firstname"
-                label="Firstname"
-                rules={[
-                {
-                    required: true,
-                    message: 'Please input your firstname!',
-                    whitespace: true,
-                },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                name="lastname"
-                label="Lastname"
-                rules={[
-                {
-                    required: true,
-                    message: 'Please input your lastname!',
-                    whitespace: true,
-                },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                name="gender"
-                label="Gender"
-                rules={[
-                {
-                    required: true,
-                    message: 'Please select gender!',
-                },
-                ]}
-              >
-                <Select placeholder="select your gender">
-                <Option value="Male">Male</Option>
-                <Option value="Female">Female</Option>
-                <Option value="Other">Other</Option>
-                </Select>
-              </Form.Item>
-
-              <Form.Item name="birthday" label="Birthday" {...config}>
-                <DatePicker />
-              </Form.Item>
-
-              <Form.Item
-                name="email"
-                label="E-mail"
-                rules={[
-                {
-                    type: 'email',
-                    message: 'The input is not valid E-mail!',
-                },
-                {
-                    required: true,
-                    message: 'Please input your E-mail!',
-                },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                name="language"
-                label="Language"
-                rules={[
-                {
-                    required: true,
-                    message: 'Please select preferred language!',
-                },
-                ]}
-              >
-                <Select placeholder="select preferred language">
-                  <Option value="Chinese">Chinese</Option>
-                  <Option value="English">English</Option>
-                  <Option value="French">French</Option>
-                  <Option value="German">German</Option>
-                  <Option value="Japanese">Japanese</Option>
-                  <Option value="Russian">Russian</Option>
-                </Select>
-              </Form.Item>
-
-              <Form.Item {...tailFormItemLayout}>
-                <div id="EditProfile-Submit">
-                  {contextHolder1}
-                  <Button type="primary" htmlType="submit" size="large" style={{width: 100}}>Update</Button>
-                  {contextHolder2}
-                  <Button id="EditProfile-Cancel" size="large" onClick={handleCancel}>Cancel</Button>
-                </div>
-              </Form.Item>
-            </Form>
-          </Card>
-
-        </div>
-    </div>
+                Hydra Learning management system©2023 Created by COMP9900 HYDRA Group
+            </Footer>
+        </Layout>
+    </Layout>
   );
 }
 

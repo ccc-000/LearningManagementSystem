@@ -20,7 +20,6 @@ function Dashboard() {
     const role=localStorage.getItem('role');
     const navigate = useNavigate();
   
-
     const handleLogout = () => {
         localStorage.clear();
         navigate('/')
@@ -51,7 +50,6 @@ function Dashboard() {
 
                     }}
                 />
-
                 <Menu theme="dark" mode="inline">
                     <Avatar 
                     style={{
@@ -83,7 +81,6 @@ function Dashboard() {
                     marginLeft: 200,
                 }}
             >
-
                 <Content
                     className='content'
                 >
@@ -108,7 +105,7 @@ function Dashboard() {
                 <Footer
                     className='footer'
                 >
-                    ©2023 Created by Hydra
+                    Hydra Learning management system©2023 Created by COMP9900 HYDRA Group
                 </Footer>
             </Layout>
         </Layout>

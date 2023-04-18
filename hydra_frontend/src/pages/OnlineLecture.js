@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, message, Space, Tooltip, Modal, Typography} from 'antd';
-import {useNavigate} from 'react-router-dom';
+import { Button, Table, message, Space, Tooltip, Modal, Typography, Layout} from 'antd';
+import { useNavigate, Link } from 'react-router-dom';
+import { RollbackOutlined } from '@ant-design/icons';
 import FileSaver from 'file-saver';
 import 'antd/dist/reset.css';
 import '../styles/OnlineLecture.css';
+import Navibar from '../components/Navibar';
+
+const { Header, Content, Footer, Sider } = Layout;
 
 function OnlineLecture() {
     const navigate = useNavigate();
 
     const role = localStorage.getItem('role');
-    console.log('role', role);
+    const cname = localStorage.getItem('cname');
 
     //TODO: get data from backend
 
@@ -155,47 +159,71 @@ function OnlineLecture() {
     };
 
     const CourseMsg = "This live is for lecture 1";
+    const SectionName = localStorage.getItem('cname') + " —— Online Lecture";
 
     return (
-      <div className="OnlineLecture-Total">
-        <div className="OnlineLecture-Content">
-            <div className="OnlineLecture-Create">
-                {role !== 'student' ?
-                    <Tooltip placement="right" title="Don't forget to start record the online lecture!">
-                        <Button type="primary" htmlType="submit" size="large" style={{width: 160, marginRight: 50}}>Start a live stream</Button>
+        <Layout
+            className="site-layout"
+            style={{
+                minHeight: '100vh',
+                marginLeft: 200,
+            }}>
+            <Header style={{ padding: '2px 10px' }}>
+                <Link to='/dashboardLecturer'>
+                    <Tooltip title="Back">
+                    <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                     </Tooltip>
-                :
-                    <Tooltip placement="bottom" title={CourseMsg}>
-                        <Button type="primary" htmlType="submit" size="large" style={{width: 200, marginRight: 50}}>Join a live stream</Button>
-                    </Tooltip>
-                }    
-            </div>
-            <div className="OnlineLecture-List">
-                {role !== 'student' &&
-                    <Table 
-                        // rowKey={"lid"}
-                        columns={columns} 
-                        dataSource={data} 
-                        onChange={onChangeFilter}
-                    />
-                }
-                <Modal
-                    title="Student Attendance"
-                    open={open}
-                    onOk={handleOk}
-                    onCancel={handleCancel}
-                    okText="Download"
-                    cancelText="Close"
-                >
-                    <div style={{ width: '450px', maxHeight: '250px', overflowY: 'auto', margin: '30px 10px 30px 10px' }}>
-                        <Typography.Text style={{ display: 'block', whiteSpace: 'pre-wrap' }}>
-                            {modalText}
-                        </Typography.Text>
+                </Link>
+                <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
+            </Header>
+            <Content>
+                <div className="OnlineLecture-Content">
+                    <div className="OnlineLecture-Create">
+                        {role !== 'student' ?
+                            <Tooltip placement="right" title="Don't forget to start record the online lecture!">
+                                <Button type="primary" htmlType="submit" size="large" style={{width: 160, marginRight: 50}}>Start a live stream</Button>
+                            </Tooltip>
+                        :
+                            <Tooltip placement="bottom" title={CourseMsg}>
+                                <Button type="primary" htmlType="submit" size="large" style={{width: 200, marginRight: 50}}>Join a live stream</Button>
+                            </Tooltip>
+                        }    
                     </div>
-                </Modal>
-            </div>
-        </div>
-      </div>
+                    <div className="OnlineLecture-List">
+                        {role !== 'student' &&
+                            <Table 
+                                // rowKey={"lid"}
+                                columns={columns} 
+                                dataSource={data} 
+                                onChange={onChangeFilter}
+                            />
+                        }
+                        <Modal
+                            title="Student Attendance"
+                            open={open}
+                            onOk={handleOk}
+                            onCancel={handleCancel}
+                            okText="Download"
+                            cancelText="Close"
+                        >
+                            <div style={{ width: '450px', maxHeight: '250px', overflowY: 'auto', margin: '30px 10px 30px 10px' }}>
+                                <Typography.Text style={{ display: 'block', whiteSpace: 'pre-wrap' }}>
+                                    {modalText}
+                                </Typography.Text>
+                            </div>
+                        </Modal>
+                    </div>
+                </div>
+            </Content>
+            <Navibar />   
+            <Footer
+                style={{
+                    textAlign: 'center',
+                }}
+            >
+                Hydra Learning management system©2023 Created by COMP9900 HYDRA Group
+            </Footer>
+        </Layout>
     );
   }
 export default OnlineLecture;

@@ -282,7 +282,7 @@ function DashboardLecturer() {
                 <Footer
                     className='footer'
                 >
-                    ©2023 Created by Hydra
+                    Hydra Learning management system©2023 Created by COMP9900 HYDRA Group
                 </Footer>
             </Layout>
         </Layout>
