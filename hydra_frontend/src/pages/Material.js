@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Modal, Select, Upload, message} from 'antd';
+import { Button, Table, Modal, Select, Upload, message, Layout, Tooltip} from 'antd';
 import {useNavigate, Link} from 'react-router-dom';
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined, RollbackOutlined } from '@ant-design/icons';
 import { Document, Page } from "@react-pdf/renderer";
 import 'antd/dist/reset.css';
 import '../styles/Material.css';
+import Navibar from '../components/Navibar';
+
+const { Header, Content, Footer, Sider } = Layout;
 
 function Material() {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
 
     const role = localStorage.getItem('role');
-    console.log('role', role);
+    const cname = localStorage.getItem('cname');
 
     const jsonToPost = (material_data) => {
       const material_list = material_data.map(m => {
@@ -154,91 +157,114 @@ function Material() {
     };
 
     return (
-      <div className="Material-Total">
-        <div className="Material-Content">
-          <div className="Material-Filter">
-            {role !== 'student' &&
-              <Button type="primary" htmlType="submit" size="large" style={{width: 160, marginRight: 50}} onClick={showModal}>Upload a material</Button>
-            }
-            <Modal
-              title="Upload a material"
-              open={open}
-              onOk={handleOk}
-              confirmLoading={confirmLoading}
-              onCancel={handleCancel}
-            >
-              <div className="Upload-Content">
-                <div className="Upload-Type">
-                  <span style={{fontSize: 16}}>Material Type:</span>
-                  <Select
-                    style={{
-                      width: 120,
-                      marginLeft: 25,
-                    }}
-                    onChange={handleChange}
-                    options={[
-                      {
-                        value: 'PDF',
-                        label: 'PDF',
-                      },
-                      {
-                        value: 'ZIP',
-                        label: 'ZIP',
-                      },
-                      {
-                        value: 'MP4',
-                        label: 'MP4',
-                      },
-                    ]}
-                  />
+      <Layout
+        className="site-layout"
+        style={{
+            minHeight: '100vh',
+            marginLeft: 200,
+        }}>
+            <Header style={{ padding: '2px 10px' }}>
+              <Link to='/dashboardLecturer'>
+                  <Tooltip title="Back">
+                    <Button type='link' shape="circle" icon={<RollbackOutlined />} />
+                  </Tooltip>
+              </Link>
+              <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{cname}</h2>
+            </Header>
+            <Content>
+              <div className="Material-Content">
+                <div className="Material-Filter">
+                  {role !== 'student' &&
+                    <Button type="primary" htmlType="submit" size="large" style={{width: 160, marginRight: 50}} onClick={showModal}>Upload a material</Button>
+                  }
+                  <Modal
+                    title="Upload a material"
+                    open={open}
+                    onOk={handleOk}
+                    confirmLoading={confirmLoading}
+                    onCancel={handleCancel}
+                  >
+                    <div className="Upload-Content">
+                      <div className="Upload-Type">
+                        <span style={{fontSize: 16}}>Material Type:</span>
+                        <Select
+                          style={{
+                            width: 120,
+                            marginLeft: 25,
+                          }}
+                          onChange={handleChange}
+                          options={[
+                            {
+                              value: 'PDF',
+                              label: 'PDF',
+                            },
+                            {
+                              value: 'ZIP',
+                              label: 'ZIP',
+                            },
+                            {
+                              value: 'MP4',
+                              label: 'MP4',
+                            },
+                          ]}
+                        />
+                      </div>
+                      <div className="Upload-File">
+                        <Upload {...props}>
+                          <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                        </Upload>
+                      </div>
+                    </div>
+                  </Modal>
                 </div>
-                <div className="Upload-File">
-                  <Upload {...props}>
-                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                  </Upload>
+                <div className="Material-List">
+                    <Table 
+                      rowKey={"mid"}
+                      columns={columns} 
+                      dataSource={data} 
+                      onChange={onChangeFilter}
+                      onRow={(record) => {
+                        return {
+                          onClick: event => {
+                            if (record.filepath.endsWith('.pdf')) {
+                              console.log("pdf",record.filepath);
+                              window.location.assign(record.filepath);
+                              // window.location.assign(<iframe src={record.filepath} title="file preview" width="100%" height="600px" />)
+                            } 
+                            if (record.filepath.endsWith('.zip')) {
+                              //if file is zip, download it
+                              fetch(record.filepath) // 替换为要下载的文件 URL
+                                .then(response => response.blob())
+                                .then(blob => {
+                                  const downloadLink = document.createElement("a");
+                                  downloadLink.href = URL.createObjectURL(blob);
+                                  const urlObj = new URL(record.filepath);
+                                  downloadLink.download = urlObj.pathname.split('/').pop().replace(/%20/g, ' '); // 替换为要下载的文件名称
+                                  downloadLink.click();
+                                })
+                                .catch(error => console.error("Download failed", error));
+                            }
+                            if (record.filepath.endsWith('.mp4')){
+                              //if file is mp4, navigate to videoPlayer page
+                              console.log("mp4", record.filepath);
+                              navigate('/coursemainpage/videoPlayer', { state: { filepath: record.filepath } });
+                            }
+                          },
+                        };
+                      }}
+                    />
                 </div>
               </div>
-            </Modal>
-          </div>
-          <div className="Material-List">
-              <Table 
-                rowKey={"mid"}
-                columns={columns} 
-                dataSource={data} 
-                onChange={onChangeFilter}
-                onRow={(record) => {
-                  return {
-                    onClick: event => {
-                      if (record.filepath.endsWith('.pdf')) {
-                        console.log("pdf",record.filepath);
-                        window.location.assign(record.filepath);
-                        // window.location.assign(<iframe src={record.filepath} title="file preview" width="100%" height="600px" />)
-                      } 
-                      if (record.filepath.endsWith('.zip')) {
-                        //if file is zip, download it
-                        fetch(record.filepath) // 替换为要下载的文件 URL
-                          .then(response => response.blob())
-                          .then(blob => {
-                            const downloadLink = document.createElement("a");
-                            downloadLink.href = URL.createObjectURL(blob);
-                            const urlObj = new URL(record.filepath);
-                            downloadLink.download = urlObj.pathname.split('/').pop().replace(/%20/g, ' '); // 替换为要下载的文件名称
-                            downloadLink.click();
-                          })
-                          .catch(error => console.error("Download failed", error));
-                      }
-                      if (record.filepath.endsWith('.mp4')){
-                        //if file is mp4, navigate to videoPlayer page
-                        console.log("mp4", record.filepath);
-                        navigate('/coursemainpage/videoPlayer', { state: { filepath: record.filepath } });
-                      }
-                    },
-                  };
+            </Content>
+            <Navibar />   
+            <Footer
+                style={{
+                    textAlign: 'center',
                 }}
-              />
-          </div>
-        </div>
-      </div>
+            >
+                Hydra Learning management system©2023 Created by COMP9900 HYDRA Group
+            </Footer>
+        </Layout> 
     );
   }
 export default Material;
