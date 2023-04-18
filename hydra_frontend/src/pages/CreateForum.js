@@ -71,7 +71,7 @@ function CreateForum() {
         if (data.status === 200) {
           messageApi.destroy();
           messageApi.success("Success!")
-          navigate("/forum");
+          navigate("/coursemainpage/forum");
         }
       })
       .catch((error) => {
@@ -83,7 +83,7 @@ function CreateForum() {
 
   // Control the button to cancle post creation
   const confirmCancel = () => {
-    navigate('/forum');
+    navigate('/coursemainpage/forum');
   };
 
   function handleCancel() {

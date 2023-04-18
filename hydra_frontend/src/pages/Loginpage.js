@@ -1,4 +1,5 @@
 import '../styles/loginpage.css';
+import pic from '../img/hydra1.png';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react'
@@ -39,15 +40,21 @@ export default function Loginpage() {
         console.log('Failed:', errorInfo);
     };
 
+    const resetPassword = () => {
+        navigate("/resetpassword/1");
+    }
+
     return (
         <>
             <div className='loginpage'>
                 <div className="logincard">
-                    <h1 className='welcomemsg'>Welcome to the Hydra learning management system!</h1>
+                    <img src={pic} style={{maxWidth: '300px', marginTop: -25}}/>    
                     <Form
                         name="basic"
                         style={{
                             maxWidth: 600,
+                            margin: 'auto',
+                            marginTop: -28,
                         }}
                         initialValues={{
                             remember: true,
@@ -89,6 +96,7 @@ export default function Loginpage() {
                                 offset: 8,
                                 span: 16,
                             }}
+                            style={{textAlign: 'left'}}
                         >
                             <Checkbox>Remember me</Checkbox>
                         </Form.Item>
@@ -96,10 +104,17 @@ export default function Loginpage() {
                         <Form.Item
                         >
                             <div style={{display:'flex', justifyContent: 'space-evenly'}}>
-                            <Button type="primary" htmlType="submit">
-                                Submit
+                            <Button type="primary" htmlType="submit" style={{marginRight: 15}}>
+                                Sign In
                             </Button>
-                            <Button onClick={routeChange}>Register</Button>
+                            <Button onClick={routeChange} style={{marginLeft: 15}}>Register</Button>
+                            </div>
+                        </Form.Item>
+
+                        <Form.Item
+                        >
+                            <div style={{textAlign: 'right', marginRight: 20, marginTop: -30}}>
+                                <a onClick={resetPassword}>Forget password?</a>
                             </div>
                         </Form.Item>
                     </Form>

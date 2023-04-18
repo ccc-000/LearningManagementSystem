@@ -21,3 +21,17 @@
 3. forumdetail page: show if edited
 4. forumdetail page: navigate to edit page using pid
 5. editforum page: edit post(half)
+
+4.13
+1. profile page & coursehistory page: sort enrollment history
+2. forumdetail page: like post using pid and uid
+3. forumdetail page: flag post using pid and uid
+
+4.14
+1. debug after database reset
+2. forumdetail page: set post private/public
+
+4.17
+1. create onlinelecture page
+2. add navibar to all page
+

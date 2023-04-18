@@ -5,13 +5,14 @@ import { Divider, Layout, Tooltip } from 'antd';
 import Navibar from '../components/Navibar';
 import { Button, Modal, Space, Input, Radio, Checkbox } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
-
-const { Header, Content, Footer, Sider } = Layout;
-const { TextArea } = Input;
-
-const role = localStorage.getItem('role');
+import axios from 'axios';
 
 function Quiz () {
+    const { Header, Content, Footer, Sider } = Layout;
+    const { TextArea } = Input;
+    const role = localStorage.getItem('role');
+    const cname = localStorage.getItem('cname');
+
     //Create Quiz Modal
     const [questionCount, setQuestionCount] = useState(1);
     const [questionData, setQuestionData] = useState([
@@ -27,26 +28,26 @@ function Quiz () {
         },
     ]);
 
-    const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const showModal = () => {
         setOpen(true);
     };
     const handleOk = () => {
-        setLoading(true);
-        setTimeout(() => {
-          setLoading(false);
-          setOpen(false);
-        }, 1000);
       };
 
     const handleSubmit = () => {
-    setLoading(true);
-    setTimeout(() => {
-        setLoading(false);
         setOpen(false);
-    }, 1000);
+        const data = questionData.map(question => ({
+            question: question.question,
+            type: question.type,
+            options: question.options.map(option => ({
+              label: option.label,
+              value: option.value,
+              input: option.input
+            }))
+        }));
     };
+    
     
     const handleCancel = () => {
         setOpen(false);
@@ -95,6 +96,7 @@ function Quiz () {
     setQuestionData(newQuestionData);
     }
 
+
     if (role === 'lecturer') {
         return (
             <>
@@ -104,26 +106,25 @@ function Quiz () {
                 minHeight: '100vh',
                 marginLeft: 200,
             }}>
-            {/* <Header courseName={getCourseName()} style={{padding:'5px 10px'}} > */}
             <Header style={{ padding: '2px 10px' }}>
                 <Link to='/DashboardLecturer'>
                 <Tooltip title="Back">
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                 </Tooltip>
                 </Link>
-                {/* <h2>{props.courseName}</h2> */}
+                <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{cname}</h2>
             </Header>
             <Divider orientation="left" style={{fontSize:'25px'}}>Quiz</Divider>
             <Space style={{marginLeft:'15px', marginBottom:'15px'}}>
-                <Button type="primary" onClick={showModal}>Create a new quiz</Button>
+                <Button type="primary" onClick={showModal} style={{marginLeft:'20px'}}>Create a new quiz</Button>
                 <Modal
                     open={open}
                     title="New quiz"
-                    onOk={handleOk}
+                    onOk={handleSubmit}
                     onCancel={handleCancel}
                     footer={[
                     <Button key="back" onClick={handleCancel}> Cancel </Button>,
-                    <Button key="submit" type="primary" onClick={handleOk} loading={loading}> Create </Button>,
+                    <Button key="submit" type="primary" onClick={handleSubmit} > Create </Button>,
                     ]}
                 >
                     {questionData.map((question, index) => (
@@ -148,7 +149,7 @@ function Quiz () {
                                 />
                                 </Radio>
                             ))}
-                            </Radio.Group>
+                        </Radio.Group>
                         ) : (
                             <Checkbox.Group style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', flexWrap: 'wrap'}} >
                             {question.options.map((option, optionIndex) => (
@@ -199,14 +200,13 @@ function Quiz () {
             minHeight: '100vh',
             marginLeft: 200,
         }}>
-        {/* <Header courseName={getCourseName()} style={{padding:'5px 10px'}} > */}
         <Header style={{padding:'2px 10px'}} >
             <Link to='/Dashboard'>
             <Tooltip title="Back">
                 <Button type='link' shape="circle" icon={<RollbackOutlined />} />
             </Tooltip>
             </Link>
-            {/* <h2>{props.courseName}</h2> */}
+            <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{cname}</h2>
         </Header>
         <Divider orientation="left" style={{fontSize:'25px'}}>Quiz</Divider>
         <Space style={{marginLeft:'50px', marginBottom:'15px'}}>
@@ -219,7 +219,7 @@ function Quiz () {
                 onCancel={handleCancel}
                 footer={[
                 <Button key="back" onClick={handleCancel}> Cancel </Button>,
-                <Button key="submit" type="primary" loading={loading} onClick={handleSubmit}> Submit </Button>,
+                <Button key="submit" type="primary" onClick={handleSubmit}> Submit </Button>,
                 ]}
             ></Modal>
             </li>
