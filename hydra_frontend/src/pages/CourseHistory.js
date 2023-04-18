@@ -6,7 +6,10 @@ import '../styles/CourseHistory.css';
 function CourseHistory() {
     const [reverse, setReverse] = useState(false);
     const [data, setData] = useState([]);
-    
+
+    const role = localStorage.getItem('role');
+    console.log('role', role);
+
     //reverse timeline
     const handleClick = () => {
         setReverse(!reverse);
@@ -50,7 +53,7 @@ function CourseHistory() {
                 height: 500,
                 }}
             >
-                <div id="EnrolmentHistory-Title"><span>Enrolment History</span></div>
+                {role === "student" ? <div id="EnrolmentHistory-Title"><span>Enrolment History</span></div> : <div id="EnrolmentHistory-Title"><span>Course History</span></div>}
                 <div id="EnrolmentHistory-Content">
                     <Timeline
                         reverse={reverse}

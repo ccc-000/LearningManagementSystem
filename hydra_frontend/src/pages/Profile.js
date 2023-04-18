@@ -10,6 +10,9 @@ function Profile() {
     const [data2, setData2] = useState([]);
     console.log(data2.courses);
 
+    const role = localStorage.getItem('role');
+    console.log('role', role);
+
     const jsonToList = (data2) => {
       const enrollment_list = data2.courses.map((course) => {
         return {
@@ -86,27 +89,51 @@ function Profile() {
               </div>
             </Link>
           </Card>
-          <Card
-            title="Enrolment History"
-            bordered={false}
-            style={{
-            width: 380,
-            height: 400,
-            marginLeft: 15,
-            }}
-            >
-            <Timeline
-                pending="More"
-                items={data2}
-            />
-            <Link to="/enrolmenthistory">
-              <div id="ProfileDetail-Button">
-                <Button type="primary" size="large" style={{width:100}}>
-                  Detail
-                </Button>
-              </div>
-            </Link>
-          </Card>
+          { role === "student" ?
+            <Card
+              title="Enrolment History"
+              bordered={false}
+              style={{
+              width: 380,
+              height: 400,
+              marginLeft: 15,
+              }}
+              >
+              <Timeline
+                  pending="More"
+                  items={data2}
+              />
+              <Link to="/enrolmenthistory">
+                <div id="ProfileDetail-Button">
+                  <Button type="primary" size="large" style={{width:100}}>
+                    Detail
+                  </Button>
+                </div>
+              </Link>
+            </Card>
+          :
+            <Card
+                title="Course History"
+                bordered={false}
+                style={{
+                width: 380,
+                height: 400,
+                marginLeft: 15,
+                }}
+                >
+                <Timeline
+                    pending="More"
+                    items={data2}
+                />
+                <Link to="/enrolmenthistory">
+                  <div id="ProfileDetail-Button">
+                    <Button type="primary" size="large" style={{width:100}}>
+                      Detail
+                    </Button>
+                  </div>
+                </Link>
+              </Card>
+          }
         </div>
       </div>
     );
