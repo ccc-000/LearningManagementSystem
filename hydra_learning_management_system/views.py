@@ -653,44 +653,44 @@ def sendemail(uids, title, content):
 
     return
 
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
-from django.shortcuts import render
-from django.http import JsonResponse
-
-def create_meeting(request):
-    if request.method == "POST":
-
-    credentials = Credentials.from_authorized_user_info(request.session['credentials'])
-
-    service = build('calendar', 'v3', credentials=credentials)
-
-    meeting = service.events().insert(
-        calendarId='primary',
-        body={
-            'summary': 'Test Meeting',
-            'description': 'This is a test meeting',
-            'start': {
-                'dateTime': '2023-04-20T12:00:00',
-                'timeZone': 'Asia/Shanghai',
-            },
-            'end': {
-                'dateTime': '2023-04-20T13:00:00',
-                'timeZone': 'Asia/Shanghai',
-            },
-            'conferenceData': {
-                'createRequest': {
-                    'conferenceSolutionKey': {
-                        'type': 'hangoutsMeet'
-                    },
-                    'requestId': 'randomString'
-                }
-            },
-        },
-        conferenceDataVersion=1,
-        sendNotifications=True,
-    ).execute()
-
-    meeting_link = meeting['hangoutLink']
-
-    return JsonResponse({'link': meeting_link})
+# from google.oauth2.credentials import Credentials
+# from googleapiclient.discovery import build
+# from django.shortcuts import render
+# from django.http import JsonResponse
+#
+# def create_meeting(request):
+#     if request.method == "POST":
+#
+#     credentials = Credentials.from_authorized_user_info(request.session['credentials'])
+#
+#     service = build('calendar', 'v3', credentials=credentials)
+#
+#     meeting = service.events().insert(
+#         calendarId='primary',
+#         body={
+#             'summary': 'Test Meeting',
+#             'description': 'This is a test meeting',
+#             'start': {
+#                 'dateTime': '2023-04-20T12:00:00',
+#                 'timeZone': 'Asia/Shanghai',
+#             },
+#             'end': {
+#                 'dateTime': '2023-04-20T13:00:00',
+#                 'timeZone': 'Asia/Shanghai',
+#             },
+#             'conferenceData': {
+#                 'createRequest': {
+#                     'conferenceSolutionKey': {
+#                         'type': 'hangoutsMeet'
+#                     },
+#                     'requestId': 'randomString'
+#                 }
+#             },
+#         },
+#         conferenceDataVersion=1,
+#         sendNotifications=True,
+#     ).execute()
+#
+#     meeting_link = meeting['hangoutLink']
+#
+#     return JsonResponse({'link': meeting_link})
