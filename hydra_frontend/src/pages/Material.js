@@ -10,6 +10,9 @@ function Material() {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
 
+    const role = localStorage.getItem('role');
+    console.log('role', role);
+
     const jsonToPost = (material_data) => {
       const material_list = material_data.map(m => {
         const urlObj = new URL(m.filepath);
@@ -154,7 +157,9 @@ function Material() {
       <div className="Material-Total">
         <div className="Material-Content">
           <div className="Material-Filter">
-            <Button type="primary" htmlType="submit" size="large" style={{width: 160, marginRight: 50}} onClick={showModal}>Upload a material</Button>
+            {role !== 'student' &&
+              <Button type="primary" htmlType="submit" size="large" style={{width: 160, marginRight: 50}} onClick={showModal}>Upload a material</Button>
+            }
             <Modal
               title="Upload a material"
               open={open}

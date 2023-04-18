@@ -4,8 +4,6 @@ import 'antd/dist/reset.css';
 import '../styles/ResetPassword2.css';
 import { useNavigate } from 'react-router-dom';
 
-//将修改的密码提交到数据库，并跳转到登录页面
-
 const formItemLayout = {
   labelCol: {
     xs: {
@@ -31,6 +29,8 @@ function ResetPassword2() {
   const navigate = useNavigate();
   const onFinish = (values) => {
       console.log('Received values of form: ', values);
+      //TODO: send the data to backend
+      // fetch('http://localhost:8000/reset_password/', {
       messageApi.open({
         type: 'loading',
         content: 'Updating...',
