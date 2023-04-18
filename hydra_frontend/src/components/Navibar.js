@@ -1,4 +1,6 @@
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Button, Layout, Menu, theme, Tooltip } from 'antd';
 import {
   AppstoreOutlined,
   BarChartOutlined,
@@ -11,10 +13,9 @@ import {
   VideoCameraOutlined,
   FileOutlined,
   PieChartOutlined,
-  LogoutOutlined
+  LogoutOutlined,
+  RollbackOutlined
   } from '@ant-design/icons';
-  import { Layout, Menu, theme } from 'antd';
-  import React from 'react';
   const { Header, Content, Footer, Sider } = Layout;
   
   const Navibar = () => {
@@ -30,7 +31,11 @@ import {
     }
     if (role === 'lecturer') {
     return (
-      <Layout hasSider>
+      <Layout hasSider
+      className="site-layout"
+      style={{
+          minHeight: '100vh'
+      }}>
         <Sider
           style={{
               overflow: 'auto',
