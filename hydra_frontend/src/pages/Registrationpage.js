@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import '../styles/registrationpage.css';
 import {
   Button,
@@ -6,10 +6,8 @@ import {
   Input,
   Select,
 } from 'antd';
+import { LeftCircleOutlined } from '@ant-design/icons';
 import React from 'react';
-
-const { TextArea } = Input;
-
 
 const RegistraionFrom = () => {
   let navigate = useNavigate();
@@ -39,6 +37,7 @@ const RegistraionFrom = () => {
 
   return (
     <>
+      <Link to="/"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 30, marginTop: 30, color: 'grey'}}/></Link>
       <div className='pagelayout'>
         <div className='registrationcard'>
           <Form
@@ -55,19 +54,77 @@ const RegistraionFrom = () => {
             }}
             onFinish={onFinish}
           >
-            <Form.Item label="User name" name="username" >
+            <Form.Item 
+              label="User name" 
+              name="username" 
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your username!',
+                },
+              ]}
+            >
               <Input />
             </Form.Item>
-            <Form.Item label="Email address" name="email">
+            <Form.Item 
+              label="Email address" 
+              name="email"
+              rules={[
+               {
+                  type: 'email',
+                  message: 'The input is not valid E-mail!',
+               },
+               {
+                  required: true,
+                  message: 'Please input your E-mail!',
+               }, 
+              ]}
+            >
               <Input />
             </Form.Item>
-            <Form.Item label="Password" name="password">
+            <Form.Item 
+              label="Password" 
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                }
+              ]}
+            >
               <Input.Password />
             </Form.Item>
-            <Form.Item label="Confirm password">
+            <Form.Item 
+              label="Confirm password"
+              dependencies={['password']}
+              name="confirm"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please confirm your password!',
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject('The two passwords that you entered do not match!');
+                  },
+                }),
+              ]}
+            >
               <Input.Password />
             </Form.Item>
-            <Form.Item label="Role: " name="role">
+            <Form.Item 
+              label="Role: " 
+              name="role"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please select your role!',
+                },
+              ]}
+            >
               <Select>
                 <Select.Option value="student">Student</Select.Option>
                 <Select.Option value="lecturer">Lecturer</Select.Option>

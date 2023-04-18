@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Modal, Select, Upload, message, Layout, Tooltip} from 'antd';
+import { Button, Table, Modal, Select, Upload, message, Layout, Tooltip, Pagination} from 'antd';
 import {useNavigate, Link} from 'react-router-dom';
 import { UploadOutlined, RollbackOutlined } from '@ant-design/icons';
 import { Document, Page } from "@react-pdf/renderer";
@@ -8,14 +8,15 @@ import 'antd/dist/reset.css';
 import '../styles/Material.css';
 import Navibar from '../components/Navibar';
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Footer } = Layout;
 
 function Material() {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(8);
+    
     const role = localStorage.getItem('role');
-    const cname = localStorage.getItem('cname');
 
     const jsonToPost = (material_data) => {
       const material_list = material_data.map(m => {
@@ -83,6 +84,18 @@ function Material() {
             },
         },
       ];
+
+    const handlePageChange = (page, pageSize) => {
+      setCurrentPage(page);
+      setPageSize(pageSize);
+    };
+
+    const paginationConfig = {
+      current: currentPage,
+      pageSize: pageSize,
+      total: data.length,
+      onChange: handlePageChange
+    };
 
     //tablefilter
     const onChangeFilter = (pagination, filters, sorter, extra) => {
@@ -167,11 +180,11 @@ function Material() {
       <Layout
         className="site-layout"
         style={{
-            minHeight: '100vh',
+            height: '100vh',
             marginLeft: 200,
         }}>
             <Header style={{ padding: '2px 10px' }}>
-              <Link to='/dashboardLecturer'>
+              <Link to='/coursemainpage'>
                   <Tooltip title="Back">
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                   </Tooltip>
@@ -228,8 +241,9 @@ function Material() {
                     <Table 
                       rowKey={"mid"}
                       columns={columns} 
-                      dataSource={data} 
+                      dataSource={data.slice((currentPage - 1) * pageSize, currentPage * pageSize)} 
                       onChange={onChangeFilter}
+                      pagination={paginationConfig}
                       onRow={(record) => {
                         return {
                           onClick: event => {

@@ -38,6 +38,8 @@ const AnnouncementPage = () => {
     console.log('Failed:', errorInfo);
   };
 
+  const SectionName = localStorage.getItem('cname') + " —— Announcement";
+
   return (
     <><Layout
       className="site-layout"
@@ -45,18 +47,16 @@ const AnnouncementPage = () => {
         minHeight: '100vh',
         marginLeft: 200,
       }}>
-      {/* <Header courseName={getCourseName()} style={{padding:'5px 10px'}} > */}
       <Header style={{ padding: '2px 10px' }}>
         <Link to='/DashboardLecturer'>
           <Tooltip title="Back">
             <Button type='link' shape="circle" icon={<RollbackOutlined />} />
           </Tooltip>
         </Link>
-        {/* <span style={{fontSize:'20px', color:'whitesmoke', marginLeft:'5px'}}>COMP9900</span> */}
+        <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
       </Header>
-      <Divider orientation="left" style={{fontSize:'25px'}}>Announcement</Divider>
-      <div>
-        <Button onClick={() => setIsModalVisible(true)}>
+      <div style={{marginTop: '40px', marginLeft: '77px'}}>
+        <Button onClick={() => setIsModalVisible(true)} type="primary" size="large" style={{width: 200, marginRight: 50}}>
           Post Announcement
         </Button>
         <Modal

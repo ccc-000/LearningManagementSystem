@@ -144,7 +144,7 @@ export default function Assignment() {
                 marginLeft: 200,
             }}>
             <Header style={{ padding: '2px 10px' }}>
-            <Link to='/dashboardLecturer'>
+            <Link to='/coursemainpage'>
                 <Tooltip title="Back">
                 <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                 </Tooltip>
@@ -152,7 +152,7 @@ export default function Assignment() {
             <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
             </Header>
             {/* <Divider orientation="left" style={{fontSize:'25px'}}>Assignment</Divider> */}
-            <Space style={{marginLeft:'15px', marginBottom:'15px', marginTop: '40px'}}>
+            <Space style={{marginLeft:'58px', marginBottom:'15px', marginTop: '40px'}}>
                 <Button type="primary" size = "large" onClick={() => openModal('modal1')} style={{marginLeft:'20px'}}>Create a new assignment</Button>
                 <Modal
                     open={currentModal === 'modal1' && open}
@@ -182,7 +182,7 @@ export default function Assignment() {
             </Space>
             
             {/* show assignemts */}
-            <div class="container"> 
+            <div class="container" style={{marginTop: "15px"}}> 
                 {assList.map((ass) => (
                     <div key={ass.pk} class="box">
                         <a href={ass.url}>
@@ -250,7 +250,7 @@ export default function Assignment() {
                 marginLeft: 200,
             }}>
             <Header style={{padding:'2px 10px'}} >
-                <Link to='/Dashboard'>
+                <Link to='/coursemainpage'>
                 <Tooltip title="Back">
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                 </Tooltip>

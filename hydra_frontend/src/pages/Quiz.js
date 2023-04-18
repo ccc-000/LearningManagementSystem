@@ -11,7 +11,6 @@ function Quiz () {
     const { Header, Content, Footer, Sider } = Layout;
     const { TextArea } = Input;
     const role = localStorage.getItem('role');
-    const cname = localStorage.getItem('cname');
 
     //Create Quiz Modal
     const [questionCount, setQuestionCount] = useState(1);
@@ -149,7 +148,7 @@ function Quiz () {
                 marginLeft: 200,
             }}>
             <Header style={{ padding: '2px 10px' }}>
-                <Link to='/DashboardLecturer'>
+                <Link to='/coursemainpage'>
                 <Tooltip title="Back">
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                 </Tooltip>
@@ -157,8 +156,8 @@ function Quiz () {
                 <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
             </Header>
             {/* <Divider orientation="left" style={{fontSize:'25px'}}>Quiz</Divider> */}
-            <Space style={{marginLeft:'15px', marginBottom:'15px'}}>
-                <Button type="primary" onClick={showModal} style={{marginLeft:'20px'}}>Create a new quiz</Button>
+            <Space style={{marginLeft:'58px', marginBottom:'15px', marginTop: '40px'}}>
+                <Button type="primary" size = "large" onClick={showModal} style={{marginLeft:'20px'}}>Create a new quiz</Button>
                 <Modal
                     open={open}
                     title="New quiz"
@@ -249,15 +248,15 @@ function Quiz () {
             marginLeft: 200,
         }}>
         <Header style={{padding:'2px 10px'}} >
-            <Link to='/Dashboard'>
+            <Link to='/coursemainpage'>
             <Tooltip title="Back">
                 <Button type='link' shape="circle" icon={<RollbackOutlined />} />
             </Tooltip>
             </Link>
-            <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{cname}</h2>
+            <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
         </Header>
-        <Divider orientation="left" style={{fontSize:'25px'}}>Quiz</Divider>
-        <Space style={{marginLeft:'50px', marginBottom:'15px'}}>
+        {/* <Divider orientation="left" style={{fontSize:'25px'}}>Quiz</Divider> */}
+        <Space style={{marginLeft:'50px', marginBottom:'15px', marginTop: '50px'}}>
             <li>
             <Button type="link" style={{fontSize:'20px'}} onClick={showModal}>Quiz1</Button>
             <Modal

@@ -54,7 +54,7 @@ const Coursemainpage = () => {
           marginLeft: 200,
       }}>
       <Header style={{ padding: '2px 10px' }}>
-        <Link to='/dashboardLecturer'>
+        <Link to='/dashboard'>
           <Tooltip title="Back">
             <Button type='link' shape="circle" icon={<RollbackOutlined />} />
           </Tooltip>

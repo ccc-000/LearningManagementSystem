@@ -14,6 +14,8 @@ function EditAvatar() {
     const [api, contextHolder2] = notification.useNotification();
     const navigate = useNavigate();
 
+    const role = localStorage.getItem('role');
+
     //Upload avatar
     const [fileList, setFileList] = useState([
         {
@@ -61,13 +63,13 @@ function EditAvatar() {
         });
       }, 2100);
       setTimeout(() => {
-        navigate('/profile');
+        navigate(role === 'student'?'/dashboard':'/dashboardlecturer');
       }, 3500);
     }
 
     //Cancel modification
     const confirmCancel = () => {
-      navigate('/profile');
+      navigate(role === 'student'?'/dashboard':'/dashboardlecturer');
     };
 
     function handleCancel(){

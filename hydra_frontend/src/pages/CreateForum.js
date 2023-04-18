@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Input, Button, Upload, message, notification, Space } from 'antd';
-import { UploadOutlined, LeftCircleOutlined } from '@ant-design/icons';
+import { Input, Button, Upload, message, notification, Space, Layout, Tooltip } from 'antd';
+import { UploadOutlined, RollbackOutlined } from '@ant-design/icons';
 import { useNavigate, Link } from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/CreateForum.css';
+import Navibar from '../components/Navibar';
 const { TextArea } = Input;
 
+const { Header, Content, Footer } = Layout;
 
 function CreateForum() {
   const [messageApi, contextHolder1] = message.useMessage();
@@ -106,40 +108,64 @@ function CreateForum() {
       key,
     });
   }
+  
+  const SectionName = localStorage.getItem('cname') + " —— Create Post";
 
   return (
-    <div className="CreateForum-Total">
-      {/* <Link to="/forum"><LeftCircleOutlined style={{ fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey' }} /></Link> */}
-      <div className="CreateForum-Content">
-        <div className="Create-Title">
-          <span style={{ marginRight: 20 }}>Title</span>
-          <Input placeholder="Please input a post title" value={form.title} onChange={(e) => { setForm({ ...form, title: e.target.value }) }} />
-        </div>
-        <div className="Create-Content">
-          <TextArea rows={8} placeholder="Please input post content" value={form.content} onChange={(e) => { setForm({ ...form, content: e.target.value }) }} />
-        </div>
-        <div className="Create-File">
-          <Upload
-            // This line is to prevent automatic uploading
-            beforeUpload={() => false}
-            onChange={multimediaHandler}
-            listType="picture"
-            maxCount={1}
-            className="upload-list-inline"
-          >
-            <Button icon={<UploadOutlined />}>Upload</Button>
-          </Upload>
-        </div>
-        <div className="Create-Button">
-          <span style={{ marginRight: 20 }}>Keyword</span>
-          <Input placeholder="Please input a keyword" style={{ width: 180 }} value={form.keyword} onChange={(e) => { setForm({ ...form, keyword: e.target.value }) }} />
-          {contextHolder2}
-          <Button size="large" style={{ width: 100, float: 'right', marginRight: 20, marginTop: -10 }} onClick={handleCancel}>Cancel</Button>
-          {contextHolder1}
-          <Button type="primary" htmlType="submit" size="large" style={{ width: 100, float: 'right', marginRight: 20, marginTop: -10 }} onClick={onFinish}>Post</Button>
-        </div>
-      </div>
-    </div>
+    <Layout
+      className="site-layout"
+      style={{
+          minHeight: '100vh',
+          marginLeft: 200,
+      }}>
+        <Header style={{ padding: '2px 10px' }}>
+          <Link to={'/coursemainpage/forum/'}>
+              <Tooltip title="Back">
+                <Button type='link' shape="circle" icon={<RollbackOutlined />} />
+              </Tooltip>
+          </Link>
+          <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
+        </Header>
+        <Content>
+          <div className="CreateForum-Content">
+            <div className="Create-Title">
+              <span style={{ marginRight: 20 }}>Title</span>
+              <Input placeholder="Please input a post title" value={form.title} onChange={(e) => { setForm({ ...form, title: e.target.value }) }} />
+            </div>
+            <div className="Create-Content">
+              <TextArea rows={6} placeholder="Please input post content" value={form.content} onChange={(e) => { setForm({ ...form, content: e.target.value }) }} />
+            </div>
+            <div className="Create-File">
+              <Upload
+                // This line is to prevent automatic uploading
+                beforeUpload={() => false}
+                onChange={multimediaHandler}
+                listType="picture"
+                maxCount={1}
+                className="upload-list-inline"
+              >
+                <Button icon={<UploadOutlined />}>Upload</Button>
+              </Upload>
+            </div>
+            <div className="Create-Button">
+              <span style={{ marginRight: 20 }}>Keyword</span>
+              <Input placeholder="Please input a keyword" style={{ width: 180 }} value={form.keyword} onChange={(e) => { setForm({ ...form, keyword: e.target.value }) }} />
+              {contextHolder2}
+              <Button size="large" style={{ width: 100, float: 'right', marginRight: 20, marginTop: -10 }} onClick={handleCancel}>Cancel</Button>
+              {contextHolder1}
+              <Button type="primary" htmlType="submit" size="large" style={{ width: 100, float: 'right', marginRight: 20, marginTop: -10 }} onClick={onFinish}>Post</Button>
+            </div>
+          </div>
+        </Content>
+        <Navibar />   
+        <Footer
+          style={{
+              textAlign: 'center',
+          }}
+        >
+          Hydra Learning management system©2023 Created by COMP9900 HYDRA Group
+        </Footer>
+      </Layout>
   );
 }
 export default CreateForum;

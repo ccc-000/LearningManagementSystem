@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, DatePicker, Checkbox, Table, Layout, Tooltip } from 'antd';
+import { Button, DatePicker, Checkbox, Table, Layout, Tooltip, Pagination } from 'antd';
 import { useNavigate, Link, json } from 'react-router-dom';
 import dayjs from 'dayjs';
 import 'antd/dist/reset.css';
 import '../styles/Forum.css';
 import Navibar from '../components/Navibar';
 import { RollbackOutlined } from '@ant-design/icons';
+
 const { RangePicker } = DatePicker;
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -18,9 +19,11 @@ function Forum() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [tabledata, setTableData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(8);
 
-  // Function to get UNIQUE keywods from the data
-  // TODO: the key words should be unique
+  const role = localStorage.getItem('role');
+
   const getKeyWords = () => {
     const key_list = data.map(p => {
       return {
@@ -80,6 +83,18 @@ function Forum() {
       },
     },
   ];
+
+  const handlePageChange = (page, pageSize) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
+
+  const paginationConfig = {
+    current: currentPage,
+    pageSize: pageSize,
+    total: tabledata.length,
+    onChange: handlePageChange
+  };
 
   // Function that convert json data into post list
   const jsonToPost = (posts_data) => {
@@ -179,6 +194,8 @@ function Forum() {
     console.log('params', pagination, filters, sorter, extra);
   };
 
+  const SectionName = localStorage.getItem('cname') + " —— Forum";
+
   return (
     <Layout
       className="site-layout"
@@ -187,29 +204,30 @@ function Forum() {
           marginLeft: 200,
       }}>
         <Header style={{ padding: '2px 10px' }}>
-          <Link to='/dashboard'>
-            <Tooltip title="Back">
-              <Button type='link' shape="circle" icon={<RollbackOutlined />} />
-            </Tooltip>
+          <Link to='/coursemainpage'>
+              <Tooltip title="Back">
+                <Button type='link' shape="circle" icon={<RollbackOutlined />} />
+              </Tooltip>
           </Link>
+          <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
         </Header>
         <Content>
-          <div className="Forum-Total">
             <div className="Forum-Content">
               <div className="Forum-Filter">
                 <Link to="/coursemainpage/createforum">
                   <Button type="primary" htmlType="submit" size="large" style={{ width: 160, marginRight: 50 }}>Create a Post</Button>
                 </Link>
                 <RangePicker presets={rangePresets} onChange={onRangeChange} style={{ width: 400, height: 35, marginRight: 50 }} />
-                <Checkbox onChange={onChange} style={{ fontSize: 15 }}>flagged</Checkbox>
+                <Checkbox onChange={onChange} className="Forum-Checkbox">flagged</Checkbox>
               </div>
               <div className="Forum-List">
                 <Table
                   // The rowkey is to tell which property of data would be the key of the row
                   rowKey={"postid"}
                   columns={columns}
-                  dataSource={tabledata}
+                  dataSource={tabledata.slice((currentPage - 1) * pageSize, currentPage * pageSize)}
                   onChange={onChangeFilter}
+                  pagination={paginationConfig}
                   onRow={(record) => {
                     return {
                       onClick: () => {
@@ -220,13 +238,12 @@ function Forum() {
                 />
               </div>
             </div>
-          </div>
         </Content>
         <Navibar />   
         <Footer
-        style={{
-            textAlign: 'center',
-        }}
+          style={{
+              textAlign: 'center',
+          }}
         >
           Hydra Learning management system©2023 Created by COMP9900 HYDRA Group
         </Footer>
