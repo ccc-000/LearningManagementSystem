@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { LikeOutlined, PushpinOutlined } from '@ant-design/icons';
-import { Input, Button, Descriptions, Badge, message, notification, Space } from 'antd';
-import { useNavigate, useParams } from 'react-router-dom';
+import { LikeOutlined, PushpinOutlined, RollbackOutlined } from '@ant-design/icons';
+import { Input, Button, Descriptions, Badge, message, notification, Space, Layout, Tooltip } from 'antd';
+import { useNavigate, useParams, Link } from 'react-router-dom';
+import Navibar from '../components/Navibar';
 import 'antd/dist/reset.css';
 import '../styles/ForumDetail-student.css';
+
 const { TextArea } = Input;
+const { Header, Content, Footer } = Layout;
 
 
 function ForumDetailStudent() {
@@ -46,7 +49,7 @@ function ForumDetailStudent() {
   }
 
   const propsFlag = {
-    fontSize: 23,
+    fontSize: 27,
     marginLeft: 30,
     cursor: 'pointer',
   }
@@ -375,45 +378,72 @@ function ForumDetailStudent() {
     media_compnent = data.multimedia ? <img src={data.multimedia} alt="avatar" style={{ width: '50%' }} /> : <></>
   }
 
+  const SectionName = localStorage.getItem('cname') + " —— Post Detail";
+
   return (
-    <div className="ForumDetail-Total">
-      <div className="ForumDetail-Post">
-        <Descriptions title={data ? data.title : "No data"}>
-          <Descriptions.Item label="Creator" span={2}>{data ? data.creatorname : "No data"}</Descriptions.Item>
-          <Descriptions.Item label="Post Time">{data ? data.createtime.slice(0, 10) : "No data"}</Descriptions.Item>
-          <Descriptions.Item label="Keyword" span={2}>{data ? data.keyword : "No data"}</Descriptions.Item>
-          <Descriptions.Item span={1} style={{ float: 'right' }}>
-            <Button htmlType="submit" size="small" style={{ width: 80, marginRight: 30 }} onClick={handleTranslate}>{isTranslated ? "Undo" : "Translate"}</Button>
-          </Descriptions.Item>
-          <Descriptions.Item label="Content" span={3}>
-            {PostDetail}
-          </Descriptions.Item>
-          <Descriptions.Item span={2}>
-            {media_compnent}
-          </Descriptions.Item>
-          <Descriptions.Item span={1} style={{ float: 'right', marginRight: 30 }}>
-            <p style={propsEdit}>edited</p>
-          </Descriptions.Item>
-          <Descriptions.Item span={2}>
-            <Badge size="small" count={data ? data.likes.likes.length : 0}>
-              <LikeOutlined style={propsLike} onClick={handleLike} />
-            </Badge>
-            <PushpinOutlined style={propsFlag} onClick={handleFlag} />
-          </Descriptions.Item>
-          <Descriptions.Item >
-            {contextHolder2}
-            <Button type="primary" htmlType="submit" size="medium" style={propsDelete} onClick={handleDelete}>Delete</Button>
-            <Button type="primary" htmlType="submit" size="medium" style={propsPrivate} onClick={makePrivate}>{privatecontent}</Button>
-            <Button type="primary" htmlType="submit" size="medium" style={propsChange} onClick={handleEdit}>Edit</Button>
-          </Descriptions.Item>
-        </Descriptions>
-      </div>
-      {reply_components}
-      <div className="ForumDetail-Reply">
-        <TextArea rows={2} placeholder="Please input the reply" value={reply} onChange={(e) => { setReply(e.target.value) }} />
-        <Button type="primary" htmlType="submit" size="medium" style={{ marginLeft: 30 }} onClick={handleSubmit}>Reply</Button>
-      </div>
-    </div>
+    <Layout
+      className="site-layout"
+      style={{
+          minHeight: '100vh',
+          marginLeft: 200,
+      }}>
+        <Header style={{ padding: '2px 10px' }}>
+          <Link to='/coursemainpage/forum'>
+              <Tooltip title="Back">
+                <Button type='link' shape="circle" icon={<RollbackOutlined />} />
+              </Tooltip>
+          </Link>
+          <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
+        </Header>
+        <Content>
+          <div className="ForumDetail-Total">
+            <div className="ForumDetail-Post">
+              <Descriptions title={data ? data.title : "No data"}>
+                <Descriptions.Item label="Creator" span={2}>{data ? data.creatorname : "No data"}</Descriptions.Item>
+                <Descriptions.Item label="Post Time">{data ? data.createtime.slice(0, 10) : "No data"}</Descriptions.Item>
+                <Descriptions.Item label="Keyword" span={2}>{data ? data.keyword : "No data"}</Descriptions.Item>
+                <Descriptions.Item span={1} style={{ float: 'right' }}>
+                  <Button htmlType="submit" size="small" style={{ width: 80, marginRight: 30 }} onClick={handleTranslate}>{isTranslated ? "Undo" : "Translate"}</Button>
+                </Descriptions.Item>
+                <Descriptions.Item label="Content" span={3}>
+                  {PostDetail}
+                </Descriptions.Item>
+                <Descriptions.Item span={2}>
+                  {media_compnent}
+                </Descriptions.Item>
+                <Descriptions.Item span={1} style={{ float: 'right', marginRight: 30 }}>
+                  <p style={propsEdit}>edited</p>
+                </Descriptions.Item>
+                <Descriptions.Item span={2}>
+                  <Badge size="small" count={data ? data.likes.likes.length : 0}>
+                    <LikeOutlined style={propsLike} onClick={handleLike} />
+                  </Badge>
+                  <PushpinOutlined style={propsFlag} onClick={handleFlag} />
+                </Descriptions.Item>
+                <Descriptions.Item >
+                  {contextHolder2}
+                  <Button type="primary" htmlType="submit" size="medium" style={propsDelete} onClick={handleDelete}>Delete</Button>
+                  <Button type="primary" htmlType="submit" size="medium" style={propsPrivate} onClick={makePrivate}>{privatecontent}</Button>
+                  <Button type="primary" htmlType="submit" size="medium" style={propsChange} onClick={handleEdit}>Edit</Button>
+                </Descriptions.Item>
+              </Descriptions>
+            </div>
+            {reply_components}
+            <div className="ForumDetail-Reply">
+              <TextArea rows={2} placeholder="Please input the reply" value={reply} onChange={(e) => { setReply(e.target.value) }} />
+              <Button type="primary" htmlType="submit" size="medium" style={{ marginLeft: 30 }} onClick={handleSubmit}>Reply</Button>
+            </div>
+          </div>
+        </Content>
+        <Navibar />   
+        <Footer
+          style={{
+              textAlign: 'center',
+          }}
+        >
+          Hydra Learning management system©2023 Created by COMP9900 HYDRA Group
+        </Footer>
+      </Layout>   
   );
 }
 export default ForumDetailStudent;

@@ -151,7 +151,7 @@ function Quiz () {
                 marginLeft: 200,
             }}>
             <Header style={{ padding: '2px 10px' }}>
-                <Link to='/DashboardLecturer'>
+                <Link to='/coursemainpage'>
                 <Tooltip title="Back">
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                 </Tooltip>
@@ -159,8 +159,8 @@ function Quiz () {
                 <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
             </Header>
             {/* <Divider orientation="left" style={{fontSize:'25px'}}>Quiz</Divider> */}
-            <Space style={{marginLeft:'15px', marginBottom:'15px'}}>
-                <Button type="primary" onClick={showModal} style={{marginLeft:'20px'}}>Create a new quiz</Button>
+            <Space style={{marginLeft:'58px', marginBottom:'15px', marginTop: '40px'}}>
+                <Button type="primary" size = "large" onClick={showModal} style={{marginLeft:'20px'}}>Create a new quiz</Button>
                 <Modal
                     open={open}
                     title="New quiz"
@@ -251,7 +251,7 @@ function Quiz () {
             marginLeft: 200,
         }}>
         <Header style={{padding:'2px 10px'}} >
-            <Link to='/Dashboard'>
+            <Link to='/coursemainpage'>
             <Tooltip title="Back">
                 <Button type='link' shape="circle" icon={<RollbackOutlined />} />
             </Tooltip>

@@ -1,13 +1,16 @@
 import React from 'react';
 import { Input, Button, Card, Form } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LeftCircleOutlined } from '@ant-design/icons';
 import 'antd/dist/reset.css';
 import '../styles/ResetPassword1.css';
 
 function ResetPassword1() {
+  const navigate = useNavigate();
+
   const handleSubmit = (values) => {
     console.log('Success:', values);
+    navigate('/waiting');
   };
 
   return (

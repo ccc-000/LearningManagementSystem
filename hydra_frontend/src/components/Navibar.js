@@ -57,7 +57,7 @@ import {
             {
               key: '1',
               icon: <DesktopOutlined />,
-              label: 'Announcements',
+              label: 'Announcement',
               onClick: () => {navigate('/coursemainpage/announcementsLecturer')},
             },
             {
@@ -124,7 +124,7 @@ import {
               {
                 key: '1',
                 icon: <DesktopOutlined />,
-                label: 'Announcements',
+                label: 'Announcement',
                 onClick: () => {navigate('/coursemainpage/announcements')},
               },
               {

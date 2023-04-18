@@ -31,6 +31,8 @@ import VideoPlayer from './pages/VedioPlayer';
 //Online Lecture page
 import OnlineLecture from './pages/OnlineLecture';
 
+import Waiting from './pages/WaitingPage';
+
 function App() {
 
     return (
@@ -59,6 +61,7 @@ function App() {
                 <Route path="/coursemainpage/material" element={<Material/>}/>
                 <Route path="/coursemainpage/videoPlayer" element={<VideoPlayer/>}/>
                 <Route path="/coursemainpage/onlinelecture" element={<OnlineLecture/>}/>
+                <Route path="/waiting" element={<Waiting/>}/>
             </Routes>
         </>
     );

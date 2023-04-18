@@ -11,9 +11,10 @@ const { Header, Content, Footer, Sider } = Layout;
 
 function OnlineLecture() {
     const navigate = useNavigate();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(8);
 
     const role = localStorage.getItem('role');
-    const cname = localStorage.getItem('cname');
 
     //TODO: get data from backend
 
@@ -128,6 +129,18 @@ function OnlineLecture() {
         },
       ];
 
+    const handlePageChange = (page, pageSize) => {
+        setCurrentPage(page);
+        setPageSize(pageSize);
+    };
+
+    const paginationConfig = {
+        current: currentPage,
+        pageSize: pageSize,
+        total: data.length,
+        onChange: handlePageChange
+    };
+
     //tablefilter
     const onChangeFilter = (pagination, sorter, extra) => {
       console.log('params', pagination, sorter, extra);
@@ -169,7 +182,7 @@ function OnlineLecture() {
                 marginLeft: 200,
             }}>
             <Header style={{ padding: '2px 10px' }}>
-                <Link to='/dashboardLecturer'>
+                <Link to='/coursemainpage'>
                     <Tooltip title="Back">
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                     </Tooltip>
@@ -194,8 +207,9 @@ function OnlineLecture() {
                             <Table 
                                 // rowKey={"lid"}
                                 columns={columns} 
-                                dataSource={data} 
+                                dataSource={data.slice((currentPage - 1) * pageSize, currentPage * pageSize)} 
                                 onChange={onChangeFilter}
+                                pagination={paginationConfig}
                             />
                         }
                         <Modal

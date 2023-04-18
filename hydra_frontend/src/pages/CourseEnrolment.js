@@ -13,10 +13,10 @@ const CourseEnrolment = () => {
             key: 'coursename',
             sorter: (a, b) => a.coursename.localeCompare(b.coursename),
             render: (text, record) => (
-            <div onClick={() => handleSelect(record)}>
-                {record.selected ? <Checkbox checked /> : <Checkbox />}
-                {text}
-            </div>
+                <div onClick={() => handleSelect(record)}>
+                    {record.selected ? <Checkbox checked /> : <Checkbox />}
+                    {'\n'+text}
+                </div>
             ),
         },
         {
@@ -100,20 +100,14 @@ const CourseEnrolment = () => {
 
     return (
         <>
-        <Input.Search placeholder="Search" onSearch={handleSearch} />
-        <Table
-            dataSource={filteredData}
-            columns={columns}
-
-            // onRow={(record, rowIndex) => {
-            //   return {
-            //     onClick: () => handleSelect(record.key),
-            //   };
-            // }}
-        />
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10 }}>
-            <Button type='primary' onClick={handleSubmit}>Submit</Button>
-        </div>
+            <Input.Search placeholder="Search" onSearch={handleSearch} />
+            <Table
+                dataSource={filteredData}
+                columns={columns}
+            />
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: 10 }}>
+                <Button type='primary' onClick={handleSubmit}>Submit</Button>
+            </div>
         </>
     );
 };

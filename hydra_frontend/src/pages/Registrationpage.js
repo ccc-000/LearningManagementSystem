@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import '../styles/registrationpage.css';
 import {
   Button,
@@ -6,6 +6,7 @@ import {
   Input,
   Select,
 } from 'antd';
+import { LeftCircleOutlined } from '@ant-design/icons';
 import React from 'react';
 
 const RegistraionFrom = () => {
@@ -36,6 +37,7 @@ const RegistraionFrom = () => {
 
   return (
     <>
+      <Link to="/"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 30, marginTop: 30, color: 'grey'}}/></Link>
       <div className='pagelayout'>
         <div className='registrationcard'>
           <Form

@@ -13,6 +13,8 @@ function Profile() {
     const [data2, setData2] = useState([]);
     console.log(data2.courses);
 
+    const role = localStorage.role;
+
     const jsonToList = (data2) => {
       const enrollment_list = data2.courses.map((course) => {
         return {
@@ -119,7 +121,7 @@ function Profile() {
             }}
         >
             <Header style={{ padding: '2px 10px' }}>
-                <Link to='/dashboardLecturer'>
+                <Link to={role === 'lecturer' ? '/dashboardLecturer' : '/dashboard'}>
                     <Tooltip title="Back">
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                     </Tooltip>
@@ -153,27 +155,52 @@ function Profile() {
                       </div>
                     </Link>
                   </Card>
+                  {role === 'student' ?
+                    <Card
+                      title="Enrolment History"
+                      bordered={false}
+                      style={{
+                      width: 360,
+                      height: 400,
+                      marginLeft: 20,
+                      }}
+                      >
+                      <Timeline
+                          pending="More"
+                          items={data2}
+                      />
+                      <Link to="/enrolmenthistory">
+                        <div id="ProfileDetail-Button">
+                          <Button type="primary" size="large" style={{width:100}}>
+                            Detail
+                          </Button>
+                        </div>
+                      </Link>
+                    </Card> 
+                  :
                   <Card
-                    title="Enrolment History"
-                    bordered={false}
-                    style={{
-                    width: 360,
-                    height: 400,
-                    marginLeft: 20,
-                    }}
-                    >
-                    <Timeline
-                        pending="More"
-                        items={data2}
-                    />
-                    <Link to="/enrolmenthistory">
-                      <div id="ProfileDetail-Button">
-                        <Button type="primary" size="large" style={{width:100}}>
-                          Detail
-                        </Button>
-                      </div>
-                    </Link>
-                  </Card>
+                      title="Course History"
+                      bordered={false}
+                      style={{
+                      width: 360,
+                      height: 400,
+                      marginLeft: 20,
+                      }}
+                      >
+                      <Timeline
+                          pending="More"
+                          items={data2}
+                      />
+                      <Link to="/enrolmenthistory">
+                        <div id="ProfileDetail-Button">
+                          <Button type="primary" size="large" style={{width:100}}>
+                            Detail
+                          </Button>
+                        </div>
+                      </Link>
+                    </Card> 
+                  }
+                  
                 </div>
             </Content>
             <Footer
