@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Divider, Layout, Tooltip } from 'antd';
+import { Divider, Layout, Tooltip, message } from 'antd';
 import Navibar from '../components/Navibar';
 import { Button, Modal, Space, Input, Radio, Checkbox } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
@@ -34,20 +34,13 @@ function Quiz () {
     };
 
 
-    const data = {};
+    const quizData = {};
     questionData.forEach((question, index) => {
-        // 根据索引创建一个问题的键
+        // 根据索引创建一个问题的key
         const questionKey = `q${index + 1}`;
       
-        // 创建一个名为"ans"的对象，用于存储答案信息
         const ans = {};
-      
-        // 根据问题的类型来存储答案
-        if (question.type === "single") {
-        //   ans.selected = selectedValues;
-        // } else {
-        //   ans.selected = checkedValues;
-        }
+        ans.selected = questionData[index].selectedOption;        
       
         // 将问题信息和答案信息存储在一个字符串中
         const questionStr = `{description: ${question.question}, `;
@@ -57,26 +50,30 @@ function Quiz () {
         
         const ansStr = `ans: ${ans.selected}, type: ${question.type}}`;
       
-        // 将问题信息和答案信息合并成一个字符串
         const questionDataStr = questionStr + optionsStr.join(", ") + ", " + ansStr;
       
-        // 将问题信息添加到"data"对象中
-        data[questionKey] = questionDataStr;
+        quizData[questionKey] = questionDataStr;
       });
     
     const handleSubmit = () => {
         setOpen(false);
-        // const data = questionData.map(question => ({
-        //     question: question.question,
-        //     type: question.type,
-        //     options: question.options.map(option => ({
-        //         label: option.label,
-        //         value: option.value,
-        //         input: option.input,
-        //     })),
-        //     ans: ansValues,
-        // }));
-        console.log(data);
+        axios.post('http://localhost:8080/createquiz/', {
+            ddl:'',
+            q1: quizData[0],
+            q2: quizData[1],
+            q3: quizData[2],
+            // ans: ans.selected,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 200){
+                message.success('Quiz created successfully');
+            }
+            else{
+                message.error('Failed to create quiz');
+            }
+        })
+        console.log(quizData);
     };
     
     
@@ -102,11 +99,11 @@ function Quiz () {
     setQuestionData(newQuestionData);
     }
 
-    const handleRadioChange = (questionIndex, optionIndex) => {
-        const newData = [...questionData];
-        newData[questionIndex].selectedOption = optionIndex;
-        setQuestionData(newData);
-      };
+    const handleRadioChange = (index, value) => {
+        const question = questionData[index];
+        question.selectedOption = value;
+        setQuestionData([...questionData.slice(0, index), question, ...questionData.slice(index + 1)]);
+    };
 
       const handleCheckboxChange = (questionIndex, checkedValues) => {
         const newData = [...questionData];
