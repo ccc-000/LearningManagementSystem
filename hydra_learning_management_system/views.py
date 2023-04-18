@@ -103,14 +103,12 @@ def forget_pwd_send_link(request):
 def createcourses(request):
     if request.method == "POST":
         course_info = json.loads(request.body)
+        uid = course_info["uid"]
         coursename = course_info['coursename']
-        creatorname = course_info['creatorname']
-        creatorid = Users.objects.get(username=creatorname)
-        crid = creatorid.uid
-        #enrolllist = json.dumps({"enrolllist": [crid]})
+        creator = Users.objects.get(uid=uid)
         coursedecription = course_info['coursedescription']
         gradedistribution = course_info['gradedistribution']
-        course = Courses.objects.create(coursename=coursename, creatorid=creatorid,
+        course = Courses.objects.create(coursename=coursename, creatorid=creator,
                                         coursedescription=coursedecription, gradedistribution=gradedistribution)
         if course:
             return JsonResponse({'status': 200})
@@ -271,7 +269,7 @@ def attendquiz(request):
         assessment = Assessments.objects.get(cid=course,uid=user)
         grade = assessment.grade
         grade = json.loads(grade)
-        grade["quiz"]["qid"] = score
+        grade["quiz"].append(score)
         grade = json.dumps(grade)
         assessment.grade = grade
         assessment.save()
@@ -648,9 +646,51 @@ def announcement(request):
         for i in enrollment:
             tmp = i["fields"]["uid"]
             uids.append(tmp)
-        #send
+
         return JsonResponse({"status":200})
 
 def sendemail(uids, title, content):
 
     return
+
+from google.oauth2.credentials import Credentials
+from googleapiclient.discovery import build
+from django.shortcuts import render
+from django.http import JsonResponse
+
+def create_meeting(request):
+    if request.method == "POST":
+
+    credentials = Credentials.from_authorized_user_info(request.session['credentials'])
+
+    service = build('calendar', 'v3', credentials=credentials)
+
+    meeting = service.events().insert(
+        calendarId='primary',
+        body={
+            'summary': 'Test Meeting',
+            'description': 'This is a test meeting',
+            'start': {
+                'dateTime': '2023-04-20T12:00:00',
+                'timeZone': 'Asia/Shanghai',
+            },
+            'end': {
+                'dateTime': '2023-04-20T13:00:00',
+                'timeZone': 'Asia/Shanghai',
+            },
+            'conferenceData': {
+                'createRequest': {
+                    'conferenceSolutionKey': {
+                        'type': 'hangoutsMeet'
+                    },
+                    'requestId': 'randomString'
+                }
+            },
+        },
+        conferenceDataVersion=1,
+        sendNotifications=True,
+    ).execute()
+
+    meeting_link = meeting['hangoutLink']
+
+    return JsonResponse({'link': meeting_link})
