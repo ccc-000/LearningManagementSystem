@@ -119,8 +119,11 @@ function Material() {
               setOpen(false);
               setConfirmLoading(false);
               PostAnnouncement('material');
-              window.location.reload();
+              
             }, 2000);
+            setTimeout(() => {
+              window.location.reload();
+            }, 3500);
           }
           // TODO: if upload failed, show error message
         });
