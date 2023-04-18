@@ -61,7 +61,10 @@ urlpatterns = [
     path("editprofile/",views.editprofile),
 
     path("translate/",views.translate),
+
     path("announcement/",views.announcement),
+    path("materialannouncement/", views.materialannouncement),
+    path("onlinecourseannouncement/",views.onlinecourseannouncement)
 
     # announcementpath(),#create live, show live, sholive
     # path(),

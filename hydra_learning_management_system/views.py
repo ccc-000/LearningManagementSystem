@@ -160,7 +160,8 @@ def createdcourses(request):
     if request.method == "POST":
         data = json.loads(request.body)
         uid = data["uid"]
-        courses = Courses.objects.filter(creatorid=uid)
+        creator = Users.objects.get(uid=uid)
+        courses = Courses.objects.filter(creatorid=creator)
         courses = serializers.serialize("python", courses)
         course = []
         for i in courses:
@@ -646,11 +647,14 @@ def announcement(request):
         for i in enrollment:
             tmp = i["fields"]["uid"]
             uids.append(tmp)
-
+        sendemail(uids, title, content)
         return JsonResponse({"status":200})
 
 def sendemail(uids, title, content):
-
+    emails = []
+    for i in uids:
+        user = Users.objects.get(uid=i)
+        emails.append(user.email)
     return
 
 # from google.oauth2.credentials import Credentials
@@ -694,3 +698,13 @@ def sendemail(uids, title, content):
 #     meeting_link = meeting['hangoutLink']
 #
 #     return JsonResponse({'link': meeting_link})
+
+@csrf_exempt
+def materialannouncement(request):
+    if request.method == "POST":
+        return JsonResponse({"status":200})
+
+@csrf_exempt
+def onlinecourseannouncement(request):
+    if request.method == "POST":
+        return JsonResponse({"status":200})

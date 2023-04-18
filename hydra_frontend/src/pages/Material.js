@@ -3,12 +3,16 @@ import { Button, Table, Modal, Select, Upload, message} from 'antd';
 import {useNavigate, Link} from 'react-router-dom';
 import { UploadOutlined } from '@ant-design/icons';
 import { Document, Page } from "@react-pdf/renderer";
+import PostAnnouncement from '../components/PostAnnouncement';
 import 'antd/dist/reset.css';
 import '../styles/Material.css';
 
 function Material() {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
+
+    const role = localStorage.getItem('role');
+    console.log('role', role);
 
     const jsonToPost = (material_data) => {
       const material_list = material_data.map(m => {
@@ -114,7 +118,8 @@ function Material() {
             setTimeout(() => {
               setOpen(false);
               setConfirmLoading(false);
-              window.location.reload();
+              PostAnnouncement('material');
+              // window.location.reload();
             }, 2000);
           }
           // TODO: if upload failed, show error message
@@ -154,7 +159,9 @@ function Material() {
       <div className="Material-Total">
         <div className="Material-Content">
           <div className="Material-Filter">
-            <Button type="primary" htmlType="submit" size="large" style={{width: 160, marginRight: 50}} onClick={showModal}>Upload a material</Button>
+            {role !== 'student' &&
+              <Button type="primary" htmlType="submit" size="large" style={{width: 160, marginRight: 50}} onClick={showModal}>Upload a material</Button>
+            }
             <Modal
               title="Upload a material"
               open={open}
