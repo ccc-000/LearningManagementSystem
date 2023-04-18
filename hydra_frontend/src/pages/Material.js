@@ -3,6 +3,7 @@ import { Button, Table, Modal, Select, Upload, message} from 'antd';
 import {useNavigate, Link} from 'react-router-dom';
 import { UploadOutlined } from '@ant-design/icons';
 import { Document, Page } from "@react-pdf/renderer";
+import PostAnnouncement from '../components/PostAnnouncement';
 import 'antd/dist/reset.css';
 import '../styles/Material.css';
 
@@ -114,7 +115,8 @@ function Material() {
             setTimeout(() => {
               setOpen(false);
               setConfirmLoading(false);
-              window.location.reload();
+              PostAnnouncement('material');
+              // window.location.reload();
             }, 2000);
           }
           // TODO: if upload failed, show error message
