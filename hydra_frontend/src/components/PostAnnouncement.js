@@ -15,7 +15,8 @@ export default function PostAnnouncement (route) {
         content: 'Dear All, this is a reminder that your live lecture is open, please go to the live lecture page to join!'};
         path = 'onlinecourseannouncement';
     }
-    
+    console.log('request is ', request);
+    useEffect(() => {
         fetch(`http://localhost:8000/${path}/`, {
             method: 'POST',
             headers: {
@@ -31,7 +32,7 @@ export default function PostAnnouncement (route) {
         }
         message.success('Post announcement Successfully!');
         })
-    
+    }, []);
 
 
 };
