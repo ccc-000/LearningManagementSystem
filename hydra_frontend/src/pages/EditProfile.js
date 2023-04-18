@@ -268,26 +268,12 @@ function EditProfile() {
                 ]}
               >
                 <Select placeholder="select preferred language">
-                  <Option value="Arabic">Arabic</Option>
                   <Option value="Chinese">Chinese</Option>
-                  <Option value="Danish">Danish</Option>
-                  <Option value="Dutch">Dutch</Option>
                   <Option value="English">English</Option>
                   <Option value="French">French</Option>
                   <Option value="German">German</Option>
-                  <Option value="Greek">Greek</Option>
-                  <Option value="Hindi">Hindi</Option>
-                  <Option value="Italian">Italian</Option>
                   <Option value="Japanese">Japanese</Option>
-                  <Option value="Korean">Korean</Option>
-                  <Option value="Norwegian">Norwegian</Option>
-                  <Option value="Portuguese">Portuguese</Option>
                   <Option value="Russian">Russian</Option>
-                  <Option value="Spanish">Spanish</Option>
-                  <Option value="Swedish">Swedish</Option>
-                  <Option value="Thai">Thai</Option>
-                  <Option value="Turkish">Turkish</Option>
-                  <Option value="Vietnamese">Vietnamese</Option>
                 </Select>
               </Form.Item>
 
