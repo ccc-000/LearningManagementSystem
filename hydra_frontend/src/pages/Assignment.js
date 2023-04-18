@@ -85,7 +85,6 @@ export default function Assignment() {
         .then((response) => {
             setAssList(response.data.asses);
             localStorage.setItem('aid', response.data.asses[0].aid);
-            console.log('aid', response.data.asses[0].aid);
         })
     }, []);
 
