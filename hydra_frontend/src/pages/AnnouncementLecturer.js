@@ -6,16 +6,19 @@ import { Link } from 'react-router-dom';
 
 const { Header, Content, Footer, Sider } = Layout;
 const AnnouncementPage = () => {
+  const cid = localStorage.getItem('cid');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formContent, setFormContent] = useState({ title: '', content: '' });
   const handleOk = (formContent) => {
     console.log('formContent', formContent);
-    fetch('http://localhost:8000/sendemail/', {
+    const request = { cid: cid, title: formContent.title, content: formContent.content}
+    console.log('request', request);
+    fetch('http://localhost:8000/announcement/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formContent),
+        body: JSON.stringify(request),
         }).then(async(response) => {
             const jsonRes = await response.json();
             if (response.status !== 200) {
