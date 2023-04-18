@@ -1,76 +1,36 @@
 import pic from '../img/unsw.jpeg';
+import avatar from '../img/avatar.png';
 import '../styles/DashboardPage.css';
 import {
-    AppstoreOutlined,
-    BarChartOutlined,
-    CloudOutlined,
-    ShopOutlined,
-    TeamOutlined,
-    UploadOutlined,
     UserOutlined,
-    VideoCameraOutlined,
+    LogoutOutlined
 } from '@ant-design/icons';
-import {Button, Card, Checkbox, Layout, Menu, Modal} from 'antd';
+import {Form, Input, Button, Card, Layout, Menu, Modal, Avatar, message} from 'antd';
 import React, {useRef, useState} from 'react';
 import Draggable from 'react-draggable';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate } from 'react-router-dom';
+import ShowCourse from '../components/CourseCard';
 
 const {Content, Footer, Sider} = Layout;
-const items = [
-    UserOutlined,
-    VideoCameraOutlined,
-    UploadOutlined,
-    BarChartOutlined,
-    CloudOutlined,
-    AppstoreOutlined,
-    TeamOutlined,
-    ShopOutlined,
-].map((icon, index) => ({
-    key: String(index + 1),
-    icon: React.createElement(icon),
-    label: `nav ${index + 1}`,
-}));
+const uid=localStorage.getItem('uid');
+const role=localStorage.getItem('role');
 
-function DashboardPage() {
-    const [showModal, setShowModal] = useState(false);
-    const [selectedOptions, setSelectedOptions] = useState([]);
-    const [disabled, setDisabled] = useState(false);
-    const [bounds, setBounds] = useState({
-        left: 0,
-        top: 0,
-        bottom: 0,
-        right: 0,
-    });
-    const draggleRef = useRef(null);
 
-    const handleOpen = () => {
-        setShowModal(true);
-    };
+function Dashboard() {
+    const navigate = useNavigate();
+  
 
-    const handleClose = () => {
-        setShowModal(false);
+    const handleLogout = () => {
+        localStorage.clear();
+        navigate('/')
     };
-
-    const handleOptionClick = (option) => {
-        if (selectedOptions.includes(option)) {
-            setSelectedOptions(selectedOptions.filter((item) => item !== option));
-        } else {
-            setSelectedOptions([...selectedOptions, option]);
-        }
+    const handleProfile = () => {
+        navigate('/profile')
     };
-    const onStart = (_event, uiData) => {
-        const {clientWidth, clientHeight} = window.document.documentElement;
-        const targetRect = draggleRef.current?.getBoundingClientRect();
-        if (!targetRect) {
-            return;
-        }
-        setBounds({
-            left: -targetRect.left + uiData.x,
-            right: clientWidth - (targetRect.right - uiData.x),
-            top: -targetRect.top + uiData.y,
-            bottom: clientHeight - (targetRect.bottom - uiData.y),
-        });
+    const handleEditAvatar = () => {
+        navigate('/editavatar')
     };
+    console.log('dashboard',uid);
     return (
         <Layout hasSider>
             <Sider
@@ -90,7 +50,31 @@ function DashboardPage() {
 
                     }}
                 />
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items}/>
+
+                <Menu theme="dark" mode="inline">
+                    <Avatar 
+                    style={{
+                        size: 40,
+                        cursor: 'pointer',
+                        marginLeft: '80px',
+                    }}
+                    src={avatar} onClick={handleEditAvatar}/>
+                    <Menu.Item
+                        key="profile"
+                        icon={<UserOutlined />}
+                        onClick={handleProfile}
+                        >
+                        Profile
+                    </Menu.Item>
+                    <Menu.Item
+                        key="logout"
+                        icon={<LogoutOutlined />}
+                        style={{ position: 'absolute', bottom: 0 }}
+                        onClick={handleLogout}
+                        >
+                        Logout
+                    </Menu.Item>
+                </Menu>
             </Sider>
             <Layout
                 className="site-layout"
@@ -106,106 +90,18 @@ function DashboardPage() {
                     <div className='divider'></div>
 
                     <div style={{position: 'relative'}}>
-                        <Button onClick={handleOpen}
+                        <Button onClick={() => navigate('/dashboard/enrolment')}
                                 style={{
                                     position: 'absolute',
                                     top: '8px',
                                     right: '10px',
                                 }}>
-                            Enrol courses
+                            Enrol Courses
                         </Button>
-                        {selectedOptions.length > 0 && (
-                            <div className='cardBox'>
-                                {selectedOptions.map((option, index) => (
-                                    <Link to='/coursemainpage'>
-                                        <Card
-                                            hoverable
-                                            key={index}
-                                            className='courseCard'
-                                            cover={
-                                                <img
-                                                    alt="course"
-                                                    src={pic}
-                                                />
-                                            }
-                                        >
-                                            <Card.Meta className='meta' title={option}/>
-                                        </Card>
-                                    </Link>
-                                ))}
-                            </div>
-                        )}
-
-
-                        <Modal
-                            title={
-                                <div
-                                    style={{
-                                        width: '100%',
-                                        cursor: 'move',
-                                    }}
-                                    onMouseOver={() => {
-                                        if (disabled) {
-                                            setDisabled(false);
-                                        }
-                                    }}
-                                    onMouseOut={() => {
-                                        setDisabled(true);
-                                    }}
-                                    onFocus={() => {
-                                    }}
-                                    onBlur={() => {
-                                    }}
-                                    // end
-                                >
-                                    Enrol Courses
-                                </div>
-                            }
-                            open={showModal}
-                            onOk={handleClose}
-                            closable={false}
-                            modalRender={(modal) => (
-                                <Draggable
-                                    disabled={disabled}
-                                    bounds={bounds}
-                                    onStart={(event, uiData) => onStart(event, uiData)}
-                                >
-                                    <div ref={draggleRef}>{modal}</div>
-                                </Draggable>
-                            )}
-                            footer={[
-                                <Button onClick={handleClose}>Close</Button>,
-                            ]}
-                        >
-                            <Checkbox
-                                onChange={() => handleOptionClick('23t1COMP6080 	Web Front-End Programming')}>
-                                23t1COMP6080 Web Front-End Programming
-                            </Checkbox>
-                            <br/>
-                            <Checkbox
-                                onChange={() => handleOptionClick('23t1COMP9318 	Data Warehousing and Data Mining')}>
-                                23t1COMP9318 Data Warehousing and Data Mining
-                            </Checkbox>
-                            <br/>
-                            <Checkbox onChange={() => handleOptionClick('23t1COMP9414 	Artificial Intelligence')}>
-                                23t1COMP9414 Artificial Intelligence
-                            </Checkbox>
-                            <br/>
-                            <Checkbox
-                                onChange={() => handleOptionClick('23t1COMP9417 	Machine Learning and Data Mining')}>
-                                23t1COMP9417 Machine Learning and Data Mining
-                            </Checkbox>
-                            <br/>
-                            <Checkbox
-                                onChange={() => handleOptionClick('23t1COMP9418 	Advanced Topics in Statistical Machine Learning')}>
-                                23t1COMP9418 Advanced Topics in Statistical Machine Learning
-                            </Checkbox>
-                            <br/>
-                            <Checkbox
-                                onChange={() => handleOptionClick('23t1COMP9900 Information Technology Project')}>
-                                23t1COMP9900	Information Technology Project
-                            </Checkbox>
-                        </Modal>
+                        <div className='cardBox'>
+                            <ShowCourse uid={uid} role={role}/>
+                            
+                        </div>
                     </div>
                 </Content>
                 <Footer
@@ -220,4 +116,4 @@ function DashboardPage() {
     );
 }
 
-export default DashboardPage;
+export default Dashboard;

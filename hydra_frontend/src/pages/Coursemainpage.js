@@ -7,7 +7,6 @@ import { useState } from 'react';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-
 const Coursemainpage = () => {
   const role = localStorage.getItem('role');
   const cname = localStorage.getItem('cname');
