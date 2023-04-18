@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
 
+# from google.oauth2.credentials import Credentials
 
 # Create your views here.
 
@@ -464,7 +465,7 @@ def editposts(request):
             post.title = data["title"]
             post.content = data["content"]
             post.keyword = data["keyword"]
-            post.multimedia = data["multimeida"]
+            post.multimedia = data["multimedia"]
             post.editted = True
             post.save()
             return JsonResponse({"status": 200, "msg": "edit success"})
