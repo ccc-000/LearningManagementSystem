@@ -33,5 +33,9 @@
 
 4.17
 1. create onlinelecture page
-2. add navibar to all page
+2. add navibar to all page(half)
 
+4.18
+1. add navibar to all page(half)
+2. optimize page
+3. test and debug 1.0
