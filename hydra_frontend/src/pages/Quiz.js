@@ -96,6 +96,7 @@ function Quiz () {
     setQuestionData(newQuestionData);
     }
 
+    const SectionName = localStorage.getItem('cname') + " —— Quiz";
 
     if (role === 'lecturer') {
         return (
@@ -112,9 +113,9 @@ function Quiz () {
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                 </Tooltip>
                 </Link>
-                <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{cname}</h2>
+                <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
             </Header>
-            <Divider orientation="left" style={{fontSize:'25px'}}>Quiz</Divider>
+            {/* <Divider orientation="left" style={{fontSize:'25px'}}>Quiz</Divider> */}
             <Space style={{marginLeft:'15px', marginBottom:'15px'}}>
                 <Button type="primary" onClick={showModal} style={{marginLeft:'20px'}}>Create a new quiz</Button>
                 <Modal

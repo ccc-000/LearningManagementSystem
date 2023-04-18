@@ -133,6 +133,7 @@ export default function Assignment() {
         },
     };
 
+    const SectionName = localStorage.getItem('cname') + " —— Assignment";
     
     if (role === 'lecturer') {
         return (
@@ -149,11 +150,11 @@ export default function Assignment() {
                 <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                 </Tooltip>
             </Link>
-            <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{cname}</h2>
+            <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
             </Header>
-            <Divider orientation="left" style={{fontSize:'25px'}}>Assignment</Divider>
-            <Space style={{marginLeft:'15px', marginBottom:'15px'}}>
-                <Button type="primary" onClick={() => openModal('modal1')} style={{marginLeft:'20px'}}>Create a new assignment</Button>
+            {/* <Divider orientation="left" style={{fontSize:'25px'}}>Assignment</Divider> */}
+            <Space style={{marginLeft:'15px', marginBottom:'15px', marginTop: '40px'}}>
+                <Button type="primary" size = "large" onClick={() => openModal('modal1')} style={{marginLeft:'20px'}}>Create a new assignment</Button>
                 <Modal
                     open={currentModal === 'modal1' && open}
                     id='modal1'
@@ -255,9 +256,9 @@ export default function Assignment() {
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                 </Tooltip>
                 </Link>
-                <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{cname}</h2>
+                <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
             </Header>
-            <Divider orientation="left" style={{fontSize:'25px'}}>Assignment</Divider>
+            {/* <Divider orientation="left" style={{fontSize:'25px'}}>Assignment</Divider> */}
             <div class="container"> 
                 {assList.map((ass) => (
                     <div key={ass.pk} class="box">

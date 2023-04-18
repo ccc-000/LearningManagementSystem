@@ -159,6 +159,7 @@ function OnlineLecture() {
     };
 
     const CourseMsg = "This live is for lecture 1";
+    const SectionName = localStorage.getItem('cname') + " —— Online Lecture";
 
     return (
         <Layout
@@ -173,7 +174,7 @@ function OnlineLecture() {
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                     </Tooltip>
                 </Link>
-                <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{cname}</h2>
+                <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
             </Header>
             <Content>
                 <div className="OnlineLecture-Content">

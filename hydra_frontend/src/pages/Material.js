@@ -156,6 +156,8 @@ function Material() {
       },
     };
 
+    const SectionName = localStorage.getItem('cname') + " —— Material";
+
     return (
       <Layout
         className="site-layout"
@@ -169,7 +171,7 @@ function Material() {
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                   </Tooltip>
               </Link>
-              <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{cname}</h2>
+              <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
             </Header>
             <Content>
               <div className="Material-Content">
