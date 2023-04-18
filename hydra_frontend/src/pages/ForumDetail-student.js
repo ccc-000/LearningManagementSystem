@@ -15,6 +15,7 @@ function ForumDetailStudent() {
   const [isTranslated, setIsTranslated] = useState(false);
   const { pid } = useParams();
   const navigate = useNavigate();
+  const role = localStorage.getItem("role");
 
   // Receive post data from the backend
   useEffect(() => {
