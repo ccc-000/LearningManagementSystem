@@ -309,6 +309,12 @@ function ForumDetailStudent() {
     })
   }
 
+  // Render multimedia
+  let media_compnent = undefined
+  if (data) {
+    media_compnent = data.multimedia ? <img src={data.multimedia} alt="avatar" style={{ width: '50%' }} /> : <></>
+  }
+
   return (
     <div className="ForumDetail-Total">
       <div className="ForumDetail-Post">
@@ -325,12 +331,7 @@ function ForumDetailStudent() {
             {PostDetail}
           </Descriptions.Item>
           <Descriptions.Item span={2}>
-            {/* TODO: Fix the follwing */}
-            {/* {() => {
-              if (data) {
-                { data.multimedia ? <img src={data.multimedia} alt="avatar" style={{ width: '100%' }} /> : <></> }
-              }
-            }} */}
+            {media_compnent}
           </Descriptions.Item>
           <Descriptions.Item span={1} style={{ float: 'right', marginRight: 30 }}>
             <p style={propsEdit}>edited</p>
