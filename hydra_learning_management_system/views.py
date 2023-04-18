@@ -364,8 +364,8 @@ def markass(request):
         assessment = Assessments.objects.get(uid=user, cid=course)
         grade = assessment.grade
         grade = json.loads(grade)
-        grade['ass'][f'{aid}'] = mark
-        grade = grade.dumps(grade)
+        grade['ass'].append(mark)
+        grade = json.dumps(grade)
         assessment.grade = grade
         assessment.save()
         return JsonResponse({"status": 200})
@@ -408,7 +408,6 @@ def forum(request):
             i = i["fields"]
             i["flagged"] = json.loads(i["flagged"])
             i["likes"] = json.loads(i["likes"])
-            #i["privacy"] = json.loads(i["privacy"])
             i["reply"] = json.loads(i["reply"])
             uid = i["creatorid"]
             creatorname = Users.objects.get(uid=uid).username
@@ -431,13 +430,10 @@ def createposts(request):
         createtime = now
         keyword = data['keyword']
         multimedia = data['multimedia']
-        reply = json.dumps({"reply": {}})
-        #1: good, 2:bad
+        reply = json.dumps({"reply": []})
         likes = json.dumps({"likes": []})
-        # likes:[1,2,3]
         editted = False
         flagged = json.dumps({"flagged": []})
-        # flagged[1,2,3]
         privacy = False
         post = Posts.objects.create(creatorid=creatorid, cid=cid, createtime=createtime, keyword=keyword, title=title
                                     , content=content, multimedia=multimedia, reply=reply, likes=likes,
@@ -453,14 +449,20 @@ def editposts(request):
     if request.method == "PUT":
         data = json.loads(request.body)
         pid = data["pid"]
+        uid = data['uid']
         post = Posts.objects.get(pid=pid)
-        post.title = data["title"]
-        post.content = data["content"]
-        post.keyword = data["keyword"]
-        post.multimedia = data["multimeida"]
-        post.editted = True
-        post.save()
-        return JsonResponse({"status": 200, "msg":"edit success"})
+        ownerid = post.creatorid.uid
+        uid = int(uid)
+        if uid == ownerid:
+            post.title = data["title"]
+            post.content = data["content"]
+            post.keyword = data["keyword"]
+            post.multimedia = data["multimeida"]
+            post.editted = True
+            post.save()
+            return JsonResponse({"status": 200, "msg":"edit success"})
+        else:
+            return JsonResponse({"status": 403})
 
 @csrf_exempt
 def flagposts(request):
@@ -492,10 +494,11 @@ def replyposts(request):
         content = data['content']
         user = Users.objects.get(uid=uid)
         post = Posts.objects.get(pid=pid)
-        reply = Replies.objects.create(pid=pid, creator_id=user, content=content)
+        reply = Replies.objects.create(pid=post, creator_id=user, content=content)
+        username = user.username
         replylist = post.reply
         replylist = json.loads(replylist)
-        replylist["reply"]["uid"] = content
+        replylist["reply"].append({f'{username}': content})
         replylist = json.dumps(replylist)
         post.reply = replylist
         post.save()
@@ -535,13 +538,15 @@ def setprivate(request):
         pid = data["pid"]
         uid = data["uid"]
         post = Posts.objects.get(pid=pid)
-        ownerid = post.creatorid
-        cid = post.cid
-        course = Courses.objects.get(cid=cid)
-        lectorid = course.creatorid
+        ownerid = post.creatorid.uid
+        lectorid = post.cid.creatorid.uid
+        uid = int(uid)
+        #print(uid, ownerid, lectorid)
+        #print(type(uid), type(ownerid), type(lectorid))
         if uid == ownerid or uid == lectorid:
-            privacy = not post.privacy
-            if privacy == True:
+            post.privacy = not post.privacy
+            post.save()
+            if post.privacy == True:
                 return JsonResponse({"status": 200, "msg": "privacy set"})
             else:
                 return JsonResponse({"status": 200, "msg": "privacy unset"})
@@ -574,7 +579,6 @@ def deletereplys(request):
         replylist = []
         if reply is not None:
             reply.delete()
-
             return JsonResponse({"status": 200})
         else:
             return JsonResponse({"status": 403})

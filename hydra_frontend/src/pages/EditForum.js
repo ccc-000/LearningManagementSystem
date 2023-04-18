@@ -1,23 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Input, Button, Upload, message, notification, Space} from 'antd';
 import { UploadOutlined, LeftCircleOutlined } from '@ant-design/icons';
-import { useNavigate, Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/EditForum.css';
 const { TextArea } = Input;
 
 
 function EditForum() {
-    const fileList = [
-      {
-        uid: '-1',
-        name: 'yyy.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
-    ];
-
     //edit a post
     const [messageApi, contextHolder1] = message.useMessage();
     const [api, contextHolder2] = notification.useNotification();
@@ -51,17 +41,18 @@ function EditForum() {
         content: 'Editing...',
       });
 
-      fetch('http://localhost:8000/editpost/', {
+      fetch('http://localhost:8000/editposts/', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        uid: localStorage.getItem("uid"),
         pid: pid,
-        // title: form.title,
-        // content: form.content,
-        // keyword: form.keyword,
-        // multimedia: form.multimedia
+        title: data.title,
+        content: data.content,
+        keyword: data.keyword,
+        multimedia: data.multimedia
       }),
     })
       .then(response => response.json())
@@ -112,22 +103,75 @@ function EditForum() {
       });
     }
 
+    // Conver the img into base64
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+    })
+  };
+
+  // Function to handle changes in multimedia
+  const multimediaHandler = async (e) => {
+    if (!e.fileList[0]) {
+      return;
+    }
+    // Get the file obj from the file list
+    const file = e.fileList[0].originFileObj;
+    const file_base64 = await convertBase64(file);
+    setData({...data, multimedia: file_base64});
+  }
+
+    // Generate multimedia from data
+    const fileList = []
+    if (data && data.multimedia) {
+      fileList.push(
+        {
+          uid: '-1',
+          name: 'multimedia.png',
+          status: 'done',
+          url: [data.multimedia],
+          thumbUrl: [data.multimedia],
+        }
+      )
+    }
+
     return (
       <div className="EditForum-Total">
-        {/* <Link to="/forumdetailstudent"><LeftCircleOutlined style={{fontSize: 30, marginLeft: 15, marginTop: 15, color: 'grey'}}/></Link> */}
         <div className="EditForum-Content">
           <div className="Edit-Title">
               <span style={{marginRight: 20}}>Title</span>
-              <Input placeholder="Please input a post title" defaultValue={data? data.title : "No data"}/>
+              <Input placeholder="Please input a post title" value={data? data.title : "No data"} onChange={(e) => { setData({ ...data, title: e.target.value }) }} />
           </div>
           <div className="Edit-Content">
-              <TextArea rows={8} placeholder="Please input post content" defaultValue={data? data.content : "No data"}/>
+              <TextArea rows={8} placeholder="Please input post content" value={data? data.content : "No data"} onChange={(e) => { setData({ ...data, content: e.target.value })}} />
           </div>
           <div className="Edit-File">
               <Upload
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                beforeUpload={() => false}
+                onChange={multimediaHandler}
                 listType="picture"
-                defaultFileList={[...fileList]}
+                // Force the upload component to thinks the url is correct
+                isImageUrl={() => true}
+                onRemove={() => {
+                  setData({ ...data, multimedia: ""});
+                  return true;
+                }}
+                onPreview={(file) => {
+                  var image = new Image();
+                  image.src = file.url[0]
+                  var w = window.open("");
+                  w.document.write(image.outerHTML);
+                }}
+                fileList={[...fileList]}
                 maxCount={1}
                 className="upload-list-inline"
               >
@@ -136,7 +180,7 @@ function EditForum() {
           </div>
           <div className="Edit-Button">
               <span style={{marginRight: 20}}>Keyword</span>
-              <Input placeholder="Please input a keyword" style={{width: 180}} defaultValue={data? data.keyword : "No data"}/>
+              <Input placeholder="Please input a keyword" style={{width: 180}} value={data? data.keyword : "No data"} onChange={(e) => { setData({ ...data, keyword: e.target.value })}}/>
               {contextHolder2}
               <Button size="large" style={{width: 100, float: 'right', marginRight: 20, marginTop: -10}} onClick={handleCancel}>Cancel</Button>
               {contextHolder1}
