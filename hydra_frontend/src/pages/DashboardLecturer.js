@@ -12,13 +12,15 @@ import {
     VideoCameraOutlined,
     LogoutOutlined
 } from '@ant-design/icons';
-import {Form, Input, Button, Card, Layout, Menu, Modal, Avatar} from 'antd';
+import {Form, Input, Button, Card, Layout, Menu, Modal, Avatar, message} from 'antd';
 import React, {useRef, useState} from 'react';
 import Draggable from 'react-draggable';
 import {Link, useNavigate } from 'react-router-dom';
+import ShowCourse from '../components/CourseCard';
 
 const {Content, Footer, Sider} = Layout;
-
+const uid=localStorage.getItem('uid');
+const role=localStorage.getItem('role');
  
 const items = [
     UserOutlined,
@@ -34,6 +36,19 @@ const items = [
     icon: React.createElement(icon),
     label: `nav ${index + 1}`,
 }));
+const grade = { quiz: {
+    quiz1: 9,
+    quiz2: 9,
+    quiz3: 9
+    },
+    ass: {
+    ass1: 15,
+    ass2: 15,
+    ass3: 15
+    },
+    final: {
+    'final exam': 28
+    }};
 
 function DashboardLecturer() {
     const navigate = useNavigate();
@@ -47,32 +62,50 @@ function DashboardLecturer() {
         bottom: 0,
         right: 0,
     });
-    const [formData, setFormData] = useState({
+    const [form] = Form.useForm();
+    const [initialValues, setInitialValues] = useState({
         coursename: '',
         creatorname: '',
         coursedescription: '',
-        gradedistribution: { 
-            quiz: {
-            quiz1: 9,
-            quiz2: 9,
-            quiz3: 9
-            },
-            ass: {
-            ass1: 15,
-            ass2: 15,
-            ass3: 15
-            },
-            final: {
-            'final exam': 28
-            }}
+        gradedistribution: JSON.stringify(grade),
     });
 
     const draggleRef = useRef(null);
 
     const handleSubmit = () => {
-        setShowModal(false);
-        setShowCard(true);
+        form.validateFields().then(values => {
+            console.log('values', values);
+            
+            const request = {
+                uid: uid,
+                coursename: values.coursename,
+                coursedescription: values.coursedescription,
+                gradedistribution: values.gradedistribution,
+            }
+            console.log('request', request);
+        // console.log('form data:',JSON.stringify(formData))
+            fetch('http://localhost:8000/createcourses/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(request),
+            }).then(async(response) => {
+                const jsonRes = await response.json();
+                if (response.status !== 200) {
+                    message.error(jsonRes.error);
+                    return;
+                }
+                message.success('Successful!');
+                setShowModal(false);
+                form.resetFields();
+                form.setFieldsValue({ gradedistribution: JSON.stringify(grade) });  
+                window.location.reload();        
+            });
+        });
+    
       };
+      
     const handleOpen = () => {
         setShowModal(true);
     };
@@ -104,6 +137,7 @@ function DashboardLecturer() {
     const handleEditAvatar = () => {
         navigate('/editavatar')
     };
+    console.log('dashboard',uid);
     return (
         <Layout hasSider>
             <Sider
@@ -163,73 +197,18 @@ function DashboardLecturer() {
                     <div className='divider'></div>
 
                     <div style={{position: 'relative'}}>
-                        <div>
-                            <Button onClick={handleOpen}
-                                    style={{
-                                        position: 'absolute',
-                                        top: '8px',
-                                        right: '10px',
-                                    }}>
-                                Create Courses
-                            </Button>
-                        </div>
+                        <Button onClick={handleOpen}
+                                style={{
+                                    position: 'absolute',
+                                    top: '8px',
+                                    right: '10px',
+                                }}>
+                            Create Courses
+                        </Button>
                         <div className='cardBox'>
-                            <Link to='/coursemainpage'>
-                                <Card
-                                    hoverable
-                                    className='courseCard'
-                                    cover={
-                                        <img
-                                            alt="course"
-                                            src={pic}
-                                        />
-                                    }
-                                >
-                                    <Card.Meta className='meta' title="23t1COMP9900	Information Technology Project" description="It's the last course of 8543."/>
-                                </Card>
-                            </Link>
-                        {showCard && (
-                           
-                            <Link to='/coursemainpageLecturer'>
-                                <Card
-                                    hoverable
-                                    className='courseCard'
-                                    cover={
-                                        <img
-                                            alt="course"
-                                            src={pic}
-                                        />
-                                    }
-                                >
-                                    <Card.Meta className='meta' title={formData.coursename} description={formData.coursedescription}/>
-                                </Card>
-                            </Link>
-                        )}
-                       </div>
-
-
-                        {/* {selectedOptions.length > 0 && (
-                            <div className='cardBox'>
-                                {selectedOptions.map((option, index) => (
-                                    <Link to='/coursemainpage'>
-                                        <Card
-                                            hoverable
-                                            key={index}
-                                            className='courseCard'
-                                            cover={
-                                                <img
-                                                    alt="course"
-                                                    src={pic}
-                                                />
-                                            }
-                                        >
-                                            <Card.Meta className='meta' title={option}/>
-                                        </Card>
-                                    </Link>
-                                ))}
-                            </div>
-                        )} */}
-
+                            <ShowCourse uid={uid} role='lecturer'/>
+                            
+                        </div>
 
                         <Modal
                             title={
@@ -256,8 +235,8 @@ function DashboardLecturer() {
                                 </div>
                             }
                             open={showModal}
-                            onOk={handleClose}
-                            closable={false}
+                            onOk={form.submit}
+                            onCancel={handleClose}
                             modalRender={(modal) => (
                                 <Draggable
                                     disabled={disabled}
@@ -268,39 +247,30 @@ function DashboardLecturer() {
                                 </Draggable>
                             )}
                             footer={[
-                                <><Button type='primary' onClick={handleSubmit}>
+                                <><Button key='submit' type='primary' onClick={handleSubmit}>
                                     Submit
                                 </Button>
-                                <Button onClick={handleClose}>
+                                <Button key='cancel' onClick={handleClose}>
                                     Close
                                 </Button></>
                             ]}
                         >
-                            <Form>
-                                <Form.Item label='Course Name'>
+                            <Form form={form} initialValues={initialValues} >
+                                <Form.Item name="coursename" label='Course Name'>
                                     <Input
-                                        name="coursename"
-                                        value={formData.coursename}
-                                        onChange={(e) => setFormData({ ...formData, coursename: e.target.value })}></Input>
+                                      
+                                    ></Input>
                                 </Form.Item>
-                                <Form.Item label='Creator Name'>
+                                {/* <Form.Item name="creatorname" label='Creator Name'>
                                     <Input
-                                        name="creatorname"
-                                        value={formData.creatorname}
-                                        onChange={(e) => setFormData({ ...formData, creatorname: e.target.value })}></Input>
-                                </Form.Item>
-                                <Form.Item label='Course Description'>
+                                    ></Input>
+                                </Form.Item> */}
+                                <Form.Item name="coursedescription" label='Course Description'>
                                     <Input.TextArea
-                                        name="coursedescription"
-                                        defaultValue={formData.coursedescription}
-                                        onChange={(e) => setFormData({ ...formData, coursedescription: e.target.value })}
                                     />
                                 </Form.Item>
-                                <Form.Item label='Grade Distribution'>
+                                <Form.Item name="gradedistribution" label='Grade Distribution'>
                                     <Input.TextArea
-                                        name="gradedistribution"
-                                        defaultValue={JSON.stringify(formData.gradedistribution)}
-                                        onChange={(e) => setFormData({ ...formData, gradedistribution: e.target.value })}
                                     />
                                 </Form.Item>
                             </Form>
