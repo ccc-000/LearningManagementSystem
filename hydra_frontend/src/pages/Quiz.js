@@ -11,7 +11,6 @@ function Quiz () {
     const { Header, Content, Footer, Sider } = Layout;
     const { TextArea } = Input;
     const role = localStorage.getItem('role');
-    const cname = localStorage.getItem('cname');
 
     //Create Quiz Modal
     const [questionCount, setQuestionCount] = useState(1);
@@ -207,10 +206,10 @@ function Quiz () {
                 <Button type='link' shape="circle" icon={<RollbackOutlined />} />
             </Tooltip>
             </Link>
-            <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{cname}</h2>
+            <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
         </Header>
-        <Divider orientation="left" style={{fontSize:'25px'}}>Quiz</Divider>
-        <Space style={{marginLeft:'50px', marginBottom:'15px'}}>
+        {/* <Divider orientation="left" style={{fontSize:'25px'}}>Quiz</Divider> */}
+        <Space style={{marginLeft:'50px', marginBottom:'15px', marginTop: '50px'}}>
             <li>
             <Button type="link" style={{fontSize:'20px'}} onClick={showModal}>Quiz1</Button>
             <Modal
