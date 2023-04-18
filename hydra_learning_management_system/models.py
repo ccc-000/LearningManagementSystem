@@ -1,6 +1,8 @@
 import json
 
 from django.db import models
+
+
 # Create your models here.
 class Users(models.Model):
     uid = models.AutoField(primary_key=True)
@@ -14,6 +16,7 @@ class Users(models.Model):
     birthday = models.TextField(default='')
     preferredlanguage = models.TextField(default='')
 
+
 class Courses(models.Model):
     cid = models.AutoField(primary_key=True)
     coursename = models.CharField(max_length=60)
@@ -21,9 +24,11 @@ class Courses(models.Model):
     coursedescription = models.TextField()
     gradedistribution = models.TextField()
 
+
 class Enrollments(models.Model):
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
     uid = models.ForeignKey(Users, on_delete=models.CASCADE)
+
 
 class Assessments(models.Model):
     ####################################################################
@@ -31,17 +36,19 @@ class Assessments(models.Model):
     ###################################################################
     uid = models.ForeignKey(Users, on_delete=models.CASCADE)
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
-    worklink = models.TextField(default = "{}")
-    grade = models.TextField(default = json.dumps({"quiz":{},"ass":{},"final exam":0}))
+    worklink = models.TextField(default="{}")
+    grade = models.TextField(default=json.dumps({"quiz": [], "ass": [], "final exam": 0}))
+
 
 class Quizzes(models.Model):
     qid = models.AutoField(primary_key=True)
-    cid = models.ForeignKey(Courses, on_delete=models.CASCADE,default='')
+    cid = models.ForeignKey(Courses, on_delete=models.CASCADE, default='')
     ddl = models.DateTimeField()
     q1 = models.TextField()
     q2 = models.TextField()
     q3 = models.TextField()
     ans = models.TextField()
+
 
 class Assignments(models.Model):
     aid = models.AutoField(primary_key=True)
@@ -50,11 +57,13 @@ class Assignments(models.Model):
     assignmentdescription = models.TextField(default='')
     url = models.TextField()
 
+
 class Materials(models.Model):
     mid = models.AutoField(primary_key=True)
     type = models.TextField()
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
     filepath = models.TextField()
+
 
 class Posts(models.Model):
     pid = models.AutoField(primary_key=True)
@@ -71,7 +80,16 @@ class Posts(models.Model):
     flagged = models.TextField()
     privacy = models.BooleanField()
 
+
 class Replies(models.Model):
     pid = models.ForeignKey(Posts, on_delete=models.CASCADE)
     creator_id = models.ForeignKey(Users, on_delete=models.CASCADE)
     content = models.TextField()
+
+
+class LiveStream(models.Model):
+    lid = models.AutoField(primary_key=True)
+    creatorid = models.ForeignKey(Users, on_delete=models.CASCADE)
+    cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
+    url = models.TextField()
+    attendance = models.TextField()
