@@ -1,5 +1,7 @@
 import datetime
-import json
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 from django.core import serializers
 from django.http import JsonResponse
@@ -8,7 +10,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
 
-from google.oauth2.credentials import Credentials
 
 # Create your views here.
 
@@ -128,32 +129,33 @@ def enrollcourses(request):
             course = Courses.objects.get(coursename=i)
             cid = course.cid
             uids = Enrollments.objects.filter(cid=cid)
-            uids = serializers.serialize("python",uids)
+            uids = serializers.serialize("python", uids)
             print(uids)
             uidss = []
             for i in uids:
                 tmp = i["fields"]["uid"]
                 uidss.append(tmp)
-            #for i in uids:
+            # for i in uids:
             if uid in uidss:
-                return JsonResponse({"status":500, "msg":"You have enrolled"})
-            #print(uid)
+                return JsonResponse({"status": 500, "msg": "You have enrolled"})
+            # print(uid)
             seat = len(uids)
-            #enrolllist = course.enrolllist
-            #enrolllist = json.loads(enrolllist)["enrolllist"]
-            #print(enrolllist)
+            # enrolllist = course.enrolllist
+            # enrolllist = json.loads(enrolllist)["enrolllist"]
+            # print(enrolllist)
             available = MAX_SEAT - seat
             if available > 0:
                 enroll_flag = Enrollments.objects.filter(cid=1)
                 enroll_flag = serializers.serialize("python", enroll_flag)
-                #print(enroll_flag)
+                # print(enroll_flag)
                 course = Courses.objects.get(cid=cid)
                 user = Users.objects.get(uid=uid)
                 enrollment = Enrollments.objects.create(cid=course, uid=user)
-                assessment = Assessments.objects.create(uid=user,cid=course)
+                assessment = Assessments.objects.create(uid=user, cid=course)
             else:
                 return JsonResponse({"status": 500, "msg": f"The enrollment of {i} failed"})
         return JsonResponse({'status': 200})
+
 
 @csrf_exempt
 def createdcourses(request):
@@ -174,6 +176,7 @@ def createdcourses(request):
             course.append(tmp)
         return JsonResponse({"courses": course})
 
+
 @csrf_exempt
 def showcourses(request):
     if request.method == "POST":
@@ -188,37 +191,39 @@ def showcourses(request):
             i["fields"]["creatorname"] = creatorname
             i = i["fields"]
             course.append(i)
-        #print(course)
+        # print(course)
         return JsonResponse({"courses": course})
+
 
 @csrf_exempt
 def dropcourses(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        #print(data)
+        # print(data)
         cid = data['cid']
         uid = data['uid']
         course = Courses.objects.get(cid=cid)
         user = Users.objects.get(uid=uid)
-        #course.delete()
-        enrollment = Enrollments.objects.get(cid=course,uid=user)
+        # course.delete()
+        enrollment = Enrollments.objects.get(cid=course, uid=user)
         enrollment.delete()
         return JsonResponse({'status': 200})
+
 
 @csrf_exempt
 def enrolledcourses(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        #print(data,"111")
+        # print(data,"111")
         uid = data['uid']
         cid = Enrollments.objects.filter(uid=uid)
         cid = serializers.serialize("python", cid)
-        #print(cid)
+        # print(cid)
         cids = []
         for i in cid:
             tmp = i["fields"]["cid"]
             cids.append(tmp)
-        #print(cids)
+        # print(cids)
         courses = []
         for i in cids:
             course = Courses.objects.get(cid=i)
@@ -226,7 +231,7 @@ def enrolledcourses(request):
             tmp = course[0]["fields"]
             tmp["cid"] = course[0]['pk']
             courses.append(tmp)
-        #print(courses)
+        # print(courses)
         return JsonResponse({"courses": courses})
 
 
@@ -264,10 +269,10 @@ def attendquiz(request):
         for i in range(len(ans)):
             if ans[i] == rightans[i]:
                 score += 1
-        #存分
+        # 存分
         course = Courses.objects.get(cid=cid)
         user = Users.objects.get(uid=uid)
-        assessment = Assessments.objects.get(cid=course,uid=user)
+        assessment = Assessments.objects.get(cid=course, uid=user)
         grade = assessment.grade
         grade = json.loads(grade)
         grade["quiz"].append(score)
@@ -279,26 +284,26 @@ def attendquiz(request):
 
 @csrf_exempt
 def reviewquiz(request):
-    #在此查看quiz
-    #CID UID QID
-    #quiz info right ans
+    # 在此查看quiz
+    # CID UID QID
+    # quiz info right ans
     if request.method == "POST":
         data = json.loads(request.body)
         cid = data["cid"]
         uid = data["uid"]
         qid = data["uid"]
         quiz = Quizzes.objects.get(qid=qid)
-        quiz = serializers.serialize("python",quiz)
+        quiz = serializers.serialize("python", quiz)
         quizes = []
         for i in quiz:
             tmp = i["fields"]
             quizes.append(tmp)
-    return JsonResponse({"quiz":quizes})
+    return JsonResponse({"quiz": quizes})
 
 
 @csrf_exempt
 def createass(request):
-    #git status
+    # git status
     if request.method == "POST":
         data = json.loads(request.body)
         title = data["title"]
@@ -311,6 +316,7 @@ def createass(request):
             return JsonResponse({'status': 200})
         else:
             return JsonResponse({'status': 403})
+
 
 @csrf_exempt
 def showass(request):
@@ -328,7 +334,8 @@ def showass(request):
             tmp["url"] = i["fields"]["url"]
             tmp['aid'] = i['pk']
             ass.append(tmp)
-        return JsonResponse({"asses":ass})
+        return JsonResponse({"asses": ass})
+
 
 @csrf_exempt
 def submitass(request):
@@ -337,17 +344,17 @@ def submitass(request):
         uid = data["uid"]
         cid = data["cid"]
         aid = data['aid']
-        ass = data["ass"]##link
+        ass = data["ass"]  ##link
         user = Users.objects.get(uid=uid)
         course = Courses.objects.get(cid=cid)
-        assessment = Assessments.objects.get(uid=user,cid=course)
+        assessment = Assessments.objects.get(uid=user, cid=course)
         worklink = assessment.worklink
         worklink = json.loads(worklink)
         worklink[aid] = ass
         worklink = json.dumps(worklink)
         assessment.worklink = worklink
         assessment.save()
-        return JsonResponse({"status":200})
+        return JsonResponse({"status": 200})
 
 
 @csrf_exempt
@@ -374,6 +381,7 @@ def markass(request):
 def grade(request):
     return HttpResponse()
 
+
 @csrf_exempt
 def postes(request):
     if request.method == "POST":
@@ -388,9 +396,9 @@ def postes(request):
         post["fields"]["reply"] = json.loads(post["fields"]["reply"])
         post["fields"]["likes"] = json.loads(post["fields"]["likes"])
         post["fields"]["flagged"] = json.loads(post["fields"]["flagged"])["flagged"]
-        #post["fields"]["privacy"] = json.loads(post["fields"]["privacy"])["privacy"]
+        # post["fields"]["privacy"] = json.loads(post["fields"]["privacy"])["privacy"]
         post = post["fields"]
-        #print(post)
+        # print(post)
         return JsonResponse(post)
 
 
@@ -459,9 +467,10 @@ def editposts(request):
             post.multimedia = data["multimeida"]
             post.editted = True
             post.save()
-            return JsonResponse({"status": 200, "msg":"edit success"})
+            return JsonResponse({"status": 200, "msg": "edit success"})
         else:
             return JsonResponse({"status": 403})
+
 
 @csrf_exempt
 def flagposts(request):
@@ -477,12 +486,13 @@ def flagposts(request):
             flagged = json.dumps(flagged)
             post.flagged = flagged
             post.save()
-            return JsonResponse({"status": 200, "msg":"flag removes"})
+            return JsonResponse({"status": 200, "msg": "flag removes"})
         flagged["flagged"].append(uid)
         flagged = json.dumps(flagged)
         post.flagged = flagged
         post.save()
-        return JsonResponse({"status": 200, "msg":"flag success"})
+        return JsonResponse({"status": 200, "msg": "flag success"})
+
 
 @csrf_exempt
 def replyposts(request):
@@ -514,20 +524,20 @@ def likeposts(request):
         pid = data["pid"]
         uid = data["uid"]
         post = Posts.objects.get(pid=pid)
-        likes =post.likes
+        likes = post.likes
         likes = json.loads(likes)
         if uid in likes['likes']:
             likes["likes"].remove(uid)
             likes = json.dumps(likes)
             post.likes = likes
             post.save()
-            return JsonResponse({"status": 200, "msg":"like remove"})
+            return JsonResponse({"status": 200, "msg": "like remove"})
         else:
             likes['likes'].append(uid)
             likes = json.dumps(likes)
             post.likes = likes
             post.save()
-            return JsonResponse({"status": 200, "msg":"like success"})
+            return JsonResponse({"status": 200, "msg": "like success"})
 
 
 @csrf_exempt
@@ -540,8 +550,8 @@ def setprivate(request):
         ownerid = post.creatorid.uid
         lectorid = post.cid.creatorid.uid
         uid = int(uid)
-        #print(uid, ownerid, lectorid)
-        #print(type(uid), type(ownerid), type(lectorid))
+        # print(uid, ownerid, lectorid)
+        # print(type(uid), type(ownerid), type(lectorid))
         if uid == ownerid or uid == lectorid:
             post.privacy = not post.privacy
             post.save()
@@ -624,6 +634,7 @@ def showmaterial(request):
             res.append(i)
         return JsonResponse({"material": res})
 
+
 @csrf_exempt
 def translate(request):
     if request.method == "POST":
@@ -633,78 +644,57 @@ def translate(request):
         language = user.preferredlanguage
         return JsonResponse({"language": language})
 
+
 @csrf_exempt
 def announcement(request):
     if request.method == "POST":
         data = json.loads(request.body)
         cid = data['cid']
-        title = data["title"]
+        #title = data["title"]
         content = data["content"]
         course = Courses.objects.get(cid=cid)
+        coursename = course.coursename
         enrollment = Enrollments.objects.filter(cid=course)
         enrollment = serializers.serialize("python", enrollment)
         uids = []
         for i in enrollment:
             tmp = i["fields"]["uid"]
             uids.append(tmp)
-        sendemail(uids, title, content)
-        return JsonResponse({"status":200})
+        sendemail(coursename, uids, content)
+        return JsonResponse({"status": 200})
 
-def sendemail(uids, title, content):
-    emails = []
+
+def sendemail(coursename, uids, content):
+    smtp_port = 587
+    smtp_server = 'smtp.gmail.com'
+    email_from = 'randomzsh@gmail.com'
+    pwd = 'ehomuqhuogjozndr'
+
+    body = content
+    msg = MIMEMultipart()
+    msg["From"] = email_from
+    msg["Subject"] = f"Course {coursename} Email"
+    msg.attach(MIMEText(body, "plain"))
+    TIE_server = smtplib.SMTP(smtp_server, smtp_port)
+    TIE_server.starttls()
+    TIE_server.login(email_from, pwd)
     for i in uids:
-        user = Users.objects.get(uid=i)
-        emails.append(user.email)
-    return
+        email_to = Users.objects.get(uid=i).email
+        msg["To"] = email_to
+        text = msg.as_string()
+        TIE_server.sendmail(email_from, email_to, text)
+    TIE_server.quit()
+    return JsonResponse({"status": 200, "msg": "send success"})
 
-# from google.oauth2.credentials import Credentials
-# from googleapiclient.discovery import build
-# from django.shortcuts import render
-# from django.http import JsonResponse
-#
-# def create_meeting(request):
-#     if request.method == "POST":
-#
-#     credentials = Credentials.from_authorized_user_info(request.session['credentials'])
-#
-#     service = build('calendar', 'v3', credentials=credentials)
-#
-#     meeting = service.events().insert(
-#         calendarId='primary',
-#         body={
-#             'summary': 'Test Meeting',
-#             'description': 'This is a test meeting',
-#             'start': {
-#                 'dateTime': '2023-04-20T12:00:00',
-#                 'timeZone': 'Asia/Shanghai',
-#             },
-#             'end': {
-#                 'dateTime': '2023-04-20T13:00:00',
-#                 'timeZone': 'Asia/Shanghai',
-#             },
-#             'conferenceData': {
-#                 'createRequest': {
-#                     'conferenceSolutionKey': {
-#                         'type': 'hangoutsMeet'
-#                     },
-#                     'requestId': 'randomString'
-#                 }
-#             },
-#         },
-#         conferenceDataVersion=1,
-#         sendNotifications=True,
-#     ).execute()
-#
-#     meeting_link = meeting['hangoutLink']
-#
-#     return JsonResponse({'link': meeting_link})
 
 @csrf_exempt
 def materialannouncement(request):
     if request.method == "POST":
-        return JsonResponse({"status":200})
+        data =
+        return JsonResponse({"status": 200})
+
 
 @csrf_exempt
 def onlinecourseannouncement(request):
     if request.method == "POST":
-        return JsonResponse({"status":200})
+        return JsonResponse({"status": 200})

@@ -93,3 +93,4 @@ class LiveStream(models.Model):
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
     url = models.TextField()
     attendance = models.TextField()
+    createtime = models.TextField()
