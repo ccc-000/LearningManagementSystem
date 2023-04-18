@@ -16,6 +16,9 @@ function ForumDetailStudent() {
   const [reply, setReply] = useState("");
   // const [translatedText, setTranslatedText] = useState("");
 
+  const role = localStorage.getItem('role');
+  console.log("role:", role);
+
   const { pid } = useParams();
   const navigate = useNavigate();
 
@@ -53,6 +56,24 @@ function ForumDetailStudent() {
     cursor: 'pointer',
   }
 
+  const propsPrivate = {
+    width: 80, 
+    marginRight: 30,
+    display: 'none'
+  }
+
+  const propsDelete = {
+    width: 80, 
+    marginRight: 30,
+    display: 'none'
+  }
+
+  const propsChange = {
+    width: 80, 
+    marginRight: 30,
+    display: 'none'
+  }
+
   let privatecontent = ""
   let PostDetail = "No Data"
 
@@ -72,6 +93,13 @@ function ForumDetailStudent() {
     }
     if (data.privacy) {
     privatecontent = "Public"
+    }
+    if (parseInt(localStorage.getItem("uid")) === data.creatorid) {
+      propsChange.display = 'block';
+    }
+    if (role !== "student" || parseInt(localStorage.getItem("uid")) === data.creatorid) {
+      propsPrivate.display = 'block';
+      propsDelete.display = 'block';
     }
   }
 
@@ -338,20 +366,18 @@ function ForumDetailStudent() {
           </Descriptions.Item>
           <Descriptions.Item span={2}>
             <Badge size="small" count={data ? data.likes.likes.length : 0}>
-              {/* TODO: the like and pin button should change with the state */}
               <LikeOutlined style={propsLike} onClick={handleLike}/>
             </Badge>
             <PushpinOutlined style={propsFlag} onClick={handleFlag}/>
           </Descriptions.Item>
           <Descriptions.Item >
             {contextHolder2}
-            <Button type="primary" htmlType="submit" size="medium" style={{ width: 80, marginRight: 30 }} onClick={handleDelete}>Delete</Button>
-            <Button type="primary" htmlType="submit" size="medium" style={{ width: 80, marginRight: 30 }} onClick={makePrivate}>{privatecontent}</Button>
-            <Button type="primary" htmlType="submit" size="medium" style={{ width: 80, marginRight: 30 }} onClick={handleEdit}>Edit</Button>
+            <Button type="primary" htmlType="submit" size="medium" style={propsDelete} onClick={handleDelete}>Delete</Button>
+            <Button type="primary" htmlType="submit" size="medium" style={propsPrivate} onClick={makePrivate}>{privatecontent}</Button>
+            <Button type="primary" htmlType="submit" size="medium" style={propsChange} onClick={handleEdit}>Edit</Button>
           </Descriptions.Item>
         </Descriptions>
       </div>
-      {/* This section render the reply */}
       {reply_components}
       <div className="ForumDetail-Reply">
         <TextArea rows={2} placeholder="Please input the reply" value={reply} onChange={(e) => {setReply(e.target.value)}}/>
