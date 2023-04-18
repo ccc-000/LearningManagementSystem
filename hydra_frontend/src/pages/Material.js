@@ -119,7 +119,7 @@ function Material() {
               setOpen(false);
               setConfirmLoading(false);
               PostAnnouncement('material');
-              // window.location.reload();
+              window.location.reload();
             }, 2000);
           }
           // TODO: if upload failed, show error message
