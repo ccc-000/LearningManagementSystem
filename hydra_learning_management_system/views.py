@@ -364,8 +364,8 @@ def markass(request):
         assessment = Assessments.objects.get(uid=user, cid=course)
         grade = assessment.grade
         grade = json.loads(grade)
-        grade['ass'][f'{aid}'] = mark
-        grade = grade.dumps(grade)
+        grade['ass'].append(mark)
+        grade = json.dumps(grade)
         assessment.grade = grade
         assessment.save()
         return JsonResponse({"status": 200})

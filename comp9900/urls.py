@@ -62,4 +62,8 @@ urlpatterns = [
 
     path("translate/",views.translate),
     path("announcement/",views.announcement),
+
+    # announcementpath(),#create live, show live, sholive
+    # path(),
+    # path(),
 ]
