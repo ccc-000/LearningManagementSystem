@@ -85,7 +85,7 @@ const ShowCourse = ({uid, role}) => {
           style={{ position: "relative" }}
           actions={[
             <Dropdown
-              menu={<Menu onClick={() => dropCourse(courses.cid)}>
+              overlay={<Menu onClick={() => dropCourse(courses.cid)}>
                 <Menu.Item key="1">Drop Course</Menu.Item>
               </Menu>}
               style={{ border: "none", position: "absolute", bottom: 0, right: 0 }}
