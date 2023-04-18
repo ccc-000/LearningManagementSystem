@@ -144,13 +144,6 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'randomzsh@gmail.com'
-EMAIL_HOST_PASSWORD = 'Zshh0724'
-
 # Google API Credentials
 GOOGLE_OAUTH_CLIENT_ID = '573648962323-55qjsf792hu9c6ehqb26e28bll7gqu2e.apps.googleusercontent.com'
 GOOGLE_OAUTH_CLIENT_SECRET = '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'

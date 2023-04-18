@@ -30,6 +30,7 @@ const ShowCourse = ({uid, role}) => {
   
   
   const getCourses = () => {
+    console.log('uid should be 4', uid)
     fetch(`http://localhost:8000/${fetchUrl}/`, {
       method: 'POST',
       headers: {
@@ -37,14 +38,16 @@ const ShowCourse = ({uid, role}) => {
       },
       body: JSON.stringify({'uid': uid}),
     }).then(async(response) => {
-      const jsonRes = await response.json();
-      console.log(jsonRes);
-      if (response.status !== 200) {
-        message.error(jsonRes.error);
-        return;
-      }
-      console.log(jsonRes.courses);
-      setCourseList(jsonRes.courses);
+        const jsonRes = await response.json();
+        console.log(jsonRes);
+        if (response.status !== 200) {
+            message.error(jsonRes.error);
+            return;
+        }
+        message.success('Successful!');
+   
+        setCourseList(jsonRes.courses);
+     
     })
   };
   useEffect(() => {
@@ -75,14 +78,14 @@ const ShowCourse = ({uid, role}) => {
       {courseList.map(courses => (
         <Card
           hoverable
-          className='courseCard'
+          className='cards'
           cover={<img
             alt="course"
             src={pic} />}
           style={{ position: "relative" }}
           actions={[
             <Dropdown
-              menu={<Menu onClick={() => dropCourse(courses.cid)}>
+              overlay={<Menu onClick={() => dropCourse(courses.cid)}>
                 <Menu.Item key="1">Drop Course</Menu.Item>
               </Menu>}
               style={{ border: "none", position: "absolute", bottom: 0, right: 0 }}
@@ -92,56 +95,12 @@ const ShowCourse = ({uid, role}) => {
           ]}
         >
           <Meta
-            className='meta'
+            className='card-meta'
             title={courses.coursename}
-            description={courses.coursedescription} />
-          <div onClick={() => handleNavigate(courses.cid, courses.coursename, courses.coursedescription)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
+            description={<p className="custom-card-description">{courses.coursedescription}</p>} />
+          <div onClick={() => handleNavigate(courses.cid)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
         </Card>
-      
-      
-      
-      
-        // <Card
-        //   hoverable
-        //   className="courseCard"
-        //   cover={<img alt="course" src={pic} />}
-        // >
-          
-        //   <Meta
-        //     className="meta"
-        //     title={courses.coursename}
-        //     description={courses.coursedescription}
-        //   />
-        //   <div style={{ position: "relative", display: "flex" }}>
-        //     <Dropdown
-        //       overlay={
-        //         <Menu onClick={() => dropCourse(courses.cid)}>
-        //           <Menu.Item key="1">Drop Course</Menu.Item>
-        //         </Menu>
-        //       }
-        //       style={{ border: "none" }}
-        //       placement="bottomRight"
-        //     >
-        //       <button
-        //         className="ant-dropdown-link"
-        //         onClick={(e) => e.preventDefault()}
-        //         style={{ position: "absolute", bottom: 0, right: 0, zIndex: 1 }}
-        //       >
-        //         <MoreOutlined style={{ fontSize: 16 }} />
-        //       </button>
-        //     </Dropdown>
-        //     <div
-        //       onClick={() => handleNavigate(courses.cid)}
-        //       style={{
-        //         position: "absolute",
-        //         top: 0,
-        //         left: 0,
-        //         right: 0,
-        //         bottom: 0,
-        //       }}
-        //     ></div>
-        //   </div>
-        // </Card>
+    
       
       
       

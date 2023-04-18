@@ -12,11 +12,12 @@ import {Link, useNavigate } from 'react-router-dom';
 import ShowCourse from '../components/CourseCard';
 
 const {Content, Footer, Sider} = Layout;
-const uid=localStorage.getItem('uid');
-const role=localStorage.getItem('role');
+
 
 
 function Dashboard() {
+    const uid=localStorage.getItem('uid');
+    const role=localStorage.getItem('role');
     const navigate = useNavigate();
   
     const handleLogout = () => {

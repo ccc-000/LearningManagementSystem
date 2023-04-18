@@ -19,8 +19,7 @@ import {Link, useNavigate } from 'react-router-dom';
 import ShowCourse from '../components/CourseCard';
 
 const {Content, Footer, Sider} = Layout;
-const uid=localStorage.getItem('uid');
-const role=localStorage.getItem('role');
+
  
 const items = [
     UserOutlined,
@@ -51,6 +50,8 @@ const grade = { quiz: {
     }};
 
 function DashboardLecturer() {
+    const uid=localStorage.getItem('uid');
+    const role=localStorage.getItem('role');
     const navigate = useNavigate();
     const [showCard, setShowCard] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -137,7 +138,7 @@ function DashboardLecturer() {
     const handleEditAvatar = () => {
         navigate('/editavatar')
     };
-    console.log('dashboard',uid);
+   
     return (
         <Layout hasSider>
             <Sider

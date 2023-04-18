@@ -3,6 +3,7 @@ import { Button, Table, Modal, Select, Upload, message, Layout, Tooltip} from 'a
 import {useNavigate, Link} from 'react-router-dom';
 import { UploadOutlined, RollbackOutlined } from '@ant-design/icons';
 import { Document, Page } from "@react-pdf/renderer";
+import PostAnnouncement from '../components/PostAnnouncement';
 import 'antd/dist/reset.css';
 import '../styles/Material.css';
 import Navibar from '../components/Navibar';
@@ -120,8 +121,12 @@ function Material() {
             setTimeout(() => {
               setOpen(false);
               setConfirmLoading(false);
-              window.location.reload();
+              PostAnnouncement('material');
+              
             }, 2000);
+            setTimeout(() => {
+              window.location.reload();
+            }, 3500);
           }
           // TODO: if upload failed, show error message
         });

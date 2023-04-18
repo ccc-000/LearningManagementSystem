@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { LikeOutlined, PushpinOutlined } from '@ant-design/icons';
 import { Input, Button, Descriptions, Badge, message, notification, Space } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-// import { Translate } from "@google-cloud/translate";
-
 import 'antd/dist/reset.css';
 import '../styles/ForumDetail-student.css';
 const { TextArea } = Input;
@@ -14,13 +12,10 @@ function ForumDetailStudent() {
   const [api1, contextHolder2] = notification.useNotification();
   const [data, setData] = useState(undefined);
   const [reply, setReply] = useState("");
-  // const [translatedText, setTranslatedText] = useState("");
-
-  const role = localStorage.getItem('role');
-  console.log("role:", role);
-
+  const [isTranslated, setIsTranslated] = useState(false);
   const { pid } = useParams();
   const navigate = useNavigate();
+  const role = localStorage.getItem("role");
 
   // Receive post data from the backend
   useEffect(() => {
@@ -49,10 +44,10 @@ function ForumDetailStudent() {
     fontSize: 23,
     cursor: 'pointer',
   }
-  
+
   const propsFlag = {
-    fontSize: 23, 
-    marginLeft: 30, 
+    fontSize: 23,
+    marginLeft: 30,
     cursor: 'pointer',
   }
 
@@ -79,6 +74,10 @@ function ForumDetailStudent() {
 
   if (data) {
     PostDetail = data ? data.content : "No data";
+    // Give different text if the post is translated 
+    if (isTranslated) {
+      PostDetail = data.translation;
+    }
     if (data.editted) {
       propsEdit.display = 'block';
     }
@@ -89,10 +88,10 @@ function ForumDetailStudent() {
       propsFlag.color = 'blue';
     }
     if (!data.privacy) {
-    privatecontent = "Private"
+      privatecontent = "Private"
     }
     if (data.privacy) {
-    privatecontent = "Public"
+      privatecontent = "Public"
     }
     if (parseInt(localStorage.getItem("uid")) === data.creatorid) {
       propsChange.display = 'block';
@@ -105,11 +104,11 @@ function ForumDetailStudent() {
 
   function handleLike() {
     if (data.likes.likes.includes(localStorage.getItem('uid'))) {
-      let likedata = {...data};
+      let likedata = { ...data };
       likedata.likes.likes = data.likes.likes.filter(uid => uid !== localStorage.getItem('uid'))
       setData(likedata)
-    }else{
-      let likedata = {...data};
+    } else {
+      let likedata = { ...data };
       likedata.likes.likes.push(localStorage.getItem('uid'))
       setData(likedata)
     }
@@ -125,7 +124,7 @@ function ForumDetailStudent() {
     })
       .then((response) => response.json())
       .then((data) => {
-        if(data.status === 200){
+        if (data.status === 200) {
           console.log(data);
         }
       });
@@ -133,11 +132,11 @@ function ForumDetailStudent() {
 
   function handleFlag() {
     if (data.flagged.includes(localStorage.getItem('uid'))) {
-      let flagdata = {...data};
+      let flagdata = { ...data };
       flagdata.flagged = data.flagged.filter(uid => uid !== localStorage.getItem('uid'))
       setData(flagdata)
-    }else{
-      let flagdata = {...data};
+    } else {
+      let flagdata = { ...data };
       flagdata.flagged.push(localStorage.getItem('uid'))
       setData(flagdata)
     }
@@ -153,7 +152,7 @@ function ForumDetailStudent() {
     })
       .then((response) => response.json())
       .then((data) => {
-        if(data.status === 200){
+        if (data.status === 200) {
           console.log(data);
         }
       });
@@ -161,11 +160,11 @@ function ForumDetailStudent() {
 
   function makePrivate() {
     if (data.privacy) {
-      let privatedata = {...data};
+      let privatedata = { ...data };
       privatedata.privacy = "False"
       setData(privatedata)
-    }else{
-      let privatedata = {...data};
+    } else {
+      let privatedata = { ...data };
       privatedata.privacy = "True"
       setData(privatedata)
     }
@@ -182,9 +181,9 @@ function ForumDetailStudent() {
     })
       .then((response) => response.json())
       .then((data) => {
-        if(data.status === 200){
+        if (data.status === 200) {
           console.log(data);
-        }else{
+        } else {
           console.log(data);
         }
       });
@@ -197,7 +196,7 @@ function ForumDetailStudent() {
       type: 'loading',
       content: 'Deleting...',
     });
-    fetch ('http://localhost:8000/deleteposts/', {
+    fetch('http://localhost:8000/deleteposts/', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -207,26 +206,26 @@ function ForumDetailStudent() {
         uid: localStorage.getItem('uid')
       }),
     })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      if (data.status === 200) {
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.status === 200) {
+          messageApi1.destroy();
+          messageApi1.open({
+            type: 'success',
+            content: 'Deleted!',
+            duration: 2,
+          });
+          setTimeout(() => {
+            navigate('/coursemainpage/forum');
+          }, 2100);
+        }
+      })
+      .catch((error) => {
         messageApi1.destroy();
-        messageApi1.open({
-          type: 'success',
-          content: 'Deleted!',
-          duration: 2,
-        });
-        setTimeout(() => {
-          navigate('/coursemainpage/forum');
-        }, 2100);
-      }
-    })
-    .catch((error) => {
-      messageApi1.destroy();
-      messageApi1.error("Cannot connect to the server")
-      console.error(error);
-    })
+        messageApi1.error("Cannot connect to the server")
+        console.error(error);
+      })
   }
 
   //delete post confirm
@@ -258,20 +257,15 @@ function ForumDetailStudent() {
     navigate('/coursemainpage/editforum/' + pid);
   }
 
-  //translate
-  // const translateContent = async (text, targetLanguage) => {
-  //   try {
-  //     const translate = new Translate({ projectId: 'local-chalice-384004', keyFilename: '../local-chalice-384004-8eb37a93be31.json' }); // 替换成你的 GCP 项目 ID 和 API 密钥文件路径
-  //     const [translation] = await translate.translate(text, targetLanguage);
-  //     setTranslatedText(translation);
-  //   } catch (error) {
-  //     console.error("Translation error:", error);
-  //   }
-  // };
-
-  function handleTranslate() {
-    console.log("translate");
-    fetch('http://localhost:8000/translate/', {
+  async function handleTranslate() {
+    if (isTranslated) {
+      setIsTranslated(false);
+      return;
+    }
+    // Set the content is translated
+    setIsTranslated(true);
+    // Request the backend to find the user prefered language
+    const targetLan = await fetch('http://localhost:8000/translate/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -281,12 +275,50 @@ function ForumDetailStudent() {
       }),
     })
       .then(response => response.json())
-      .then(data => {
-        console.log(data.language);
-        // translateContent(PostDetail, data.language);
+      .then((data) => data.language);
+
+    var target = ""
+    switch (targetLan) {
+      case ("Chinese"):
+        target = "zh";
+        break;
+      case ("German"):
+        target = "de";
+        break;
+      case ("Russain"):
+        target = "ru";
+        break;
+      case ("French"):
+        target = "fr";
+        break;
+      case ("Japanese"):
+        target = "ja";
+        break;
+      default:
+        target = "en";
+    }
+
+    // Send to google API
+    // IMPORTANT: THE API IS HARD CODED AND MAY EXPIRE
+    fetch('https://translation.googleapis.com/language/translate/v2?key=AIzaSyDjnGFmUnXVdGY2CONQhyff3hcPyKsD7ec', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // TODO: translate according to the user preference
+      body: JSON.stringify({
+        q: [data.content],
+        source: "en",
+        target: target,
+        format: "text"
+      }),
+    })
+      .then(response => response.json())
+      .then(received_data => {
+        console.log(received_data.data.translations[0].translatedText);
+        setData({ ...data, translation: received_data.data.translations[0].translatedText })
       }
-    );
-    // PostDetail = translatedText;
+      );
   }
 
   // Handle submit reply
@@ -303,20 +335,20 @@ function ForumDetailStudent() {
         content: reply
       }),
     })
-    .then(response => response.json())
-    .then((fetched_data) => {
-      if (fetched_data.status === 200) {
-        const new_data = {...data};
-        new_data.reply.reply.push({
-          [localStorage.getItem("uid")] : [reply]
-        })
-        setReply("")
-        setData(new_data)
-      }
-    })
-    .catch((e) => {
-      console.log(e)
-    })
+      .then(response => response.json())
+      .then((fetched_data) => {
+        if (fetched_data.status === 200) {
+          const new_data = { ...data };
+          new_data.reply.reply.push({
+            [localStorage.getItem("uid")]: [reply]
+          })
+          setReply("")
+          setData(new_data)
+        }
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   }
 
   // Generate reply list from data
@@ -327,12 +359,12 @@ function ForumDetailStudent() {
       reply_components.push(
         <div className="ForumDetail-Reply">
           <Descriptions>
-              <Descriptions.Item label="Reply from" span={3}>{Object.keys(e)[0]}</Descriptions.Item>
-              <Descriptions.Item label="Content" span={3}>
-                {Object.values(e)[0]}
-              </Descriptions.Item>
-            </Descriptions>
-          </div>
+            <Descriptions.Item label="Reply from" span={3}>{Object.keys(e)[0]}</Descriptions.Item>
+            <Descriptions.Item label="Content" span={3}>
+              {Object.values(e)[0]}
+            </Descriptions.Item>
+          </Descriptions>
+        </div>
       )
     })
   }
@@ -351,11 +383,9 @@ function ForumDetailStudent() {
           <Descriptions.Item label="Post Time">{data ? data.createtime.slice(0, 10) : "No data"}</Descriptions.Item>
           <Descriptions.Item label="Keyword" span={2}>{data ? data.keyword : "No data"}</Descriptions.Item>
           <Descriptions.Item span={1} style={{ float: 'right' }}>
-            <Button htmlType="submit" size="small" style={{ width: 80, marginRight: 30 }} onClick={handleTranslate}>Translate</Button>
+            <Button htmlType="submit" size="small" style={{ width: 80, marginRight: 30 }} onClick={handleTranslate}>{isTranslated ? "Undo" : "Translate"}</Button>
           </Descriptions.Item>
           <Descriptions.Item label="Content" span={3}>
-            {/* {t({{data}} ? {{data.content}} : "No data"}})} */}
-            {/* {data ? data.content : "No data"} */}
             {PostDetail}
           </Descriptions.Item>
           <Descriptions.Item span={2}>
@@ -366,9 +396,9 @@ function ForumDetailStudent() {
           </Descriptions.Item>
           <Descriptions.Item span={2}>
             <Badge size="small" count={data ? data.likes.likes.length : 0}>
-              <LikeOutlined style={propsLike} onClick={handleLike}/>
+              <LikeOutlined style={propsLike} onClick={handleLike} />
             </Badge>
-            <PushpinOutlined style={propsFlag} onClick={handleFlag}/>
+            <PushpinOutlined style={propsFlag} onClick={handleFlag} />
           </Descriptions.Item>
           <Descriptions.Item >
             {contextHolder2}
@@ -380,7 +410,7 @@ function ForumDetailStudent() {
       </div>
       {reply_components}
       <div className="ForumDetail-Reply">
-        <TextArea rows={2} placeholder="Please input the reply" value={reply} onChange={(e) => {setReply(e.target.value)}}/>
+        <TextArea rows={2} placeholder="Please input the reply" value={reply} onChange={(e) => { setReply(e.target.value) }} />
         <Button type="primary" htmlType="submit" size="medium" style={{ marginLeft: 30 }} onClick={handleSubmit}>Reply</Button>
       </div>
     </div>
