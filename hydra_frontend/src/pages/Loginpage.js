@@ -27,7 +27,7 @@ export default function Loginpage() {
                     localStorage.setItem('role', data.role);
                     console.log(data.uid)
                     if (data.role === 'lecturer') {
-                        navigate("dashboardlecturer");
+                        navigate("/dashboardlecturer");
                     } else {
                         navigate("/dashboard");
                     }

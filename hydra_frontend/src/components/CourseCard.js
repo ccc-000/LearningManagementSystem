@@ -27,6 +27,7 @@ const ShowCourse = ({uid, role}) => {
  
   
   const getCourses = () => {
+    console.log('uid should be 4', uid)
     fetch(`http://localhost:8000/${fetchUrl}/`, {
       method: 'POST',
       headers: {
@@ -44,6 +45,7 @@ const ShowCourse = ({uid, role}) => {
         console.log('show course list success');
         console.log(jsonRes.courses);
         setCourseList(jsonRes.courses);
+        console.log(JSON.stringify(jsonRes.courses));
         console.log('course list cid', courseList[0].cid);
     })
   };
@@ -75,7 +77,7 @@ const ShowCourse = ({uid, role}) => {
       {courseList.map(courses => (
         <Card
           hoverable
-          className='courseCard'
+          className='cards'
           cover={<img
             alt="course"
             src={pic} />}
@@ -92,9 +94,9 @@ const ShowCourse = ({uid, role}) => {
           ]}
         >
           <Meta
-            className='meta'
+            className='card-meta'
             title={courses.coursename}
-            description={courses.coursedescription} />
+            description={<p className="custom-card-description">{courses.coursedescription}</p>} />
           <div onClick={() => handleNavigate(courses.cid)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
         </Card>
       
