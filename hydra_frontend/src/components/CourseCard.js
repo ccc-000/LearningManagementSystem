@@ -100,51 +100,7 @@ const ShowCourse = ({uid, role}) => {
             description={<p className="custom-card-description">{courses.coursedescription}</p>} />
           <div onClick={() => handleNavigate(courses.cid)} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}></div>
         </Card>
-      
-      
-      
-      
-        // <Card
-        //   hoverable
-        //   className="courseCard"
-        //   cover={<img alt="course" src={pic} />}
-        // >
-          
-        //   <Meta
-        //     className="meta"
-        //     title={courses.coursename}
-        //     description={courses.coursedescription}
-        //   />
-        //   <div style={{ position: "relative", display: "flex" }}>
-        //     <Dropdown
-        //       overlay={
-        //         <Menu onClick={() => dropCourse(courses.cid)}>
-        //           <Menu.Item key="1">Drop Course</Menu.Item>
-        //         </Menu>
-        //       }
-        //       style={{ border: "none" }}
-        //       placement="bottomRight"
-        //     >
-        //       <button
-        //         className="ant-dropdown-link"
-        //         onClick={(e) => e.preventDefault()}
-        //         style={{ position: "absolute", bottom: 0, right: 0, zIndex: 1 }}
-        //       >
-        //         <MoreOutlined style={{ fontSize: 16 }} />
-        //       </button>
-        //     </Dropdown>
-        //     <div
-        //       onClick={() => handleNavigate(courses.cid)}
-        //       style={{
-        //         position: "absolute",
-        //         top: 0,
-        //         left: 0,
-        //         right: 0,
-        //         bottom: 0,
-        //       }}
-        //     ></div>
-        //   </div>
-        // </Card>
+    
       
       
       
