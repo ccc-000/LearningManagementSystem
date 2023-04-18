@@ -32,20 +32,51 @@ function Quiz () {
     const showModal = () => {
         setOpen(true);
     };
-    const handleOk = () => {
-      };
 
+
+    const data = {};
+    questionData.forEach((question, index) => {
+        // 根据索引创建一个问题的键
+        const questionKey = `q${index + 1}`;
+      
+        // 创建一个名为"ans"的对象，用于存储答案信息
+        const ans = {};
+      
+        // 根据问题的类型来存储答案
+        if (question.type === "single") {
+        //   ans.selected = selectedValues;
+        // } else {
+        //   ans.selected = checkedValues;
+        }
+      
+        // 将问题信息和答案信息存储在一个字符串中
+        const questionStr = `{description: ${question.question}, `;
+        const optionsStr = question.options.map(
+          (option) => `${option.value}: ${option.input}`
+        );
+        
+        const ansStr = `ans: ${ans.selected}, type: ${question.type}}`;
+      
+        // 将问题信息和答案信息合并成一个字符串
+        const questionDataStr = questionStr + optionsStr.join(", ") + ", " + ansStr;
+      
+        // 将问题信息添加到"data"对象中
+        data[questionKey] = questionDataStr;
+      });
+    
     const handleSubmit = () => {
         setOpen(false);
-        const data = questionData.map(question => ({
-            question: question.question,
-            type: question.type,
-            options: question.options.map(option => ({
-              label: option.label,
-              value: option.value,
-              input: option.input
-            }))
-        }));
+        // const data = questionData.map(question => ({
+        //     question: question.question,
+        //     type: question.type,
+        //     options: question.options.map(option => ({
+        //         label: option.label,
+        //         value: option.value,
+        //         input: option.input,
+        //     })),
+        //     ans: ansValues,
+        // }));
+        console.log(data);
     };
     
     
@@ -70,6 +101,19 @@ function Quiz () {
     newQuestionData[questionIndex].options[optionIndex].input = event.target.value;
     setQuestionData(newQuestionData);
     }
+
+    const handleRadioChange = (questionIndex, optionIndex) => {
+        const newData = [...questionData];
+        newData[questionIndex].selectedOption = optionIndex;
+        setQuestionData(newData);
+      };
+
+      const handleCheckboxChange = (questionIndex, checkedValues) => {
+        const newData = [...questionData];
+        newData[questionIndex].selectedOption = checkedValues;
+        setQuestionData(newData);
+      };
+      
 
     function handleAddQuestion() {
     setQuestionCount(questionCount + 1);
@@ -137,7 +181,10 @@ function Quiz () {
                             <Radio value="multiple">Multiple choice</Radio>
                         </Radio.Group>
                             {question.type === 'single' ? (
-                                <Radio.Group style={{ marginTop: '10px' }}>
+                                <Radio.Group 
+                                    style={{ marginTop: '10px' }} 
+                                    value={questionData[index].selectedOption}
+                                    onChange={(e) => handleRadioChange(index, e.target.value)}>
                                 {question.options.map((option, optionIndex) => (
                                     <Radio style={{marginTop:'10px'}} key={optionIndex} value={option.value}>
                                     {option.label}
@@ -152,10 +199,13 @@ function Quiz () {
                             ))}
                         </Radio.Group>
                         ) : (
-                            <Checkbox.Group style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', flexWrap: 'wrap'}} >
+                            <Checkbox.Group 
+                                value={questionData[index].selectedOption}
+                                onChange={(checkedValues) => handleCheckboxChange(index, checkedValues)}
+                                style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', flexWrap: 'wrap'}} >
                             {question.options.map((option, optionIndex) => (
                                 <div key={optionIndex} style={{ marginBottom: '10px' }}>
-                                    <Checkbox value={option.value} style={{marginTop:'10px'}}>
+                                    <Checkbox style={{marginTop:'10px'}} value={option.value}>
                                     {option.label}
                                     <TextArea
                                         autoSize
