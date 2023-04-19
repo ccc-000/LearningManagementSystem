@@ -158,7 +158,7 @@ def forget_pwd_send_link_2(request):
         users = serializers.serialize("python", users)
         names = []
         for i in users:
-            names.append(i["fields"]["email"])
+            names.append(i["fields"]["name"])
         if username not in names:
             return JsonResponse({'status': 403, 'msg': 'Error: This username never exists.'})
         pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
@@ -234,6 +234,17 @@ def enrollcourses(request):
             else:
                 return JsonResponse({"status": 500, "msg": f"The enrollment of {i} failed"})
         return JsonResponse({'status': 200})
+
+@csrf_exempt
+def deletecourses(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        cid = data['cid']
+        course = Courses.objects.get(cid=cid)
+        course.delete()
+        return JsonResponse({"status":200})
+
 
 
 @csrf_exempt

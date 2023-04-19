@@ -32,6 +32,7 @@ urlpatterns = [
     path("createdcourses/", views.createdcourses),
     path("dropcourses/", views.dropcourses),
     path("enrolledcourses/", views.enrolledcourses),
+    path("deletecourses/", views.deletecourses)
 
     path("createquiz/", views.createquiz),
     path("attendquiz/", views.attendquiz),
