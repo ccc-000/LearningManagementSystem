@@ -16,6 +16,7 @@ class Users(models.Model):
     birthday = models.TextField(default='')
     preferredlanguage = models.TextField(default='')
     avatar = models.TextField(default='')
+    zoomlink = models.TextField(default='')
 
 
 class Courses(models.Model):
