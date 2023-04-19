@@ -55,24 +55,28 @@ function Quiz () {
     const handleSubmit = () => {
         setOpen(false);
         axios.post('http://localhost:8000/createquiz/', {
-            ddl:'10',
-            q1:quizData[0],
-            q2:quizData[1],
-            q3:quizData[2],
+            ddl: '10',
+            q1: quizData[0],
+            q2: quizData[1],
+            q3: quizData[2],
             ans: ans.join(' '),
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 200){
+        .then(({ data }) => {
+            if (data.status === 200) {
                 message.success('Quiz created successfully');
-            }
-            else{
+            } else {
                 message.error('Failed to create quiz');
             }
         })
+        .catch((error) => {
+            console.log(error);
+            message.error('Failed to create quiz');
+        });
+    
         console.log(quizData);
         console.log(ans.join(' '));
     };
+    
     
     
     const handleCancel = () => {
