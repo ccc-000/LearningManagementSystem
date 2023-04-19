@@ -1,70 +1,109 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { UploadOutlined, UserOutlined, LogoutOutlined, RollbackOutlined } from '@ant-design/icons';
 import { Card, Button, Avatar, Upload, message, notification, Space, Layout, Menu, Tooltip } from 'antd';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/EditAvatar.css';
-import avatar from '../img/avatar.png';
+import avatar from '../img/hydra2.png';
 
 const {Header, Content, Footer, Sider} = Layout;
 
 function EditAvatar() {
     const [messageApi, contextHolder1] = message.useMessage();
     const [api, contextHolder2] = notification.useNotification();
+    const [ava, setAva] = useState();
+    const [defaultAvatar, setDefault] = useState();
     const navigate = useNavigate();
 
     const role = localStorage.getItem('role');
 
-    //Upload avatar
-    const [fileList, setFileList] = useState([
-        {
-          uid: '-1',
-          name: 'xxx.png',
-          status: 'done',
-          url: 'http://www.baidu.com/xxx.png',
+    //Get avatar
+    useEffect(() => {
+      fetch('http://localhost:8000/downloadavatar/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-    ]);
-    const handleChange = (info) => {
-      let newFileList = [...info.fileList];
-
-      // 1. Limit the number of uploaded files
-      // Only to show two recent uploaded files, and old ones will be replaced by the new
-      newFileList = newFileList.slice(-2);
-
-      // 2. Read from response and show file link
-      newFileList = newFileList.map((file) => {
-        if (file.response) {
-          // Component will show file.url as link
-          file.url = file.response.url;
+        body: JSON.stringify({
+          uid: localStorage.uid,
+        }),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.status === 200) {
+          if(data.avatar === null){
+            setDefault(avatar);
+            setAva(avatar);
+          }else{
+            setDefault(data.avatar);
+            setAva(data.avatar);
+          }
         }
-        return file;
+      })
+      .catch((error) => {
+        console.error('Error:', error);
       });
-      setFileList(newFileList);
+    }, []);
+
+    //Upload avatar
+    const convertBase64 = (file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+  
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+  
+        reader.onerror = (error) => {
+          reject(error);
+        };
+      })
     };
-    const props = {
-      action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-      onChange: handleChange,
-      multiple: true,
-    };
+
+    const multimediaHandler = async (e) => {
+      // Get the file obj from the file list
+      if (e.fileList[0] === undefined) {
+        setAva(avatar);
+      }else{
+        const file = e.fileList[0].originFileObj;
+        const file_base64 = await convertBase64(file);
+        setAva(file_base64);
+        console.log(file_base64);
+      }
+    }
 
     //Save modification
     function handleSave() {
       messageApi.open({
         type: 'loading',
         content: 'Updating...',
-        duration: 2,
       });
-      setTimeout(() => {
-        messageApi.open({
-          type: 'success',
-          content: 'Updated!',
-          duration: 2,
-        });
-      }, 2100);
-      setTimeout(() => {
-        navigate(role === 'student'?'/dashboard':'/dashboardlecturer');
-      }, 3500);
+      fetch('http://localhost:8000/uploadavatar/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: localStorage.uid,
+          avatar: ava,
+        }),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.status === 200) {
+          messageApi.destroy();
+          messageApi.success("Success!")
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        messageApi.destroy();
+        messageApi.error("Cannot connect to the server")
+      });
     }
 
     //Cancel modification
@@ -130,7 +169,7 @@ function EditAvatar() {
                     cursor: 'pointer',
                     marginLeft: '80px',
                 }}
-                src={avatar} onClick={handleEditAvatar}/>
+                src={defaultAvatar} onClick={handleEditAvatar}/>
                 <Menu.Item
                     key="profile"
                     icon={<UserOutlined />}
@@ -155,11 +194,12 @@ function EditAvatar() {
             }}
         >
             <Header style={{ padding: '2px 10px' }}>
-                <Link to='/dashboardLecturer'>
+                <Link to={role === 'lecturer' ? '/dashboardLecturer' : '/dashboard'}>
                     <Tooltip title="Back">
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                     </Tooltip>
                 </Link>
+                <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>Edit Avatar</h2>
             </Header>
             <Content>
               <div className="ChangeAvatar">
@@ -172,11 +212,17 @@ function EditAvatar() {
                   }}
                 >
                   <div id="ChangeAvatar-Avatar">
-                    <Avatar shape="square" size={128} icon={<UserOutlined />} />
+                    <Avatar shape="square" size={128} src={ava} />
                   </div>
                   <div id="ChangeAvatar-Content">
-                    <Upload {...props} fileList={fileList}>
-                        <Button icon={<UploadOutlined />}>Choose a file</Button>
+                    <Upload
+                      // This line is to prevent automatic uploading
+                      beforeUpload={() => false}
+                      onChange={multimediaHandler}
+                      maxCount={1}
+                      className="upload-list-inline"
+                    >
+                      <Button icon={<UploadOutlined />}>Upload</Button>
                     </Upload>
                   </div>
                   <div id="ChangeAvatar-Submit">

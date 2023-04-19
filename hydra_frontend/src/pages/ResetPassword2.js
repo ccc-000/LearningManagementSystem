@@ -70,8 +70,20 @@ function ResetPassword2() {
                 maxWidth: 600,
             }}
             scrollToFirstError
+            onFinish={onFinish}
             >
-
+            <Form.Item
+                name="username"
+                label="Username"
+                rules={[
+                {
+                    required: true,
+                    message: 'Please input your username!',
+                },
+                ]}
+            >
+                <Input />
+            </Form.Item>
             <Form.Item
                 name="password"
                 label="Password"
@@ -107,11 +119,11 @@ function ResetPassword2() {
             >
                 <Input.Password />
             </Form.Item>
+            <Form.Item style={{textAlign: 'center', marginLeft: 120, marginTop: 60, marginBottom: -10}}>
+              {contextHolder}
+              <Button type="primary" htmlType="submit">Submit</Button>
+            </Form.Item>
           </Form>
-        </div>
-        <div id="ResetPassword-Submit">
-          {contextHolder}
-          <Button type="primary" htmlType="submit" size="large" style={{width: 100}} onClick={onFinish}>Submit</Button>
         </div>
       </Card>
     </div>
