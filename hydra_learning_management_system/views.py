@@ -114,8 +114,28 @@ def editprofile(request):
 
 
 @csrf_exempt
-def forget_pwd_send_link(request):
-    return
+def forget_pwd_send_link_1(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        email_to = data["email"]
+        smtp_port = 587
+        smtp_server = 'smtp.gmail.com'
+        email_from = 'randomzsh@gmail.com'
+        pwd = 'ehomuqhuogjozndr'
+
+        body = "This is the reset pwd link: http://localhost:3000/resetpassword/2"
+        msg = MIMEMultipart()
+        msg["From"] = email_from
+        msg["Subject"] = "reset pwd"
+        msg.attach(MIMEText(body, "plain"))
+        TIE_server = smtplib.SMTP(smtp_server, smtp_port)
+        TIE_server.starttls()
+        TIE_server.login(email_from, pwd)
+        msg["To"] = email_to
+        text = msg.as_string()
+        TIE_server.sendmail(email_from, email_to, text)
+        TIE_server.quit()
+        return JsonResponse({"status": 200, "msg": "send success"})
 
 
 @csrf_exempt
@@ -264,8 +284,7 @@ def enrolledcourses(request):
 def createquiz(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        print(data)
-        ddl = data["ddl"]
+        #ddl = data["ddl"]
         ##data["q1"] = str "{description: 1+1, A:2,b:3,c:4,d:5,ans: A}"
         ##data["q2"] = str "{description: 1+1, A:2,b:3,c:4,d:5,ans: AB}"
         q1 = data["q1"]

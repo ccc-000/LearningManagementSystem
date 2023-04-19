@@ -44,7 +44,7 @@ class Assessments(models.Model):
 class Quizzes(models.Model):
     qid = models.AutoField(primary_key=True)
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE, default='')
-    ddl = models.DateTimeField()
+    ddl = models.TextField(default='')
     q1 = models.TextField()
     q2 = models.TextField()
     q3 = models.TextField()
