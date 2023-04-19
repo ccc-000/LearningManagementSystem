@@ -235,6 +235,7 @@ function EditProfile() {
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                     </Tooltip>
                 </Link>
+                <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>Edit Profile</h2>
             </Header>
             <Content>
               <div id="EditProfile-Content">

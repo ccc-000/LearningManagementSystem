@@ -115,6 +115,7 @@ function CourseHistory() {
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                     </Tooltip>
                 </Link>
+                {role === "student" ? <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>Enrolment History</h2> : <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>Course History</h2>}
             </Header>
             <Content>
               <div className="EnrolmentHistory">

@@ -20,7 +20,7 @@ function EditAvatar() {
 
     //Get avatar
     useEffect(() => {
-      fetch('http://localhost:8000/getavatar/', {
+      fetch('http://localhost:8000/downloadavatar/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ function EditAvatar() {
         type: 'loading',
         content: 'Updating...',
       });
-      fetch('http://localhost:8000/updateavatar/', {
+      fetch('http://localhost:8000/uploadavatar/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -199,6 +199,7 @@ function EditAvatar() {
                     <Button type='link' shape="circle" icon={<RollbackOutlined />} />
                     </Tooltip>
                 </Link>
+                <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>Edit Avatar</h2>
             </Header>
             <Content>
               <div className="ChangeAvatar">
