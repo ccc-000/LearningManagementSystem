@@ -171,6 +171,38 @@ function OnlineLecture() {
         setOpen(false);
     };
 
+    const handleStartLive = () => {
+        fetch('http://localhost:8000/startlivestream/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                uid: localStorage.getItem('uid')
+            }),
+        })
+        .then(res => res.json())
+        .then(data => {
+            window.location.assign(data.zoomlink)
+        })
+    }
+
+    const handleShowLive = () => {
+        fetch('http://localhost:8000/showlive/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cid: localStorage.getItem('cid')
+            }),
+        })
+        .then(res => res.json())
+        .then(data => {
+            window.location.assign(data.zoomlink)
+        })
+    }
+
     const CourseMsg = "This live is for lecture 1";
     const SectionName = localStorage.getItem('cname') + " —— Online Lecture";
 
@@ -194,11 +226,11 @@ function OnlineLecture() {
                     <div className="OnlineLecture-Create">
                         {role !== 'student' ?
                             <Tooltip placement="right" title="Don't forget to start record the online lecture!">
-                                <Button type="primary" htmlType="submit" size="large" style={{width: 160, marginRight: 50}}>Start a live stream</Button>
+                                <Button type="primary" htmlType="submit" size="large" style={{width: 160, marginRight: 50}} onClick={handleStartLive}>Start a live stream</Button>
                             </Tooltip>
                         :
                             <Tooltip placement="bottom" title={CourseMsg}>
-                                <Button type="primary" htmlType="submit" size="large" style={{width: 200, marginRight: 50}}>Join a live stream</Button>
+                                <Button type="primary" htmlType="submit" size="large" style={{width: 200, marginRight: 50}} onClick={handleShowLive}>Join a live stream</Button>
                             </Tooltip>
                         }    
                     </div>
