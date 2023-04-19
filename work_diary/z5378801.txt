@@ -39,3 +39,8 @@
 1. add navibar to all page(half)
 2. optimize page
 3. test and debug 1.0
+
+4.19
+1. add message and check of action
+2. show avatar on navibar
+3. test and debug 2.0
