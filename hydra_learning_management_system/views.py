@@ -82,6 +82,7 @@ def showprofile(request):
         gender = user_info.gender
         birthday = user_info.birthday
         email = user_info.email
+        zoomlink = user_info.zoomlink
         preferedlanguage = user_info.preferredlanguage
         return JsonResponse({
             "Firstname": firstname,
@@ -89,7 +90,8 @@ def showprofile(request):
             "gender": gender,
             "birthday": birthday,
             "email": email,
-            "language": preferedlanguage
+            "language": preferedlanguage,
+            "zoomlink": zoomlink
         })
 
 
@@ -104,6 +106,7 @@ def editprofile(request):
         birthday = data["birthday"]
         email = data["email"]
         language = data["preferedlanguage"]
+        zoomlink = data["zoomlink"]
         user = Users.objects.get(uid=uid)
         user.firstname = firstname
         user.lastname = lastname
@@ -111,6 +114,7 @@ def editprofile(request):
         user.birthday = birthday
         user.email = email
         user.preferredlanguage = language
+        user.zoomlink = zoomlink
         user.save()
         return JsonResponse({"status": 200})
 
