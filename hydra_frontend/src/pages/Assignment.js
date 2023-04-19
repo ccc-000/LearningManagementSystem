@@ -4,8 +4,8 @@ import pic from '../img/hydra1.png';
 import '../styles/Assignment.css';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { Divider, Layout, Tooltip, Upload, Avatar, Card } from 'antd';
-import { Button, Modal, Space, Input, message, List } from 'antd';
+import { Layout, Tooltip, Upload, Avatar, Card } from 'antd';
+import { Button, Modal, Space, Input, message } from 'antd';
 import { RollbackOutlined, UploadOutlined, FundOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
@@ -76,7 +76,7 @@ export default function Assignment() {
         setOpen(false);
     };
 
-    //Lecturer Assignment List
+    //Assignment List
     const [assList, setAssList] = useState([]);
     useEffect(() => {
         axios.post('http://localhost:8000/showass/', {
@@ -151,7 +151,6 @@ export default function Assignment() {
             </Link>
             <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
             </Header>
-            {/* <Divider orientation="left" style={{fontSize:'25px'}}>Assignment</Divider> */}
             <Space style={{marginLeft:'58px', marginBottom:'15px', marginTop: '40px'}}>
                 <Button type="primary" size = "large" onClick={() => openModal('modal1')} style={{marginLeft:'20px'}}>Create a new assignment</Button>
                 <Modal
@@ -187,6 +186,7 @@ export default function Assignment() {
                     <div key={ass.pk} class="box">
                         <a href={ass.url}>
                         <Card
+                            hoverable
                             style={{
                             width: 300,
                             position: 'relative' 
@@ -257,12 +257,12 @@ export default function Assignment() {
                 </Link>
                 <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
             </Header>
-            {/* <Divider orientation="left" style={{fontSize:'25px'}}>Assignment</Divider> */}
             <div class="container"> 
                 {assList.map((ass) => (
                     <div key={ass.pk} class="box">
                         <a href={ass.url}>
                         <Card
+                            hoverable
                             style={{
                             width: 300,
                             position: 'relative' 
