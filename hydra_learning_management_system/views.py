@@ -1,4 +1,5 @@
 import datetime
+import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -9,6 +10,7 @@ from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
+
 
 # from google.oauth2.credentials import Credentials
 
@@ -25,6 +27,21 @@ def register(request):
         password = data['password']
         email = data['email']
         role = data['role']
+        pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+        if not re.match(pattern, password):
+            return JsonResponse({'status': 403,
+                                 'msg': 'Error: The password must meet the following criteria: At least 8-digit long. At Least 1 Uppercase. At Least 1 Lowercase. At Least 1 number.'})
+        users = Users.objects.all()
+        users = serializers.serialize("python", users)
+        names = []
+        emails = []
+        for i in users:
+            names.append(i["fields"]["username"])
+            emails.append(i["fields"]["email"])
+        if username in names:
+            return JsonResponse({'status': 403, 'msg': 'Error: This username has already existed'})
+        if email in emails:
+            return JsonResponse({'status': 403, 'msg': 'Error: This email has already existed'})
         user = Users.objects.create(username=username, password=password, email=email, role=role)
         return JsonResponse({'status': 200, 'msg': 'Register Success'})
 
@@ -42,7 +59,7 @@ def log_in(request):
         if password == rightpwd:
             return JsonResponse({'status': 200, 'msg': 'Log in Success', 'uid': uid, "role": role})
         else:
-            return JsonResponse({'status': 403, 'msg': 'Log in Fail'})
+            return JsonResponse({'status': 403, 'msg': 'Error: The entered user name and password do not match'})
 
 
 @csrf_exempt
@@ -110,6 +127,13 @@ def createcourses(request):
         creator = Users.objects.get(uid=uid)
         coursedecription = course_info['coursedescription']
         gradedistribution = course_info['gradedistribution']
+        courses = Courses.objects.all()
+        courses = serializers.serialize("python", courses)
+        names = []
+        for i in courses:
+            names.append(i["fields"]["coursename"])
+        if coursename in names:
+            return JsonResponse({"status":403, "msg": "Error: This course has already existed"})
         course = Courses.objects.create(coursename=coursename, creatorid=creator,
                                         coursedescription=coursedecription, gradedistribution=gradedistribution)
         if course:
@@ -131,7 +155,7 @@ def enrollcourses(request):
             cid = course.cid
             uids = Enrollments.objects.filter(cid=cid)
             uids = serializers.serialize("python", uids)
-            print(uids)
+            #print(uids)
             uidss = []
             for i in uids:
                 tmp = i["fields"]["uid"]
@@ -240,18 +264,22 @@ def enrolledcourses(request):
 def createquiz(request):
     if request.method == "POST":
         data = json.loads(request.body)
+        print(data)
         ddl = data["ddl"]
         ##data["q1"] = str "{description: 1+1, A:2,b:3,c:4,d:5,ans: A}"
         ##data["q2"] = str "{description: 1+1, A:2,b:3,c:4,d:5,ans: AB}"
         q1 = data["q1"]
         q2 = data["q2"]
         q3 = data["q3"]
-        ans = data["ans"]
-        quiz = Quizzes.objects.create(ddl=ddl, q1=q1, q2=q2, q3=q3, ans=ans)
-        if quiz is not None:
-            return JsonResponse({'status': 200})
-        else:
-            return JsonResponse({'status': 403})
+        q1 = json.loads(q1)
+        ans = [q1["ans"]]
+        print(ans)
+        # quiz = Quizzes.objects.create(ddl=ddl, q1=q1, q2=q2, q3=q3, ans=ans)
+        # if quiz is not None:
+        #     return JsonResponse({'status': 200})
+        # else:
+        #     return JsonResponse({'status': 403})
+        return JsonResponse({"status": 200})
 
 
 @csrf_exempt
@@ -651,7 +679,7 @@ def announcement(request):
     if request.method == "POST":
         data = json.loads(request.body)
         cid = data['cid']
-        #title = data["title"]
+        # title = data["title"]
         content = data["content"]
         course = Courses.objects.get(cid=cid)
         coursename = course.coursename
@@ -691,7 +719,7 @@ def sendemail(coursename, uids, content):
 @csrf_exempt
 def materialannouncement(request):
     if request.method == "POST":
-        data =
+        # data =
         return JsonResponse({"status": 200})
 
 
