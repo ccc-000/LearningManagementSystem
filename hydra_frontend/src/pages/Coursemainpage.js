@@ -4,6 +4,8 @@ import Navibar from '../components/Navibar';
 import { RollbackOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import Chatbot from '../components/Chatbot';
+
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -35,7 +37,9 @@ const Coursemainpage = () => {
         <Card title="Course Description" bordered={false} style={{ width:'90%', marginTop: 25, marginLeft:25 }}>
           <p>{cdes}</p>
         </Card>
-
+        <div className='chatbot' style={{margin: '10px 10px 10px 10px'}}>
+          <Chatbot />
+        </div>
         <Navibar />   
         <Footer
         style={{
@@ -61,6 +65,9 @@ const Coursemainpage = () => {
         </Link>
         <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{cname}</h2>
       </Header>
+      <div className='chatbot' style={{margin: '10px 10px 10px 10px'}}>
+          <Chatbot />
+      </div>
         <Navibar />   
         <Footer
         style={{

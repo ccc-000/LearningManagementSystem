@@ -11,11 +11,18 @@ const { Meta } = Card;
 
 const ShowCourse = ({uid, role}) => {
   let fetchUrl;
+  let path;
+  let choice;
   if (role === 'lecturer') {
     fetchUrl = 'createdcourses';
+    path = 'deletecourses';
+    choice = 'Delete course';
+
   }
   else if (role === 'student'){
     fetchUrl = 'enrolledcourses';
+    path = 'dropcourses';
+    choice = 'Drop course';
   }
   console.log('show course',uid);
   const navigate = useNavigate();
@@ -56,7 +63,7 @@ const ShowCourse = ({uid, role}) => {
 
   const dropCourse =(cid) => {
     console.log('drop course', cid);
-    fetch('http://localhost:8000/dropcourses/', {
+    fetch(`http://localhost:8000/${path}/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -86,7 +93,7 @@ const ShowCourse = ({uid, role}) => {
           actions={[
             <Dropdown
               overlay={<Menu onClick={() => dropCourse(courses.cid)}>
-                <Menu.Item key="1">Drop Course</Menu.Item>
+                <Menu.Item key="1">{choice}</Menu.Item>
               </Menu>}
               style={{ border: "none", position: "absolute", bottom: 0, right: 0 }}
             >
