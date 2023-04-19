@@ -284,14 +284,14 @@ def enrolledcourses(request):
 def createquiz(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        #ddl = data["ddl"]
+        ddl = data["ddl"]
         ##data["q1"] = str "{description: 1+1, A:2,b:3,c:4,d:5,ans: A}"
         ##data["q2"] = str "{description: 1+1, A:2,b:3,c:4,d:5,ans: AB}"
         q1 = data["q1"]
         q2 = data["q2"]
         q3 = data["q3"]
-        q1 = json.loads(q1)
-        ans = [q1["ans"]]
+        # q1 = json.loads(q1)
+        ans = data["ans"]
         print(ans)
         # quiz = Quizzes.objects.create(ddl=ddl, q1=q1, q2=q2, q3=q3, ans=ans)
         # if quiz is not None:
