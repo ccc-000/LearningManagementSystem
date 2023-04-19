@@ -55,6 +55,7 @@ function Quiz () {
     const handleSubmit = () => {
         setOpen(false);
         axios.post('http://localhost:8000/createquiz/', {
+            cid: localStorage.getItem("cid"),
             ddl: '10',
             q1: quizData[0],
             q2: quizData[1],
