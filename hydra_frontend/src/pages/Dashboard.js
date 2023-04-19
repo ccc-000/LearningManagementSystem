@@ -1,12 +1,12 @@
 import pic from '../img/unsw.jpeg';
-import avatar from '../img/avatar.png';
+import avatar from '../img/hydra2.png';
 import '../styles/DashboardPage.css';
 import {
     UserOutlined,
     LogoutOutlined
 } from '@ant-design/icons';
 import {Form, Input, Button, Card, Layout, Menu, Modal, Avatar, message} from 'antd';
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import Draggable from 'react-draggable';
 import {Link, useNavigate } from 'react-router-dom';
 import ShowCourse from '../components/CourseCard';
@@ -19,6 +19,7 @@ function Dashboard() {
     const uid=localStorage.getItem('uid');
     const role=localStorage.getItem('role');
     const navigate = useNavigate();
+    const [defaultAvatar, setDefault] = useState(avatar);
   
     const handleLogout = () => {
         localStorage.clear();
@@ -31,6 +32,31 @@ function Dashboard() {
         navigate('/editavatar')
     };
     console.log('dashboard',uid);
+
+    useEffect(() => {
+        fetch('http://localhost:8000/downloadavatar/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              uid: localStorage.uid,
+            }),
+          })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            if(data.ava === ''){
+              setDefault(avatar);
+            }else{
+              setDefault(data.ava);
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+    }, []);
+
     return (
         <Layout hasSider>
             <Sider
@@ -57,7 +83,7 @@ function Dashboard() {
                         cursor: 'pointer',
                         marginLeft: '80px',
                     }}
-                    src={avatar} onClick={handleEditAvatar}/>
+                    src={defaultAvatar} onClick={handleEditAvatar}/>
                     <Menu.Item
                         key="profile"
                         icon={<UserOutlined />}

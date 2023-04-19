@@ -1,5 +1,5 @@
 import pic from '../img/unsw.jpeg';
-import avatar from '../img/avatar.png';
+import avatar from '../img/hydra2.png';
 import '../styles/DashboardPage.css';
 import {
     AppstoreOutlined,
@@ -13,7 +13,7 @@ import {
     LogoutOutlined
 } from '@ant-design/icons';
 import {Form, Input, Button, Card, Layout, Menu, Modal, Avatar, message} from 'antd';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Draggable from 'react-draggable';
 import {Link, useNavigate } from 'react-router-dom';
 import ShowCourse from '../components/CourseCard';
@@ -55,8 +55,8 @@ function DashboardLecturer() {
     const navigate = useNavigate();
     const [showCard, setShowCard] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    // const [options, setOptions] = useState([]);
     const [disabled, setDisabled] = useState(false);
+    const [defaultAvatar, setDefault] = useState(avatar);
     const [bounds, setBounds] = useState({
         left: 0,
         top: 0,
@@ -70,7 +70,6 @@ function DashboardLecturer() {
         coursedescription: '',
         gradedistribution: JSON.stringify(grade),
     });
-
     const draggleRef = useRef(null);
 
     const handleSubmit = () => {
@@ -139,6 +138,29 @@ function DashboardLecturer() {
         navigate('/editavatar')
     };
    
+    useEffect(() => {
+        fetch('http://localhost:8000/downloadavatar/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              uid: localStorage.uid,
+            }),
+          })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            if(data.ava === ''){
+              setDefault(avatar);
+            }else{
+              setDefault(data.ava);
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+    }, []);
     return (
         <Layout hasSider>
             <Sider
@@ -166,7 +188,7 @@ function DashboardLecturer() {
                         cursor: 'pointer',
                         marginLeft: '80px',
                     }}
-                    src={avatar} onClick={handleEditAvatar}/>
+                    src={defaultAvatar} onClick={handleEditAvatar}/>
                     <Menu.Item
                         key="profile"
                         icon={<UserOutlined />}
