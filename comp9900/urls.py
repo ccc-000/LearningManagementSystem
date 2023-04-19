@@ -22,6 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.log_in),
     path("register/", views.register),
+    path('forgetpwd1/',views.forget_pwd_send_link_1),
+    path('forgetpwd2/',views.forget_pwd_send_link_2),
 
     path("createcourses/", views.createcourses),
     path("enrollcourses/", views.enrollcourses),
@@ -30,10 +32,13 @@ urlpatterns = [
     path("createdcourses/", views.createdcourses),
     path("dropcourses/", views.dropcourses),
     path("enrolledcourses/", views.enrolledcourses),
+    path("deletecourses/", views.deletecourses),
 
     path("createquiz/", views.createquiz),
     path("attendquiz/", views.attendquiz),
     path("reviewquiz/", views.reviewquiz),
+    #path("showquiz/",views.showquiz),
+    path("quizlist/",views.quizlist),
 
     path("createass/", views.createass),
     path("submitass/", views.submitass),

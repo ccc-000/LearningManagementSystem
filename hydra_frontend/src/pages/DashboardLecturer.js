@@ -1,4 +1,4 @@
-import pic from '../img/unsw.jpeg';
+import pic from '../img/hydra1.png';
 import avatar from '../img/hydra2.png';
 import '../styles/DashboardPage.css';
 import {

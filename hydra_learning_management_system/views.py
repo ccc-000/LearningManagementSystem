@@ -120,6 +120,14 @@ def forget_pwd_send_link_1(request):
     if request.method == "POST":
         data = json.loads(request.body)
         email_to = data["email"]
+        users = Users.objects.all()
+        users = serializers.serialize("python", users)
+        emails = []
+        for i in users:
+            emails.append(i["fields"]["email"])
+        if email_to not in emails:
+            return JsonResponse({'status': 403, 'msg': 'Error: This email never exists.'})
+
         smtp_port = 587
         smtp_server = 'smtp.gmail.com'
         email_from = 'randomzsh@gmail.com'
@@ -141,6 +149,29 @@ def forget_pwd_send_link_1(request):
 
 
 @csrf_exempt
+def forget_pwd_send_link_2(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        username = data["username"]
+        pwd = data["password"]
+        users = Users.objects.all()
+        users = serializers.serialize("python", users)
+        names = []
+        for i in users:
+            names.append(i["fields"]["name"])
+        if username not in names:
+            return JsonResponse({'status': 403, 'msg': 'Error: This username never exists.'})
+        pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+        if not re.match(pattern, pwd):
+            return JsonResponse({'status': 403,
+                                 'msg': 'Error: The password must meet the following criteria: At least 8-digit long. At Least 1 Uppercase. At Least 1 Lowercase. At Least 1 number.'})
+        user = Users.objects.get(username=username)
+        user.password = pwd
+        user.save()
+        return JsonResponse({"status": 200})
+
+
+@csrf_exempt
 def createcourses(request):
     if request.method == "POST":
         course_info = json.loads(request.body)
@@ -155,7 +186,7 @@ def createcourses(request):
         for i in courses:
             names.append(i["fields"]["coursename"])
         if coursename in names:
-            return JsonResponse({"status":403, "msg": "Error: This course has already existed"})
+            return JsonResponse({"status": 403, "msg": "Error: This course has already existed"})
         course = Courses.objects.create(coursename=coursename, creatorid=creator,
                                         coursedescription=coursedecription, gradedistribution=gradedistribution)
         enrollment = Enrollments.objects.create(cid=course, uid=creator)
@@ -178,7 +209,7 @@ def enrollcourses(request):
             cid = course.cid
             uids = Enrollments.objects.filter(cid=cid)
             uids = serializers.serialize("python", uids)
-            #print(uids)
+            # print(uids)
             uidss = []
             for i in uids:
                 tmp = i["fields"]["uid"]
@@ -203,6 +234,32 @@ def enrollcourses(request):
             else:
                 return JsonResponse({"status": 500, "msg": f"The enrollment of {i} failed"})
         return JsonResponse({'status': 200})
+
+@csrf_exempt
+def deletecourses(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        cid = data['cid']
+        course = Courses.objects.get(cid=cid)
+        course.delete()
+        return JsonResponse({"status":200})
+
+
+@csrf_exempt
+def quizlist(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        cid = data["cid"]
+        course = Courses.objects.get(cid=cid)
+        quiz = Quizzes.objects.filter(cid=course)
+        quiz = serializers.serialize("python",quiz)
+        quizzes = []
+        for i in quiz:
+            tmp = {}
+            tmp["qid"] = i['pk']
+            quizzes.append(tmp)
+        return JsonResponse({"quiz":quizzes})
 
 
 @csrf_exempt
@@ -301,7 +358,7 @@ def createquiz(request):
             return JsonResponse({'status': 200})
         else:
             return JsonResponse({'status': 403})
-        #return JsonResponse({"status": 200})
+        # return JsonResponse({"status": 200})
 
 
 @csrf_exempt
@@ -335,9 +392,6 @@ def attendquiz(request):
 
 @csrf_exempt
 def reviewquiz(request):
-    # 在此查看quiz
-    # CID UID QID
-    # quiz info right ans
     if request.method == "POST":
         data = json.loads(request.body)
         cid = data["cid"]
@@ -430,7 +484,15 @@ def markass(request):
 
 @csrf_exempt
 def grade(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        cid = data["cid"]
+        user = Users.objects.get(uid=uid)
+        course = Courses.objects.get(cid=cid)
+        grade = Assessments.objects.get(uid = user, cid = course).grade
+        grade = json.dumps(grade)
+    return JsonResponse({"grade":grade})
 
 
 @csrf_exempt
@@ -749,7 +811,8 @@ def onlinecourseannouncement(request):
     if request.method == "POST":
         return JsonResponse({"status": 200})
 
-def simplesend(content, email_from ,email_to, title):
+
+def simplesend(content, email_from, email_to, title):
     smtp_port = 587
     smtp_server = 'smtp.gmail.com'
     email_from = 'randomzsh@gmail.com'
@@ -768,6 +831,7 @@ def simplesend(content, email_from ,email_to, title):
     TIE_server.sendmail(email_from, email_to, text)
     TIE_server.quit()
 
+
 @csrf_exempt
 def uploadavatar(request):
     if request.method == "POST":
@@ -777,7 +841,8 @@ def uploadavatar(request):
         user = Users.objects.get(uid=uid)
         user.avatar = ava
         user.save()
-        return JsonResponse({"status":200})
+        return JsonResponse({"status": 200})
+
 
 @csrf_exempt
 def downloadavatar(request):
@@ -786,4 +851,4 @@ def downloadavatar(request):
         uid = data["uid"]
         user = Users.objects.get(uid=uid)
         ava = user.avatar
-        return JsonResponse({"ava":ava})
+        return JsonResponse({"ava": ava})
