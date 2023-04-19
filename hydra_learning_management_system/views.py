@@ -497,7 +497,7 @@ def createposts(request):
                                     , content=content, multimedia=multimedia, reply=reply, likes=likes,
                                     editted=editted, flagged=flagged, privacy=privacy)
         if post is not None:
-            return JsonResponse({'status': 200})
+            return JsonResponse({'pid': post.pid, 'status': 200})
         else:
             return JsonResponse({'status': 403})
 
