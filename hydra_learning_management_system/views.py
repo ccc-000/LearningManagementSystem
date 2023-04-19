@@ -246,6 +246,21 @@ def deletecourses(request):
         return JsonResponse({"status":200})
 
 
+@csrf_exempt
+def quizlist(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        cid = data["cid"]
+        course = Courses.objects.get(cid=cid)
+        quiz = Quizzes.objects.filter(cid=course)
+        quiz = serializers.serialize("python",quiz)
+        quizzes = []
+        for i in quiz:
+            tmp = {}
+            tmp["qid"] = i['pk']
+            quizzes.append(tmp)
+        return JsonResponse({"quiz":quizzes})
+
 
 @csrf_exempt
 def createdcourses(request):
@@ -377,9 +392,6 @@ def attendquiz(request):
 
 @csrf_exempt
 def reviewquiz(request):
-    # 在此查看quiz
-    # CID UID QID
-    # quiz info right ans
     if request.method == "POST":
         data = json.loads(request.body)
         cid = data["cid"]
@@ -472,7 +484,15 @@ def markass(request):
 
 @csrf_exempt
 def grade(request):
-    return HttpResponse()
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        cid = data["cid"]
+        user = Users.objects.get(uid=uid)
+        course = Courses.objects.get(cid=cid)
+        grade = Assessments.objects.get(uid = user, cid = course).grade
+        grade = json.dumps(grade)
+    return JsonResponse({"grade":grade})
 
 
 @csrf_exempt

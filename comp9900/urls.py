@@ -37,6 +37,8 @@ urlpatterns = [
     path("createquiz/", views.createquiz),
     path("attendquiz/", views.attendquiz),
     path("reviewquiz/", views.reviewquiz),
+    #path("showquiz/",views.showquiz),
+    path("quizlist/",views.quizlist),
 
     path("createass/", views.createass),
     path("submitass/", views.submitass),
