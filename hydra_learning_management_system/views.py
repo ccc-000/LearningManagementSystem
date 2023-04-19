@@ -767,3 +767,23 @@ def simplesend(content, email_from ,email_to, title):
     text = msg.as_string()
     TIE_server.sendmail(email_from, email_to, text)
     TIE_server.quit()
+
+@csrf_exempt
+def uploadavatar(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        ava = data["avatar"]
+        user = Users.objects.get(uid=uid)
+        user.avatar = ava
+        user.save()
+        return JsonResponse({"status":200})
+
+@csrf_exempt
+def downloadavatar(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        user = Users.objects.get(uid=uid)
+        ava = user.avatar
+        return JsonResponse({"ava":ava})
