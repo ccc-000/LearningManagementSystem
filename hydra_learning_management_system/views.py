@@ -400,14 +400,14 @@ def reviewquiz(request):
         data = json.loads(request.body)
         cid = data["cid"]
         uid = data["uid"]
-        qid = data["uid"]
+        qid = data["qid"]
         quiz = Quizzes.objects.get(qid=qid)
         quiz = serializers.serialize("python", quiz)
-        quizes = []
+        quizzes = []
         for i in quiz:
             tmp = i["fields"]
-            quizes.append(tmp)
-    return JsonResponse({"quiz": quizes})
+            quizzes.append(tmp)
+    return JsonResponse({"quiz": quizzes})
 
 
 @csrf_exempt

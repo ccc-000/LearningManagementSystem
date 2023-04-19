@@ -1,16 +1,35 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Divider, Layout, Tooltip, message, TimePicker } from 'antd';
+import { Layout, Tooltip, message, Card } from 'antd';
 import Navibar from '../components/Navibar';
 import { Button, Modal, Space, Input, Radio, Checkbox } from 'antd';
-import { RollbackOutlined } from '@ant-design/icons';
+import { RollbackOutlined, FundOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import pic from '../img/hydra1.png';
+import '../styles/Assignment.css';
 
 function Quiz () {
     const { Header, Content, Footer, Sider } = Layout;
     const { TextArea } = Input;
+    const { Meta } = Card;
     const role = localStorage.getItem('role');
+    const cid = localStorage.getItem('cid');
+    const SectionName = localStorage.getItem('cname') + " —— Quiz";
+
+    const [open, setOpen] = useState(false);
+    const openModal = (modalId) => {
+        setCurrentModal(modalId);
+        setOpen(true);
+    };
+
+    const closeModal = () => {
+        setCurrentModal('');
+        setOpen(false);
+    };
+
+    //Open different modal
+    const [currentModal, setCurrentModal] = useState('');
 
     //Create Quiz Modal
     const [questionCount, setQuestionCount] = useState(1);
@@ -26,13 +45,6 @@ function Quiz () {
         ],
         },
     ]);
-
-    const [open, setOpen] = useState(false);
-    const showModal = () => {
-        setOpen(true);
-    };
-
-
 
     const quizData = [];
     questionData.forEach((question) => {
@@ -52,10 +64,10 @@ function Quiz () {
       ans.push(question.answer);
     });
 
-    const handleSubmit = () => {
+    const handleCreate = () => {
         setOpen(false);
         axios.post('http://localhost:8000/createquiz/', {
-            cid: localStorage.getItem("cid"),
+            cid: cid,
             ddl: '10',
             q1: quizData[0],
             q2: quizData[1],
@@ -73,22 +85,8 @@ function Quiz () {
             console.log(error);
             message.error('Failed to create quiz');
         });
-    
-        console.log(quizData);
-        console.log(ans.join(' '));
     };
     
-    
-    
-    const handleCancel = () => {
-        setOpen(false);
-    };
-    
-    // const [ddl, setDdl] = useState('');
-    // function handleDdlChange(event) {
-    //     const newDdl = event.target.value;
-    //     setDdl(newDdl);
-    // }
 
     function handleQuestionChange(index, event) {
     const newQuestionData = [...questionData];
@@ -146,7 +144,56 @@ function Quiz () {
     setQuestionData(newQuestionData);
     }
 
-    const SectionName = localStorage.getItem('cname') + " —— Quiz";
+
+    //Show Quiz List
+    const [quizList, setQuizList] = useState([]);
+    useEffect(() => {
+        axios.post('http://localhost:8000/quizlist/', {
+            cid: cid
+        })
+        .then((response) => {
+            setQuizList(response.data.quiz);
+            localStorage.setItem('qid', response.data.quiz[0].qid);
+        })
+    }, []);
+
+    //Show Quiz Detail
+    const [quizDetail, setQuizDetail] = useState([]);
+    useEffect(() => {
+        axios.post('http://localhost:8000/reviewquiz/', {
+            cid: cid,
+            qid: localStorage.getItem('qid'),
+            uid: localStorage.getItem('uid')
+        })
+        .then((response) => {
+            setQuizDetail(response.data.quizzes);
+            console.log(response.data.quizzes);
+        })
+    }, []);
+
+    //Submit Quiz for student
+    const StuQuizData = [];
+
+    const handleSubmit = () => {
+        axios.post('http://localhost:8000/attendquiz/', {
+            cid: cid,
+            qid: localStorage.getItem('qid'),
+            uid: localStorage.getItem('uid'),
+            q1: quizData[0],
+            q2: quizData[1],
+            q3: quizData[2],
+            ans: ans.join(' ')
+        })
+        .then((response) => {
+            if (response.data.status === 200) {
+                message.success('Quiz submitted successfully');
+            } else {
+                message.error('Failed to submit quiz');
+            }
+        })
+    }
+
+
 
     if (role === 'lecturer') {
         return (
@@ -165,17 +212,17 @@ function Quiz () {
                 </Link>
                 <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
             </Header>
-            {/* <Divider orientation="left" style={{fontSize:'25px'}}>Quiz</Divider> */}
             <Space style={{marginLeft:'58px', marginBottom:'15px', marginTop: '40px'}}>
-                <Button type="primary" size = "large" onClick={showModal} style={{marginLeft:'20px'}}>Create a new quiz</Button>
+                <Button type="primary" size = "large" onClick={openModal} style={{marginLeft:'20px'}}>Create a new quiz</Button>
                 <Modal
-                    open={open}
+                    open={currentModal === 'modal1' && open}
+                    id='modal1'
                     title="New quiz"
-                    onOk={handleSubmit}
-                    onCancel={handleCancel}
+                    onOk={handleCreate}
+                    onCancel={closeModal}
                     footer={[
-                    <Button key="back" onClick={handleCancel}> Cancel </Button>,
-                    <Button key="submit" type="primary" onClick={handleSubmit} > Create </Button>,
+                    <Button key="back" onClick={closeModal}> Cancel </Button>,
+                    <Button key="create" type="primary" onClick={handleCreate} > Create </Button>,
                     ]}
                 >
                     {/* Deadline: <TimePicker onChange={handleDdlChange} /> */}
@@ -236,6 +283,42 @@ function Quiz () {
                     <Button onClick={handleAddQuestion}>Add Question</Button>
                 </Modal>
             </Space>
+
+            <div class="container" style={{marginTop: "15px"}}> 
+                {quizList.map((quiz, index) => (
+                    <div key={quiz.qid} class="box">
+                        <Card
+                            hoverable
+                            style={{
+                            width: 300,
+                            position: 'relative' 
+                            }}
+                            cover={
+                            <img
+                                alt="quiz"
+                                src={pic}
+                            />
+                            }
+                            onClick={() => openModal('modal2')}
+                        >
+                            <Meta
+                            title={`Quiz ${index+1}`}
+                            />
+                        </Card>
+                        {/* <Button onClick={() => openModal('modal2')} icon={<FundOutlined />} style={{marginTop:'10px'}}> </Button> */}
+                        <Modal
+                            open={currentModal === 'modal2'  && open}
+                            id='modal2'
+                            title={`Quiz ${index+1}`}
+                            onCancel={closeModal}
+                            footer={[
+                            <Button key="back" onClick={closeModal}> Cancel </Button>,
+                            ]}>
+                            
+                        </Modal>
+                    </div>
+                ))}
+            </div>
             
             <Navibar />
             <Footer
@@ -266,22 +349,42 @@ function Quiz () {
             </Link>
             <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
         </Header>
-        {/* <Divider orientation="left" style={{fontSize:'25px'}}>Quiz</Divider> */}
-        <Space style={{marginLeft:'50px', marginBottom:'15px', marginTop: '50px'}}>
-            <li>
-            <Button type="link" style={{fontSize:'20px'}} onClick={showModal}>Quiz1</Button>
-            <Modal
-                open={open}
-                title="Quiz1"
-                onOk={handleSubmit}
-                onCancel={handleCancel}
-                footer={[
-                <Button key="back" onClick={handleCancel}> Cancel </Button>,
-                <Button key="submit" type="primary" onClick={handleSubmit}> Submit </Button>,
-                ]}
-            ></Modal>
-            </li>
-        </Space>
+        <div class="container" style={{marginTop: "15px"}}> 
+                {quizList.map((quiz, index) => (
+                    <div key={quiz.qid} class="box">
+                        <Card
+                            hoverable
+                            style={{
+                            width: 300,
+                            position: 'relative' 
+                            }}
+                            cover={
+                            <img
+                                alt="quiz"
+                                src={pic}
+                            />
+                            }
+                            onClick={() => openModal('modal3')}
+                        >
+                            <Meta
+                            title={`Quiz ${index+1}`}
+                            />
+                        </Card>
+                        <Button onClick={() => openModal('modal3')} icon={<FundOutlined />} style={{marginTop:'10px'}}>Submit {`Quiz ${index+1}`} </Button>
+                        <Modal
+                            open={currentModal === 'modal3'  && open}
+                            id='modal3'
+                            title={`Quiz ${index+1}`}
+                            onCancel={closeModal}
+                            footer={[
+                            <Button key="back" onClick={closeModal}> Cancel </Button>,
+                            <Button key="submit" type="primary" onClick={handleSubmit}> Submit </Button>,
+                            ]}>
+                            
+                        </Modal>
+                    </div>
+                ))}
+            </div>
         <Navibar />
         <Footer
             style={{
