@@ -82,6 +82,7 @@ def showprofile(request):
         gender = user_info.gender
         birthday = user_info.birthday
         email = user_info.email
+        zoomlink = user_info.zoomlink
         preferedlanguage = user_info.preferredlanguage
         return JsonResponse({
             "Firstname": firstname,
@@ -89,7 +90,8 @@ def showprofile(request):
             "gender": gender,
             "birthday": birthday,
             "email": email,
-            "language": preferedlanguage
+            "language": preferedlanguage,
+            "zoomlink": zoomlink
         })
 
 
@@ -104,6 +106,7 @@ def editprofile(request):
         birthday = data["birthday"]
         email = data["email"]
         language = data["preferedlanguage"]
+        zoomlink = data["zoomlink"]
         user = Users.objects.get(uid=uid)
         user.firstname = firstname
         user.lastname = lastname
@@ -111,6 +114,7 @@ def editprofile(request):
         user.birthday = birthday
         user.email = email
         user.preferredlanguage = language
+        user.zoomlink = zoomlink
         user.save()
         return JsonResponse({"status": 200})
 
@@ -158,7 +162,7 @@ def forget_pwd_send_link_2(request):
         users = serializers.serialize("python", users)
         names = []
         for i in users:
-            names.append(i["fields"]["name"])
+            names.append(i["fields"]["username"])
         if username not in names:
             return JsonResponse({'status': 403, 'msg': 'Error: This username never exists.'})
         pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
@@ -852,3 +856,21 @@ def downloadavatar(request):
         user = Users.objects.get(uid=uid)
         ava = user.avatar
         return JsonResponse({"ava": ava})
+
+@csrf_exempt
+def startlive(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        user = Users.objects.get(uid=uid)
+        zoomlink = user.zoomlink
+        return JsonResponse({"zoomlink": zoomlink})
+
+@csrf_exempt
+def showlive(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        cid = data["cid"]
+        course = Courses.objects.get(cid=cid)
+        zoomlink = course.creatorid.zoomlink
+        return JsonResponse({"zoomlink":zoomlink})
