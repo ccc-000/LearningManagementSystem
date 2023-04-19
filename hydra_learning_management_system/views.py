@@ -852,3 +852,21 @@ def downloadavatar(request):
         user = Users.objects.get(uid=uid)
         ava = user.avatar
         return JsonResponse({"ava": ava})
+
+@csrf_exempt
+def startlive(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        user = Users.objects.get(uid=uid)
+        zoomlink = user.zoomlink
+        return JsonResponse({"zoomlink": zoomlink})
+
+@csrf_exempt
+def showlive(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        cid = data["cid"]
+        course = Courses.objects.get(cid=cid)
+        zoomlink = course.creatorid.zoomlink
+        return JsonResponse({"zoomlink":zoomlink})
