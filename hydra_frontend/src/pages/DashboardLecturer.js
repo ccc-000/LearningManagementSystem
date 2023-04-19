@@ -1,5 +1,5 @@
-import pic from '../img/unsw.jpeg';
-import avatar from '../img/avatar.png';
+import pic from '../img/hydra1.png';
+import avatar from '../img/hydra2.png';
 import '../styles/DashboardPage.css';
 import {
     AppstoreOutlined,

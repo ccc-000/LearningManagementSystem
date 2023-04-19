@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Button, Layout, Menu, theme, Tooltip } from 'antd';
+import avatar from '../img/hydra2.png';
+import { Layout, Menu, theme, Avatar } from 'antd';
 import {
   AppstoreOutlined,
   BarChartOutlined,
@@ -21,6 +22,10 @@ import {
   const Navibar = () => {
     const navigate = useNavigate();
     const role = localStorage.getItem('role');
+
+    const handleEditAvatar = () => {
+      navigate('/editavatar')
+    };
 
     const {
       token: { colorBgContainer },
@@ -46,13 +51,15 @@ import {
               bottom: 0,
           }}
         >
-          <div
-              style={{
-                  height: 32,
-                  margin: 16,
-                  background: 'rgba(255, 255, 255, 0.2)',
-              }}
-          />
+          <Avatar 
+            style={{
+                size: 40,
+                cursor: 'pointer',
+                marginLeft: '80px',
+                marginTop: '20px',
+            }}
+            src={avatar} onClick={handleEditAvatar}/>
+
           <Menu theme="dark" mode="inline" items={[
             {
               key: '1',
