@@ -67,7 +67,7 @@ urlpatterns = [
     path("onlinecourseannouncement/",views.onlinecourseannouncement),
 
     path("uploadavatar/",views.uploadavatar),
-    path("downloadavatar/",views.dowloadavatar)
+    path("downloadavatar/",views.downloadavatar)
 
     # announcementpath(),#create live, show live, sholive
     # path(),
