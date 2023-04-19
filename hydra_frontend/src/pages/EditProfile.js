@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import 'antd/dist/reset.css';
 import '../styles/EditProfile.css';
-import avatar from '../img/avatar.png';
+import avatar from '../img/hydra2.png';
 const { Option } = Select;
 
 const {Header, Content, Footer, Sider} = Layout;
@@ -47,6 +47,7 @@ function EditProfile() {
   //form
   const [messageApi, contextHolder1] = message.useMessage();
   const [api, contextHolder2] = notification.useNotification();
+  const [defaultAvatar, setDefault] = useState();
   const navigate = useNavigate();
   const config = {
     rules: [
@@ -76,6 +77,28 @@ function EditProfile() {
         // console.log(data)
         setData(data);
       });
+
+    fetch('http://localhost:8000/downloadavatar/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            uid: localStorage.uid,
+          }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if(data.ava === ''){
+            setDefault(avatar);
+          }else{
+            setDefault(data.ava);
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
   }, []);
 
   const [form] = Form.useForm();
@@ -205,7 +228,7 @@ function EditProfile() {
                     cursor: 'pointer',
                     marginLeft: '80px',
                 }}
-                src={avatar} onClick={handleEditAvatar}/>
+                src={defaultAvatar} onClick={handleEditAvatar}/>
                 <Menu.Item
                     key="profile"
                     icon={<UserOutlined />}

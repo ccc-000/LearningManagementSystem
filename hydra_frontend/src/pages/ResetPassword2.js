@@ -27,26 +27,42 @@ function ResetPassword2() {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
+
   const onFinish = (values) => {
       console.log('Received values of form: ', values);
-      //TODO: send the data to backend
-      // fetch('http://localhost:8000/reset_password/', {
       messageApi.open({
         type: 'loading',
-        content: 'Updating...',
-        duration: 2,
+        content: 'Reseting...',
       });
-      setTimeout(() => {
-        messageApi.open({
-          type: 'success',
-          content: 'Updated!',
-          duration: 2,
+      fetch('http://localhost:8000/forgetpwd2/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: values.username,
+          password: values.password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === 200) {
+            messageApi.destroy();
+            messageApi.success('Reset successfully!');
+            setTimeout(() => {
+              navigate('/');
+            }, 1500);
+          } else {
+            messageApi.destroy();
+            messageApi.open({
+              type: 'error',
+              content: data.msg,
+              duration: 2,
+            });
+          }
         });
-      }, 2100);
-      setTimeout(() => {
-        navigate('/');
-      }, 3500);
   };
+  
   return (
     <div className="ResetPassword">
       <Card
