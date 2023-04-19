@@ -49,6 +49,12 @@ function CreateForum() {
   const onFinish = () => {
     console.log(form);
 
+    // If the title is empty, show error message
+    if (form.title === '' || form.keyword === '') {
+      messageApi.destroy();
+      messageApi.error("Title or keyword cannot be empty");
+      return;
+    }
     // The loading button always present until success/failure
     messageApi.loading("Uploading to server...");
 
@@ -73,7 +79,9 @@ function CreateForum() {
         if (data.status === 200) {
           messageApi.destroy();
           messageApi.success("Success!")
-          navigate("/coursemainpage/forum");
+          setTimeout(() => {
+            navigate('/coursemainpage/forum/' + data.pid);
+          }, 1500);
         }
       })
       .catch((error) => {

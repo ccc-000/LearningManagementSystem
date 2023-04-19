@@ -12,6 +12,7 @@ const { Header, Content, Footer } = Layout;
 
 function ForumDetailStudent() {
   const [messageApi1, contextHolder1] = message.useMessage();
+  const [messageApi2, contextHolder3] = message.useMessage();
   const [api1, contextHolder2] = notification.useNotification();
   const [data, setData] = useState(undefined);
   const [reply, setReply] = useState("");
@@ -198,6 +199,7 @@ function ForumDetailStudent() {
     messageApi1.open({
       type: 'loading',
       content: 'Deleting...',
+      duration: 2,
     });
     fetch('http://localhost:8000/deleteposts/', {
       method: 'DELETE',
@@ -217,11 +219,10 @@ function ForumDetailStudent() {
           messageApi1.open({
             type: 'success',
             content: 'Deleted!',
-            duration: 2,
           });
           setTimeout(() => {
             navigate('/coursemainpage/forum');
-          }, 2100);
+          }, 1500);
         }
       })
       .catch((error) => {
@@ -239,7 +240,6 @@ function ForumDetailStudent() {
         <Button type="primary" size="medium" onClick={() => api1.destroy()} style={{ width: 100 }}>
           Continue
         </Button>
-        {contextHolder1}
         <Button size="medium" onClick={deletePost} style={{ width: 100 }}>
           Delete
         </Button>
@@ -312,7 +312,7 @@ function ForumDetailStudent() {
       body: JSON.stringify({
         q: [data.content],
         source: "en",
-        target: target,
+        target: target? target : "en",
         format: "text"
       }),
     })
@@ -327,6 +327,10 @@ function ForumDetailStudent() {
   // Handle submit reply
   function handleSubmit() {
     console.log(reply);
+    messageApi2.open({
+      type: 'loading',
+      content: 'Replying...',
+    });
     fetch('http://localhost:8000/replyposts/', {
       method: 'POST',
       headers: {
@@ -341,9 +345,14 @@ function ForumDetailStudent() {
       .then(response => response.json())
       .then((fetched_data) => {
         if (fetched_data.status === 200) {
+          messageApi2.destroy();
+          messageApi2.open({
+            type: 'success',
+            content: 'Replied!',
+          });
           const new_data = { ...data };
           new_data.reply.reply.push({
-            [localStorage.getItem("uid")]: [reply]
+            "Me": [reply]
           })
           setReply("")
           setData(new_data)
@@ -403,7 +412,9 @@ function ForumDetailStudent() {
                 <Descriptions.Item label="Post Time">{data ? data.createtime.slice(0, 10) : "No data"}</Descriptions.Item>
                 <Descriptions.Item label="Keyword" span={2}>{data ? data.keyword : "No data"}</Descriptions.Item>
                 <Descriptions.Item span={1} style={{ float: 'right' }}>
-                  <Button htmlType="submit" size="small" style={{ width: 80, marginRight: 30 }} onClick={handleTranslate}>{isTranslated ? "Undo" : "Translate"}</Button>
+                  <Tooltip placement="bottom" title="Translate to your prefered language">
+                    <Button htmlType="submit" size="small" style={{ width: 80, marginRight: 30 }} onClick={handleTranslate}>{isTranslated ? "Undo" : "Translate"}</Button>
+                  </Tooltip>
                 </Descriptions.Item>
                 <Descriptions.Item label="Content" span={3}>
                   {PostDetail}
@@ -422,6 +433,7 @@ function ForumDetailStudent() {
                 </Descriptions.Item>
                 <Descriptions.Item >
                   {contextHolder2}
+                  {contextHolder1}
                   <Button type="primary" htmlType="submit" size="medium" style={propsDelete} onClick={handleDelete}>Delete</Button>
                   <Button type="primary" htmlType="submit" size="medium" style={propsPrivate} onClick={makePrivate}>{privatecontent}</Button>
                   <Button type="primary" htmlType="submit" size="medium" style={propsChange} onClick={handleEdit}>Edit</Button>
@@ -431,6 +443,7 @@ function ForumDetailStudent() {
             {reply_components}
             <div className="ForumDetail-Reply">
               <TextArea rows={2} placeholder="Please input the reply" value={reply} onChange={(e) => { setReply(e.target.value) }} />
+              {contextHolder3}
               <Button type="primary" htmlType="submit" size="medium" style={{ marginLeft: 30 }} onClick={handleSubmit}>Reply</Button>
             </div>
           </div>

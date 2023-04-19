@@ -4,6 +4,7 @@ import {
   Button,
   Form,
   Input,
+  message,
   Select,
 } from 'antd';
 import { LeftCircleOutlined } from '@ant-design/icons';
@@ -11,9 +12,11 @@ import React from 'react';
 
 const RegistraionFrom = () => {
   let navigate = useNavigate();
+  const [messageApi, contextHolder1] = message.useMessage();
 
   const onFinish = (values) => {
     console.log(values)
+    messageApi.loading("Registering...");
     fetch('http://localhost:8000/register/', {
       method: 'POST',
       headers: {
@@ -30,7 +33,14 @@ const RegistraionFrom = () => {
       .then(data => {
         console.log(data)
         if (data.status === 200) {
-          navigate("/");
+          messageApi.destroy();
+          messageApi.success("Success!")
+          setTimeout(() => {
+            navigate('/');
+          }, 1500);
+        }else{
+          messageApi.destroy();
+          messageApi.error(data.msg);
         }
       });
   };
@@ -131,6 +141,7 @@ const RegistraionFrom = () => {
               </Select>
             </Form.Item>
             <Form.Item style={{textAlign: 'center', marginLeft: 120, marginTop: 30, marginBottom: -10}}>
+              {contextHolder1}
               <Button type="primary" htmlType="submit">Submit</Button>
             </Form.Item>
           </Form>
