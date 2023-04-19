@@ -1,11 +1,14 @@
 import '../styles/loginpage.css';
 import pic from '../img/hydra1.png';
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react'
+
 export default function Loginpage() {
 
     let navigate = useNavigate();
+    const [messageApi, contextHolder1] = message.useMessage();
+
     const routeChange = () => {
         navigate("/register");
     }
@@ -32,6 +35,11 @@ export default function Loginpage() {
                     } else {
                         navigate("/dashboard");
                     }
+                }else{
+                    messageApi.open({
+                        content: data.msg,
+                        type: 'error',
+                    });
                 }
             });
     };
@@ -104,6 +112,7 @@ export default function Loginpage() {
                         <Form.Item
                         >
                             <div style={{display:'flex', justifyContent: 'space-evenly'}}>
+                            {contextHolder1}
                             <Button type="primary" htmlType="submit" style={{marginRight: 15}}>
                                 Sign In
                             </Button>

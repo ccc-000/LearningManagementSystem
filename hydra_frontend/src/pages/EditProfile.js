@@ -87,6 +87,7 @@ function EditProfile() {
     email: data.email,
     language: data.language,
   }
+
   form.setFieldsValue(initialValues);
 
   //submit modify
