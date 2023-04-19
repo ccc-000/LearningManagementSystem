@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Divider, Layout, Tooltip, message } from 'antd';
+import { Divider, Layout, Tooltip, message, TimePicker } from 'antd';
 import Navibar from '../components/Navibar';
 import { Button, Modal, Space, Input, Radio, Checkbox } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
@@ -33,35 +33,33 @@ function Quiz () {
     };
 
 
-    const quizData = {};
-    questionData.forEach((question, index) => {
-        // 根据索引创建一个问题的key
-        const questionKey = `q${index + 1}`;
-      
-        const ans = {};
-        ans.selected = questionData[index].selectedOption;        
-      
-        // 将问题信息和答案信息存储在一个字符串中
-        const questionStr = `{description: ${question.question}, `;
-        const optionsStr = question.options.map(
-          (option) => `${option.value}: ${option.input}`
-        );
-        
-        const ansStr = `ans: ${ans.selected}, type: ${question.type}}`;
-      
-        const questionDataStr = questionStr + optionsStr.join(", ") + ", " + ansStr;
-      
-        quizData[questionKey] = questionDataStr;
-      });
-    
+
+    const quizData = [];
+    questionData.forEach((question) => {
+    const options = question.options.map((option) => {
+        return { value: option.value, input: option.input };
+        });
+        quizData.push({
+        description: question.question,
+        options: options,
+        answer: question.selectedOption,
+        type: question.type,
+        });
+    });
+ 
+    const ans = [];
+    quizData.forEach((question) => {
+      ans.push(question.answer);
+    });
+
     const handleSubmit = () => {
         setOpen(false);
-        axios.post('http://localhost:8080/createquiz/', {
-            ddl:'',
-            q1: quizData[0],
-            q2: quizData[1],
-            q3: quizData[2],
-            // ans: ans.selected,
+        axios.post('http://localhost:8000/createquiz/', {
+            ddl:'10',
+            q1:quizData[0],
+            q2:quizData[1],
+            q3:quizData[2],
+            ans: ans.join(' '),
         })
         .then(response => response.json())
         .then(data => {
@@ -73,6 +71,7 @@ function Quiz () {
             }
         })
         console.log(quizData);
+        console.log(ans.join(' '));
     };
     
     
@@ -80,6 +79,12 @@ function Quiz () {
         setOpen(false);
     };
     
+    // const [ddl, setDdl] = useState('');
+    // function handleDdlChange(event) {
+    //     const newDdl = event.target.value;
+    //     setDdl(newDdl);
+    // }
+
     function handleQuestionChange(index, event) {
     const newQuestionData = [...questionData];
     newQuestionData[index].question = event.target.value;
@@ -104,11 +109,11 @@ function Quiz () {
         setQuestionData([...questionData.slice(0, index), question, ...questionData.slice(index + 1)]);
     };
 
-      const handleCheckboxChange = (questionIndex, checkedValues) => {
-        const newData = [...questionData];
-        newData[questionIndex].selectedOption = checkedValues;
-        setQuestionData(newData);
-      };
+    const handleCheckboxChange = (questionIndex, checkedValues) => {
+    const newData = [...questionData];
+    newData[questionIndex].selectedOption = checkedValues;
+    setQuestionData(newData);
+    };
       
 
     function handleAddQuestion() {
@@ -168,6 +173,7 @@ function Quiz () {
                     <Button key="submit" type="primary" onClick={handleSubmit} > Create </Button>,
                     ]}
                 >
+                    {/* Deadline: <TimePicker onChange={handleDdlChange} /> */}
                     {questionData.map((question, index) => (
                         <div key={index} style={{ marginBottom: '10px' }}>
                         <span>Q{index + 1}:</span>
