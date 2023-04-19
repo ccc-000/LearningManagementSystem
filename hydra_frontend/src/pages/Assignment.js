@@ -16,7 +16,7 @@ export default function Assignment() {
     const role = localStorage.getItem('role');    
     const cid = localStorage.getItem('cid');    
     const aid = localStorage.getItem('aid');
-    const cname = localStorage.getItem('cname');
+    const SectionName = localStorage.getItem('cname') + " —— Assignment";
 
     //Create Assignment Modal   
     const [loading, setLoading] = useState(false); 
@@ -132,7 +132,6 @@ export default function Assignment() {
         },
     };
 
-    const SectionName = localStorage.getItem('cname') + " —— Assignment";
     
     if (role === 'lecturer') {
         return (

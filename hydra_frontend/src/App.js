@@ -17,12 +17,12 @@ import Forum from "./pages/Forum";
 import CreateForum from './pages/CreateForum';
 import EditForum from './pages/EditForum';
 import ForumDetailStudent from './pages/ForumDetail-student';
-//Course main page for lecturer.
+
 import Coursemainpage from "./pages/Coursemainpage";
 import Quiz from "./pages/Quiz";
 import Assignment from "./pages/Assignment";
 import AnnouncementLecturer from "./pages/AnnouncementLecturer";
-// import Grade from './pages/Grade';
+import Grade from './pages/Grade';
 
 // Material page for lecturer.
 import Material from "./pages/Material";
@@ -57,7 +57,7 @@ function App() {
                 <Route path="/coursemainpage/quiz" element={<Quiz/>}/>
                 <Route path="/coursemainpage/assignment" element={<Assignment/>}/>
                 <Route path="/coursemainpage/announcementsLecturer" element={<AnnouncementLecturer/>}/>
-                {/* <Route path="/Coursemainpage/grade" element={<Grade/>}/> */}
+                <Route path="/Coursemainpage/grade" element={<Grade/>}/>
                 <Route path="/coursemainpage/material" element={<Material/>}/>
                 <Route path="/coursemainpage/videoPlayer" element={<VideoPlayer/>}/>
                 <Route path="/coursemainpage/onlinelecture" element={<OnlineLecture/>}/>
