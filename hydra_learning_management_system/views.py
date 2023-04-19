@@ -1,4 +1,5 @@
 import datetime
+import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -10,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
 
+
 # from google.oauth2.credentials import Credentials
 
 # Create your views here.
@@ -20,12 +22,29 @@ from .models import *
 @csrf_exempt
 def register(request):
     if request.method == "POST":
+        now = datetime.date.today()
+        now = str(now)
         data = json.loads(request.body)
         username = data['username']
         password = data['password']
         email = data['email']
         role = data['role']
-        user = Users.objects.create(username=username, password=password, email=email, role=role)
+        pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+        if not re.match(pattern, password):
+            return JsonResponse({'status': 403,
+                                 'msg': 'Error: The password must meet the following criteria: At least 8-digit long. At Least 1 Uppercase. At Least 1 Lowercase. At Least 1 number.'})
+        users = Users.objects.all()
+        users = serializers.serialize("python", users)
+        names = []
+        emails = []
+        for i in users:
+            names.append(i["fields"]["username"])
+            emails.append(i["fields"]["email"])
+        if username in names:
+            return JsonResponse({'status': 403, 'msg': 'Error: This username has already existed'})
+        if email in emails:
+            return JsonResponse({'status': 403, 'msg': 'Error: This email has already existed'})
+        user = Users.objects.create(username=username, password=password, email=email, role=role, birthday=now)
         return JsonResponse({'status': 200, 'msg': 'Register Success'})
 
 
@@ -42,7 +61,7 @@ def log_in(request):
         if password == rightpwd:
             return JsonResponse({'status': 200, 'msg': 'Log in Success', 'uid': uid, "role": role})
         else:
-            return JsonResponse({'status': 403, 'msg': 'Log in Fail'})
+            return JsonResponse({'status': 403, 'msg': 'Error: The entered user name and password do not match'})
 
 
 @csrf_exempt
@@ -97,8 +116,28 @@ def editprofile(request):
 
 
 @csrf_exempt
-def forget_pwd_send_link(request):
-    return
+def forget_pwd_send_link_1(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        email_to = data["email"]
+        smtp_port = 587
+        smtp_server = 'smtp.gmail.com'
+        email_from = 'randomzsh@gmail.com'
+        pwd = 'ehomuqhuogjozndr'
+
+        body = "This is the reset pwd link: http://localhost:3000/resetpassword/2"
+        msg = MIMEMultipart()
+        msg["From"] = email_from
+        msg["Subject"] = "reset pwd"
+        msg.attach(MIMEText(body, "plain"))
+        TIE_server = smtplib.SMTP(smtp_server, smtp_port)
+        TIE_server.starttls()
+        TIE_server.login(email_from, pwd)
+        msg["To"] = email_to
+        text = msg.as_string()
+        TIE_server.sendmail(email_from, email_to, text)
+        TIE_server.quit()
+        return JsonResponse({"status": 200, "msg": "send success"})
 
 
 @csrf_exempt
@@ -110,8 +149,16 @@ def createcourses(request):
         creator = Users.objects.get(uid=uid)
         coursedecription = course_info['coursedescription']
         gradedistribution = course_info['gradedistribution']
+        courses = Courses.objects.all()
+        courses = serializers.serialize("python", courses)
+        names = []
+        for i in courses:
+            names.append(i["fields"]["coursename"])
+        if coursename in names:
+            return JsonResponse({"status":403, "msg": "Error: This course has already existed"})
         course = Courses.objects.create(coursename=coursename, creatorid=creator,
                                         coursedescription=coursedecription, gradedistribution=gradedistribution)
+        enrollment = Enrollments.objects.create(cid=course, uid=creator)
         if course:
             return JsonResponse({'status': 200})
         else:
@@ -131,7 +178,7 @@ def enrollcourses(request):
             cid = course.cid
             uids = Enrollments.objects.filter(cid=cid)
             uids = serializers.serialize("python", uids)
-            print(uids)
+            #print(uids)
             uidss = []
             for i in uids:
                 tmp = i["fields"]["uid"]
@@ -240,6 +287,7 @@ def enrolledcourses(request):
 def createquiz(request):
     if request.method == "POST":
         data = json.loads(request.body)
+        cid = data['cid']
         ddl = data["ddl"]
         ##data["q1"] = str "{description: 1+1, A:2,b:3,c:4,d:5,ans: A}"
         ##data["q2"] = str "{description: 1+1, A:2,b:3,c:4,d:5,ans: AB}"
@@ -247,11 +295,13 @@ def createquiz(request):
         q2 = data["q2"]
         q3 = data["q3"]
         ans = data["ans"]
-        quiz = Quizzes.objects.create(ddl=ddl, q1=q1, q2=q2, q3=q3, ans=ans)
+        course = Courses.objects.get(cid=cid)
+        quiz = Quizzes.objects.create(cid=course, ddl=ddl, q1=q1, q2=q2, q3=q3, ans=ans)
         if quiz is not None:
             return JsonResponse({'status': 200})
         else:
             return JsonResponse({'status': 403})
+        #return JsonResponse({"status": 200})
 
 
 @csrf_exempt
@@ -447,7 +497,7 @@ def createposts(request):
                                     , content=content, multimedia=multimedia, reply=reply, likes=likes,
                                     editted=editted, flagged=flagged, privacy=privacy)
         if post is not None:
-            return JsonResponse({'status': 200})
+            return JsonResponse({'pid': post.pid, 'status': 200})
         else:
             return JsonResponse({'status': 403})
 
@@ -651,7 +701,7 @@ def announcement(request):
     if request.method == "POST":
         data = json.loads(request.body)
         cid = data['cid']
-        #title = data["title"]
+        # title = data["title"]
         content = data["content"]
         course = Courses.objects.get(cid=cid)
         coursename = course.coursename
@@ -685,13 +735,12 @@ def sendemail(coursename, uids, content):
         text = msg.as_string()
         TIE_server.sendmail(email_from, email_to, text)
     TIE_server.quit()
-    return JsonResponse({"status": 200, "msg": "send success"})
 
 
 @csrf_exempt
 def materialannouncement(request):
     if request.method == "POST":
-        data =
+        # data =
         return JsonResponse({"status": 200})
 
 
@@ -699,3 +748,42 @@ def materialannouncement(request):
 def onlinecourseannouncement(request):
     if request.method == "POST":
         return JsonResponse({"status": 200})
+
+def simplesend(content, email_from ,email_to, title):
+    smtp_port = 587
+    smtp_server = 'smtp.gmail.com'
+    email_from = 'randomzsh@gmail.com'
+    pwd = 'ehomuqhuogjozndr'
+
+    body = content
+    msg = MIMEMultipart()
+    msg["From"] = email_from
+    msg["Subject"] = title
+    msg.attach(MIMEText(body, "plain"))
+    TIE_server = smtplib.SMTP(smtp_server, smtp_port)
+    TIE_server.starttls()
+    TIE_server.login(email_from, pwd)
+    msg["To"] = email_to
+    text = msg.as_string()
+    TIE_server.sendmail(email_from, email_to, text)
+    TIE_server.quit()
+
+@csrf_exempt
+def uploadavatar(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        ava = data["avatar"]
+        user = Users.objects.get(uid=uid)
+        user.avatar = ava
+        user.save()
+        return JsonResponse({"status":200})
+
+@csrf_exempt
+def downloadavatar(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        uid = data["uid"]
+        user = Users.objects.get(uid=uid)
+        ava = user.avatar
+        return JsonResponse({"ava":ava})

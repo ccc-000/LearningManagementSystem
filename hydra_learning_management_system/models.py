@@ -15,6 +15,7 @@ class Users(models.Model):
     gender = models.TextField(default='')
     birthday = models.TextField(default='')
     preferredlanguage = models.TextField(default='')
+    avatar = models.TextField(default='')
 
 
 class Courses(models.Model):
@@ -43,7 +44,7 @@ class Assessments(models.Model):
 class Quizzes(models.Model):
     qid = models.AutoField(primary_key=True)
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE, default='')
-    ddl = models.DateTimeField()
+    ddl = models.TextField(default='')
     q1 = models.TextField()
     q2 = models.TextField()
     q3 = models.TextField()
@@ -93,4 +94,4 @@ class LiveStream(models.Model):
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE)
     url = models.TextField()
     attendance = models.TextField()
-    createtime = models.TextField()
+    createtime = models.TextField(default='')
