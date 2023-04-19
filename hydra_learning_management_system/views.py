@@ -22,6 +22,8 @@ from .models import *
 @csrf_exempt
 def register(request):
     if request.method == "POST":
+        now = datetime.date.today()
+        now = str(now)
         data = json.loads(request.body)
         username = data['username']
         password = data['password']
@@ -42,7 +44,7 @@ def register(request):
             return JsonResponse({'status': 403, 'msg': 'Error: This username has already existed'})
         if email in emails:
             return JsonResponse({'status': 403, 'msg': 'Error: This email has already existed'})
-        user = Users.objects.create(username=username, password=password, email=email, role=role)
+        user = Users.objects.create(username=username, password=password, email=email, role=role, birthday=now)
         return JsonResponse({'status': 200, 'msg': 'Register Success'})
 
 
@@ -156,6 +158,7 @@ def createcourses(request):
             return JsonResponse({"status":403, "msg": "Error: This course has already existed"})
         course = Courses.objects.create(coursename=coursename, creatorid=creator,
                                         coursedescription=coursedecription, gradedistribution=gradedistribution)
+        enrollment = Enrollments.objects.create(cid=course, uid=creator)
         if course:
             return JsonResponse({'status': 200})
         else:
