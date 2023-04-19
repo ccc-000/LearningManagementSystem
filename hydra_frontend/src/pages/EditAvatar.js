@@ -32,14 +32,12 @@ function EditAvatar() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        if (data.status === 200) {
-          if(data.avatar === null){
-            setDefault(avatar);
-            setAva(avatar);
-          }else{
-            setDefault(data.avatar);
-            setAva(data.avatar);
-          }
+        if(data.ava === ''){
+          setAva(avatar);
+          setDefault(avatar);
+        }else{
+          setAva(data.ava);
+          setDefault(data.ava);
         }
       })
       .catch((error) => {
@@ -222,7 +220,9 @@ function EditAvatar() {
                       maxCount={1}
                       className="upload-list-inline"
                     >
-                      <Button icon={<UploadOutlined />}>Upload</Button>
+                      <Tooltip placement="bottom" title="File MaxSize is 1.5MB">
+                        <Button icon={<UploadOutlined />}>Upload</Button>
+                      </Tooltip>
                     </Upload>
                   </div>
                   <div id="ChangeAvatar-Submit">

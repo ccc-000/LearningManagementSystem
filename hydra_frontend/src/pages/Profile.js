@@ -4,13 +4,14 @@ import { Button, Card, Avatar, Timeline, Layout, Menu, Tooltip} from 'antd';
 import {useNavigate, Link} from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/Profile.css';
-import avatar from '../img/avatar.png';
+import avatar from '../img/hydra2.png';
 
 const {Header, Content, Footer, Sider} = Layout;
 
 function Profile() {
     const [data1, setData1] = useState([]);
     const [data2, setData2] = useState([]);
+    const [defaultAvatar, setDefault] = useState(avatar);
     console.log(data2.courses);
 
     const role = localStorage.role;
@@ -55,6 +56,28 @@ function Profile() {
         .then(data2 => {
           setData2(jsonToList(data2));
         });
+
+        fetch('http://localhost:8000/downloadavatar/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            uid: localStorage.uid,
+          }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if(data.ava === ''){
+            setDefault(avatar);
+          }else{
+            setDefault(data.ava);
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
     }, []);
 
     const navigate = useNavigate();
@@ -96,7 +119,7 @@ function Profile() {
                     cursor: 'pointer',
                     marginLeft: '80px',
                 }}
-                src={avatar} onClick={handleEditAvatar}/>
+                src={defaultAvatar} onClick={handleEditAvatar}/>
                 <Menu.Item
                     key="profile"
                     icon={<UserOutlined />}

@@ -4,7 +4,7 @@ import { UserOutlined, LogoutOutlined, RollbackOutlined } from '@ant-design/icon
 import { useNavigate, Link } from 'react-router-dom';
 import 'antd/dist/reset.css';
 import '../styles/CourseHistory.css';
-import avatar from '../img/avatar.png';
+import avatar from '../img/hydra2.png';
 
 const {Header, Content, Footer, Sider} = Layout;
 
@@ -12,6 +12,7 @@ function CourseHistory() {
     const [reverse, setReverse] = useState(false);
     const [data, setData] = useState([]);
     const navigate = useNavigate();
+    const [defaultAvatar, setDefault] = useState();
 
     const role = localStorage.getItem('role');
 
@@ -45,6 +46,28 @@ function CourseHistory() {
           .then(response => response.json())
           .then(data => {
             setData(jsonToList(data));
+          });
+
+          fetch('http://localhost:8000/downloadavatar/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              uid: localStorage.uid,
+            }),
+          })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            if(data.ava === ''){
+              setDefault(avatar);
+            }else{
+              setDefault(data.ava);
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
           });
       }, []);
 
@@ -85,7 +108,7 @@ function CourseHistory() {
                     cursor: 'pointer',
                     marginLeft: '80px',
                 }}
-                src={avatar} onClick={handleEditAvatar}/>
+                src={defaultAvatar} onClick={handleEditAvatar}/>
                 <Menu.Item
                     key="profile"
                     icon={<UserOutlined />}

@@ -7,6 +7,7 @@ import PostAnnouncement from '../components/PostAnnouncement';
 import 'antd/dist/reset.css';
 import '../styles/Material.css';
 import Navibar from '../components/Navibar';
+import token from "../utility/token"
 
 const { Header, Content, Footer } = Layout;
 
@@ -107,12 +108,14 @@ function Material() {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [form, setForm] = useState({
       type: "",
-      filepath: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+      filepath: ""
     });
 
     const showModal = () => {
       setOpen(true);
     };
+
+    // Upload to the backend
     const handleOk = () => {
       console.log(form);
       setConfirmLoading(true);
@@ -152,10 +155,10 @@ function Material() {
 
     const handleChange = (value) => {
       console.log(`selected ${value}`);
-      form.type = value;
+      setForm({...form, type: value})
     };
 
-    const props = {
+    const uploadProps = {
       name: 'file',
       action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
       headers: {
@@ -163,6 +166,22 @@ function Material() {
       },
       maxCount: 1,
       onChange(info) {
+        // Upload the file to Google
+        const f = info.file.originFileObj;
+        console.log(f)
+        fetch(`https://storage.googleapis.com/upload/storage/v1/b/9900hydra/o?uploadType=media&name=${f.name}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': f.type,
+            'Authorization': `Bearer ${token}`
+          },
+          body: f
+        })
+        .then(res => res.json())
+        .then((data) => {
+          console.log(data)
+          setForm({...form, filepath: `https://storage.googleapis.com/9900hydra/${f.name}`})
+        })
         if (info.file.status !== 'uploading') {
           console.log(info.file, info.fileList);
         }
@@ -230,7 +249,7 @@ function Material() {
                         />
                       </div>
                       <div className="Upload-File">
-                        <Upload {...props}>
+                        <Upload {...uploadProps}>
                           <Button icon={<UploadOutlined />}>Click to Upload</Button>
                         </Upload>
                       </div>
@@ -247,29 +266,7 @@ function Material() {
                       onRow={(record) => {
                         return {
                           onClick: event => {
-                            if (record.filepath.endsWith('.pdf')) {
-                              console.log("pdf",record.filepath);
-                              window.location.assign(record.filepath);
-                              // window.location.assign(<iframe src={record.filepath} title="file preview" width="100%" height="600px" />)
-                            } 
-                            if (record.filepath.endsWith('.zip')) {
-                              //if file is zip, download it
-                              fetch(record.filepath) // 替换为要下载的文件 URL
-                                .then(response => response.blob())
-                                .then(blob => {
-                                  const downloadLink = document.createElement("a");
-                                  downloadLink.href = URL.createObjectURL(blob);
-                                  const urlObj = new URL(record.filepath);
-                                  downloadLink.download = urlObj.pathname.split('/').pop().replace(/%20/g, ' '); // 替换为要下载的文件名称
-                                  downloadLink.click();
-                                })
-                                .catch(error => console.error("Download failed", error));
-                            }
-                            if (record.filepath.endsWith('.mp4')){
-                              //if file is mp4, navigate to videoPlayer page
-                              console.log("mp4", record.filepath);
-                              navigate('/coursemainpage/videoPlayer', { state: { filepath: record.filepath } });
-                            }
+                            window.location.assign(record.filepath)
                           },
                         };
                       }}
