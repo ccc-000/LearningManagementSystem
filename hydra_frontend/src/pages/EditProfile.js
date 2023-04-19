@@ -109,6 +109,7 @@ function EditProfile() {
     birthday: dayjs(data.birthday),
     email: data.email,
     language: data.language,
+    zoomlink: data.zoomlink,
   }
 
   form.setFieldsValue(initialValues);
@@ -141,6 +142,7 @@ function EditProfile() {
         birthday: values["date-picker"],
         email: values.email,
         preferedlanguage: values.language,
+        zoomlink: values.zoomlink,
       }),
     })
       .then(response => response.json())
@@ -266,7 +268,7 @@ function EditProfile() {
                   bordered={false}
                   style={{
                   width: 780,
-                  height: 480,
+                  height: 500,
                   }}
                 >
                   <Form
@@ -277,7 +279,7 @@ function EditProfile() {
                   onFinish={onFinish}
                   style={{
                       maxWidth: 600,
-                      marginTop: 30,
+                      marginTop: 15,
                   }}
                   scrollToFirstError
                   >
@@ -365,6 +367,19 @@ function EditProfile() {
                         <Option value="Japanese">Japanese</Option>
                         <Option value="Russian">Russian</Option>
                       </Select>
+                    </Form.Item>
+
+                    <Form.Item
+                      name="zoomlink"
+                      label="Zoom Link"
+                      rules={[
+                      {
+                          required: true,
+                          message: 'Please input your zoom link!',
+                      },
+                      ]}
+                    >
+                      <Input />
                     </Form.Item>
 
                     <Form.Item {...tailFormItemLayout}>

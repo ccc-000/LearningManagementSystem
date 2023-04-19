@@ -41,6 +41,7 @@ function Profile() {
         .then((response) => response.json())
         .then((data1) => {
           setData1(data1);
+          console.log(data1);
         });
 
       fetch('http://localhost:8000/enrolledcourses/', {
@@ -158,7 +159,7 @@ function Profile() {
                     bordered={false}
                     style={{
                     width: 360,
-                    height: 400,
+                    height: 430,
                     marginRight: 20,
                     fontSize: 15,
                     }}
@@ -170,6 +171,9 @@ function Profile() {
                       <p><span style={{ fontWeight: 'bold' }}>Birthday:</span>{'\u00A0'}{'\u00A0'}{data1.birthday}</p>
                       <p><span style={{ fontWeight: 'bold' }}>Email:</span>{'\u00A0'}{'\u00A0'}{data1.email}</p>
                       <p><span style={{ fontWeight: 'bold' }}>Preferred Language:</span>{'\u00A0'}{'\u00A0'}{data1.language}</p>
+                      {role === 'lecturer' ? 
+                        <p style={{textOverflow: 'ellipsis', maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden'}}><span style={{ fontWeight: 'bold' }}>Zoom Link:</span>{'\u00A0'}{'\u00A0'}{data1.zoomlink}</p> 
+                      : null}
                     </div>
                     <Link to="/editprofile">
                       <div id="ProfileDetail-Button">
@@ -207,7 +211,7 @@ function Profile() {
                       bordered={false}
                       style={{
                       width: 360,
-                      height: 400,
+                      height: 430,
                       marginLeft: 20,
                       }}
                       >
