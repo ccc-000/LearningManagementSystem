@@ -158,7 +158,7 @@ def forget_pwd_send_link_2(request):
         users = serializers.serialize("python", users)
         names = []
         for i in users:
-            names.append(i["fields"]["name"])
+            names.append(i["fields"]["username"])
         if username not in names:
             return JsonResponse({'status': 403, 'msg': 'Error: This username never exists.'})
         pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
