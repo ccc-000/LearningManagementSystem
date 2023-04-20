@@ -193,7 +193,15 @@ function Quiz () {
         })
     }
 
-
+    //Quiz countdown
+    const [countdown, setCountdown] = useState(600); // 10 minutes in seconds
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCountdown(countdown => countdown - 1);
+        }, 1000);
+        return () => clearInterval(intervalId);
+    }, []);
+    
 
     if (role === 'lecturer') {
         return (
@@ -314,6 +322,35 @@ function Quiz () {
                             footer={[
                             <Button key="back" onClick={closeModal}> Cancel </Button>,
                             ]}>
+                            <span>Q1: 1+1=?</span>
+                            <br />
+                            <Radio.Group style={{ marginTop: '10px' }}>
+                            <br />
+                                <Radio value="a">A. 1</Radio>
+                                <Radio value="b">B. 2</Radio>
+                                <Radio value="c">C. 3</Radio>
+                                <Radio value="d">D. 4</Radio>
+                            </Radio.Group>
+                            <br />
+                            <span>Q2: 2+2=?</span>
+                            <br />
+                            <Checkbox.Group style={{ marginTop: '10px' }}>
+                            <br />
+                                <Checkbox value="a">A. 4</Checkbox>
+                                <Checkbox value="b">B. 4</Checkbox>
+                                <Checkbox value="c">C. 5</Checkbox>
+                                <Checkbox value="d">D. 5</Checkbox>
+                            </Checkbox.Group >
+                            <br />
+                            <span>Q3: 3+3=?</span>
+                            <br />
+                            <Checkbox.Group style={{ marginTop: '10px' }}>
+                            <br />
+                                <Checkbox value="a">A. 5</Checkbox>
+                                <Checkbox value="b">B. 5</Checkbox>
+                                <Checkbox value="c">C. 6</Checkbox>
+                                <Checkbox value="d">D. 6</Checkbox>
+                            </Checkbox.Group>
                             
                         </Modal>
                     </div>
@@ -372,15 +409,58 @@ function Quiz () {
                         </Card>
                         <Button onClick={() => openModal('modal3')} icon={<FundOutlined />} style={{marginTop:'10px'}}>Submit {`Quiz ${index+1}`} </Button>
                         <Modal
-                            open={currentModal === 'modal3'  && open}
-                            id='modal3'
+                        open={currentModal === 'modal3'  && open}
+                        id='modal3'
+                        title={`Quiz ${index+1}`}
+                        onCancel={closeModal}
+                        footer={[
+                        <Button key="back" onClick={closeModal}> Cancel </Button>,
+                        <Button key="notice" type="primary" onClick={() => openModal('modal4')} disabled={countdown < 0}> Yes </Button>,
+                        ]}
+                        >
+                            Are you sure to start this quiz? There is a time limit in 10 minutes.
+                        </Modal>
+
+                        <Modal
+                            open={currentModal === 'modal4'  && open}
+                            id='modal4'
                             title={`Quiz ${index+1}`}
                             onCancel={closeModal}
                             footer={[
                             <Button key="back" onClick={closeModal}> Cancel </Button>,
-                            <Button key="submit" type="primary" onClick={handleSubmit}> Submit </Button>,
+                            <Button key="submit" type="primary" onClick={handleSubmit} disabled={countdown < 0}> Submit </Button>,
                             ]}>
-                            
+                            <div>{Math.floor(countdown / 60)}:{countdown % 60 < 10 ? '0' : ''}{countdown % 60}</div>
+
+                            <span>Q1: 1+1=?</span>
+                            <br />
+                            <Radio.Group style={{ marginTop: '10px' }}>
+                            <br />
+                                <Radio value="a">A. 1</Radio>
+                                <Radio value="b">B. 2</Radio>
+                                <Radio value="c">C. 3</Radio>
+                                <Radio value="d">D. 4</Radio>
+                            </Radio.Group>
+                            <br />
+                            <span>Q2: 2+2=?</span>
+                            <br />
+                            <Checkbox.Group style={{ marginTop: '10px' }}>
+                            <br />
+                                <Checkbox value="a">A. 4</Checkbox>
+                                <Checkbox value="b">B. 4</Checkbox>
+                                <Checkbox value="c">C. 5</Checkbox>
+                                <Checkbox value="d">D. 5</Checkbox>
+                            </Checkbox.Group >
+                            <br />
+                            <span>Q3: 3+3=?</span>
+                            <br />
+                            <Checkbox.Group style={{ marginTop: '10px' }}>
+                            <br />
+                                <Checkbox value="a">A. 5</Checkbox>
+                                <Checkbox value="b">B. 5</Checkbox>
+                                <Checkbox value="c">C. 6</Checkbox>
+                                <Checkbox value="d">D. 6</Checkbox>
+                            </Checkbox.Group>
                         </Modal>
                     </div>
                 ))}

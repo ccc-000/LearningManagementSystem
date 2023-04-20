@@ -14,7 +14,7 @@ const Grade = () => {
             title: 'Item',
             dataIndex: 'item',
             key: 'item',
-            render: (text) => <a>{text}</a>,
+            render: (text) => <p>{text}</p>,
         },
         {
             title: 'Grade',
@@ -31,12 +31,12 @@ const Grade = () => {
         {
             key: '2',
             item: 'Quiz 2',
-            grade: '7/9'
+            grade: '0/9'
         },
         {
             key: '3',
             item: 'Quiz 3',
-            grade: '9/9'
+            grade: '0/9'
         },
         {
             key: '4',
@@ -46,17 +46,17 @@ const Grade = () => {
         {
             key: '5',
             item: 'Assigment 2',
-            grade: '10/15'
+            grade: '0/15'
         },
         {
             key: '6',
             item: 'Assigment 3',
-            grade: '11/15'
+            grade: '0/15'
         },
         {
             key: '7',
             item: 'Final Exam',
-            grade: '25/28'
+            grade: '0/28'
         },
         {
             key: '8',
