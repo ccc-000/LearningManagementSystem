@@ -4,7 +4,7 @@ import {
 } from '@ant-design/icons';
 import { useState, useEffect} from 'react';
 import {useNavigate } from 'react-router-dom';
-import pic from '../img/hydra1.png';
+import pic from '../img/unsw.jpeg';
 import '../styles/CourseCard.css';
 
 const { Meta } = Card;
