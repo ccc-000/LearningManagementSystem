@@ -61,6 +61,7 @@ function EditProfile() {
 
   //get user info
   const [data, setData] = useState([]);
+  const role = localStorage.getItem('role');
   
   useEffect(() => {
     fetch('http://localhost:8000/showprofile/', {
@@ -121,6 +122,9 @@ function EditProfile() {
       ...fieldsValue,
       'date-picker': fieldsValue['birthday'].format('YYYY-MM-DD'),
     };
+    if(values.zoomlink === undefined){
+      values.zoomlink = '';
+    }
     console.log('Received values of form: ', values);
 
     api.destroy();
@@ -368,19 +372,21 @@ function EditProfile() {
                         <Option value="Russian">Russian</Option>
                       </Select>
                     </Form.Item>
-
-                    <Form.Item
-                      name="zoomlink"
-                      label="Zoom Link"
-                      rules={[
-                      {
-                          required: true,
-                          message: 'Please input your zoom link!',
-                      },
-                      ]}
-                    >
-                      <Input />
-                    </Form.Item>
+                    
+                    {role === 'lecturer' &&
+                      <Form.Item
+                        name="zoomlink"
+                        label="Zoom Link"
+                        rules={[
+                        {
+                            required: true,
+                            message: 'Please input your zoom link!',
+                        },
+                        ]}
+                      >
+                        <Input />
+                      </Form.Item>
+                    }
 
                     <Form.Item {...tailFormItemLayout}>
                       <div id="EditProfile-Submit">
