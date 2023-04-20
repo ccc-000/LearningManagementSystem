@@ -874,3 +874,26 @@ def showlive(request):
         course = Courses.objects.get(cid=cid)
         zoomlink = course.creatorid.zoomlink
         return JsonResponse({"zoomlink":zoomlink})
+
+@csrf_exempt
+def chatbot(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        #print(data)
+        cid = data['cid']
+        msg = data["message"]
+        course = Courses.objects.get(cid=cid)
+        material = Materials.objects.all()
+        material = serializers.serialize("python", material)[0]
+        post = Posts.objects.filter(cid = course)
+        #post = serializers.serialize("python", post)[0]
+        #
+        #print(re.search(r"lecturer",msg))
+        if re.search(r"lecturer",msg):
+            return JsonResponse({"msg": course.creatorid.username})
+        if re.search(r"material", msg):
+            return JsonResponse({"material": material["fields"]['filepath']})
+        # if re.search(r"forum", msg):
+        #     return JsonResponse({"post": post["fields"]})
+        else:
+            return JsonResponse({"msg": "Sorry, I don't know."})

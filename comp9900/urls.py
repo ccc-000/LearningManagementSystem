@@ -75,7 +75,8 @@ urlpatterns = [
     path("downloadavatar/",views.downloadavatar),
 
     path("startlivestream/", views.startlive),
-    path("showlive/",views.showlive)
+    path("showlive/",views.showlive),
+    path("chatbot/",views.chatbot)
 
     # announcementpath(),#create live, show live, sholive
     # path(),
