@@ -896,4 +896,4 @@ def chatbot(request):
         # if re.search(r"forum", msg):
         #     return JsonResponse({"post": post["fields"]})
         else:
-            return JsonResponse({"message": "Sorry, I don't know."})
+            return JsonResponse({"message": "Sorry, I cannot understand. Could you ask me again?"})

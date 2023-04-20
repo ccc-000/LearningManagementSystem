@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import {Link} from 'react-router-dom';
 import { Button, Input, Layout, List, Modal, Typography, Avatar } from 'antd';
 import { UserOutlined, RobotOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import Robot from './Robot';
@@ -35,10 +36,6 @@ const Chatbot = () => {
       }, 500);
       setTimeout(() => {
 
-        // setMessages((prevMessages) => [
-        //   ...prevMessages,
-        //   { message: 'Sorry I cannot understand', isRobot: true },
-        // ]);
         handleSubmit(inputValue.trim());
 
       }, 1000);
@@ -61,14 +58,34 @@ const Chatbot = () => {
             return;
         }
         console.log('response is',jsonRes);
+        let msg = typeMessage({ text: jsonRes.message });
         setMessages((prevMessages) => [
           ...prevMessages,
-          { message: jsonRes.message, isRobot: true },
+          { message: msg, isRobot: true },
         ]);
      
     })
     
   };
+  function typeMessage({ text }) {
+    const urlRegex = new RegExp('^(http|https)://[a-z0-9]+([-._][a-z0-9]+)*.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$');
+    const isUrl = urlRegex.test(text);
+    console.log('message type isUrl', isUrl);
+    if (isUrl) {
+      return (
+        
+          <a href={text} target="_blank">{text}</a>
+       
+      );
+    } else {
+      return (
+       
+          <span>{text}</span>
+  
+      );
+    }
+  }
+
 
   return (
     <>
@@ -101,6 +118,7 @@ const Chatbot = () => {
                       }
                       title={'Robot'}
                       description={item.message}
+                      
                     />) : (  
                       <List.Item.Meta
                     avatar={
