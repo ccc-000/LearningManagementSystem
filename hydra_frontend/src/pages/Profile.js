@@ -189,7 +189,7 @@ function Profile() {
                       bordered={false}
                       style={{
                       width: 360,
-                      height: 400,
+                      height: 430,
                       marginLeft: 20,
                       }}
                       >
