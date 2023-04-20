@@ -99,7 +99,7 @@ function Forum() {
   // Function that convert json data into post list
   const jsonToPost = (posts_data) => {
     const post_list = posts_data.map(p => {
-      if (!p.privacy || p.creatorid === localStorage.getItem('uid') || localStorage.getItem('role') === 'lecturer') {
+      if (!p.privacy || p.creatorid === parseInt(localStorage.getItem('uid')) || localStorage.getItem('role') === 'lecturer') {
         return {
           postid: p.pid,
           posttitle: p.title,
