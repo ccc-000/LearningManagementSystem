@@ -890,10 +890,10 @@ def chatbot(request):
         #
         #print(re.search(r"lecturer",msg))
         if re.search(r"lecturer",msg):
-            return JsonResponse({"msg": course.creatorid.username})
+            return JsonResponse({"message": course.creatorid.username})
         if re.search(r"material", msg):
-            return JsonResponse({"material": material["fields"]['filepath']})
+            return JsonResponse({"message": material["fields"]['filepath']})
         # if re.search(r"forum", msg):
         #     return JsonResponse({"post": post["fields"]})
         else:
-            return JsonResponse({"msg": "Sorry, I don't know."})
+            return JsonResponse({"message": "Sorry, I don't know."})

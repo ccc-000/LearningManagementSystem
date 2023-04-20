@@ -60,9 +60,10 @@ const Chatbot = () => {
             message.error(jsonRes.error);
             return;
         }
+        console.log('response is',jsonRes);
         setMessages((prevMessages) => [
           ...prevMessages,
-          { message: jsonRes.message, isRobot: false },
+          { message: jsonRes.message, isRobot: true },
         ]);
      
     })
