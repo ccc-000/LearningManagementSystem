@@ -308,7 +308,7 @@ function ForumDetailStudent() {
       headers: {
         'Content-Type': 'application/json',
       },
-      // TODO: translate according to the user preference
+      // Translate according to the user preference
       body: JSON.stringify({
         q: [data.content],
         source: "en",
