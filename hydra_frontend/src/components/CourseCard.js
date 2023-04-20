@@ -51,7 +51,7 @@ const ShowCourse = ({uid, role}) => {
             message.error(jsonRes.error);
             return;
         }
-        message.success('Successful!');
+        // message.success('Successful!');
    
         setCourseList(jsonRes.courses);
      
@@ -77,7 +77,7 @@ const ShowCourse = ({uid, role}) => {
           return;
       }
       getCourses();
-      message.success('Successful!');
+      // message.success('Successful!');
     })};
 
   return (
