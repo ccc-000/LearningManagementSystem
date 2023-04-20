@@ -91,7 +91,7 @@ const Grade = () => {
           </Link>
           <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
         </Header>
-        <Table columns={columns} dataSource={data} />;
+        <Table columns={columns} dataSource={data} style={{marginTop:'10px', marginLeft:'10px'}}/>;
 
         <Navibar />   
         <Footer

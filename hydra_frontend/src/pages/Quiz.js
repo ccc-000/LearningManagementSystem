@@ -221,7 +221,7 @@ function Quiz () {
                 <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
             </Header>
             <Space style={{marginLeft:'58px', marginBottom:'15px', marginTop: '40px'}}>
-                <Button type="primary" size = "large" onClick={openModal} style={{marginLeft:'20px'}}>Create a new quiz</Button>
+                <Button type="primary" size = "large" onClick={() => openModal('modal1')} style={{marginLeft:'20px'}}>Create a new quiz</Button>
                 <Modal
                     open={currentModal === 'modal1' && open}
                     id='modal1'
@@ -233,7 +233,7 @@ function Quiz () {
                     <Button key="create" type="primary" onClick={handleCreate} > Create </Button>,
                     ]}
                 >
-                    {/* Deadline: <TimePicker onChange={handleDdlChange} /> */}
+                    Time Limit: <Input style={{width:'50px'}}></Input> mins
                     {questionData.map((question, index) => (
                         <div key={index} style={{ marginBottom: '10px' }}>
                         <span>Q{index + 1}:</span>
