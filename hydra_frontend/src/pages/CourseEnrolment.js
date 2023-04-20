@@ -88,7 +88,7 @@ const CourseEnrolment = () => {
                     message.error(jsonRes.error);
                     return;
                 }
-                message.success('Successful!');
+                // message.success('Successful!');
                 setData(jsonRes.courses);
                 setFilteredData(jsonRes.courses);
                 
