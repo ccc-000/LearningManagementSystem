@@ -1,4 +1,5 @@
 import datetime
+import json
 import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -350,8 +351,6 @@ def createquiz(request):
         data = json.loads(request.body)
         cid = data['cid']
         ddl = data["ddl"]
-        ##data["q1"] = str "{description: 1+1, A:2,b:3,c:4,d:5,ans: A}"
-        ##data["q2"] = str "{description: 1+1, A:2,b:3,c:4,d:5,ans: AB}"
         q1 = data["q1"]
         q2 = data["q2"]
         q3 = data["q3"]
@@ -398,16 +397,12 @@ def attendquiz(request):
 def reviewquiz(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        cid = data["cid"]
-        uid = data["uid"]
         qid = data["qid"]
         quiz = Quizzes.objects.get(qid=qid)
-        quiz = serializers.serialize("python", quiz)
-        quizzes = []
-        for i in quiz:
-            tmp = i["fields"]
-            quizzes.append(tmp)
-    return JsonResponse({"quiz": quizzes})
+        #quiz = json.dumps(quiz)
+        quiz = serializers.serialize("python", [quiz])[0]["fields"]
+        print(quiz)
+        return JsonResponse({"quiz": quiz})
 
 
 @csrf_exempt

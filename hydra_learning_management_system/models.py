@@ -46,9 +46,9 @@ class Quizzes(models.Model):
     qid = models.AutoField(primary_key=True)
     cid = models.ForeignKey(Courses, on_delete=models.CASCADE, default='')
     ddl = models.TextField(default='')
-    q1 = models.TextField()
-    q2 = models.TextField()
-    q3 = models.TextField()
+    q1 = models.JSONField(default={})
+    q2 = models.JSONField(default={})
+    q3 = models.JSONField(default={})
     ans = models.TextField()
 
 
