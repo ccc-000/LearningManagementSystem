@@ -159,17 +159,18 @@ function Quiz () {
 
     //Show Quiz Detail
     const [quizDetail, setQuizDetail] = useState([]);
-    useEffect(() => {
+    const reviewQuiz = () => {
+        openModal('modal2')
         axios.post('http://localhost:8000/reviewquiz/', {
             cid: cid,
             qid: localStorage.getItem('qid'),
             uid: localStorage.getItem('uid')
         })
         .then((response) => {
-            setQuizDetail(response.data.quizzes);
-            console.log(response.data.quizzes);
+            setQuizDetail(response.data.quiz);
+            console.log(response.data.quiz);
         })
-    }, []);
+    };
 
     //Submit Quiz for student
     const StuQuizData = [];
@@ -307,13 +308,12 @@ function Quiz () {
                                 src={pic}
                             />
                             }
-                            onClick={() => openModal('modal2')}
+                            onClick={reviewQuiz}
                         >
                             <Meta
                             title={`Quiz ${index+1}`}
                             />
                         </Card>
-                        {/* <Button onClick={() => openModal('modal2')} icon={<FundOutlined />} style={{marginTop:'10px'}}> </Button> */}
                         <Modal
                             open={currentModal === 'modal2'  && open}
                             id='modal2'
@@ -322,6 +322,7 @@ function Quiz () {
                             footer={[
                             <Button key="back" onClick={closeModal}> Cancel </Button>,
                             ]}>
+
                             <span>Q1: 1+1=?</span>
                             <br />
                             <Radio.Group style={{ marginTop: '10px' }}>
