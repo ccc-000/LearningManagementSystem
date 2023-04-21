@@ -1,5 +1,4 @@
 import datetime
-import json
 import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -7,7 +6,6 @@ from email.mime.text import MIMEText
 
 from django.core import serializers
 from django.http import JsonResponse
-from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
@@ -209,36 +207,35 @@ def enrollcourses(request):
         data = json.loads(request.body)
         uid = data['uid']
         coursename = data['coursename']
-        for i in coursename:
-            course = Courses.objects.get(coursename=i)
-            cid = course.cid
-            uids = Enrollments.objects.filter(cid=cid)
-            uids = serializers.serialize("python", uids)
-            # print(uids)
-            uidss = []
-            for i in uids:
-                tmp = i["fields"]["uid"]
-                uidss.append(tmp)
-            # for i in uids:
-            if uid in uidss:
-                return JsonResponse({"status": 500, "msg": "You have enrolled"})
+        course = Courses.objects.get(coursename=coursename)
+        cid = course.cid
+        enrollers = Enrollments.objects.filter(cid=course)
+        enrollers = serializers.serialize("python", enrollers)
+        uidss = []
+        for i in enrollers:
+            tmp = i["fields"]["uid"]
+            uidss.append(tmp)
+        if uid in uidss:
+            return JsonResponse({"status": 500, "msg": "You have enrolled"})
             # print(uid)
-            seat = len(uids)
+        seat = len(enrollers)
             # enrolllist = course.enrolllist
             # enrolllist = json.loads(enrolllist)["enrolllist"]
             # print(enrolllist)
-            available = MAX_SEAT - seat
-            if available > 0:
-                enroll_flag = Enrollments.objects.filter(cid=1)
-                enroll_flag = serializers.serialize("python", enroll_flag)
+        available = MAX_SEAT - seat
+        if available > 0:
+            enroll_flag = Enrollments.objects.filter(cid=1)
+            enroll_flag = serializers.serialize("python", enroll_flag)
                 # print(enroll_flag)
-                course = Courses.objects.get(cid=cid)
-                user = Users.objects.get(uid=uid)
-                enrollment = Enrollments.objects.create(cid=course, uid=user)
-                assessment = Assessments.objects.create(uid=user, cid=course)
-            else:
-                return JsonResponse({"status": 500, "msg": f"The enrollment of {i} failed"})
-        return JsonResponse({'status': 200})
+            course = Courses.objects.get(cid=cid)
+            user = Users.objects.get(uid=uid)
+            enrollment = Enrollments.objects.create(cid=course, uid=user)
+            assessment = Assessments.objects.create(uid=user, cid=course)
+            return JsonResponse({'status': 200})
+        else:
+            return JsonResponse({"status": 500, "msg": f"The enrollment of {i} failed"})
+
+
 
 @csrf_exempt
 def deletecourses(request):
@@ -248,7 +245,7 @@ def deletecourses(request):
         cid = data['cid']
         course = Courses.objects.get(cid=cid)
         course.delete()
-        return JsonResponse({"status":200})
+        return JsonResponse({"status": 200})
 
 
 @csrf_exempt
@@ -258,13 +255,13 @@ def quizlist(request):
         cid = data["cid"]
         course = Courses.objects.get(cid=cid)
         quiz = Quizzes.objects.filter(cid=course)
-        quiz = serializers.serialize("python",quiz)
+        quiz = serializers.serialize("python", quiz)
         quizzes = []
         for i in quiz:
             tmp = {}
             tmp["qid"] = i['pk']
             quizzes.append(tmp)
-        return JsonResponse({"quiz":quizzes})
+        return JsonResponse({"quiz": quizzes})
 
 
 @csrf_exempt
@@ -399,7 +396,7 @@ def reviewquiz(request):
         data = json.loads(request.body)
         qid = data["qid"]
         quiz = Quizzes.objects.get(qid=qid)
-        #quiz = json.dumps(quiz)
+        # quiz = json.dumps(quiz)
         quiz = serializers.serialize("python", [quiz])[0]["fields"]
         print(quiz)
         return JsonResponse({"quiz": quiz})
@@ -489,9 +486,9 @@ def grade(request):
         cid = data["cid"]
         user = Users.objects.get(uid=uid)
         course = Courses.objects.get(cid=cid)
-        grade = Assessments.objects.get(uid = user, cid = course).grade
+        grade = Assessments.objects.get(uid=user, cid=course).grade
         grade = json.dumps(grade)
-    return JsonResponse({"grade":grade})
+    return JsonResponse({"grade": grade})
 
 
 @csrf_exempt
@@ -852,6 +849,7 @@ def downloadavatar(request):
         ava = user.avatar
         return JsonResponse({"ava": ava})
 
+
 @csrf_exempt
 def startlive(request):
     if request.method == "POST":
@@ -861,6 +859,7 @@ def startlive(request):
         zoomlink = user.zoomlink
         return JsonResponse({"zoomlink": zoomlink})
 
+
 @csrf_exempt
 def showlive(request):
     if request.method == "POST":
@@ -868,23 +867,24 @@ def showlive(request):
         cid = data["cid"]
         course = Courses.objects.get(cid=cid)
         zoomlink = course.creatorid.zoomlink
-        return JsonResponse({"zoomlink":zoomlink})
+        return JsonResponse({"zoomlink": zoomlink})
+
 
 @csrf_exempt
 def chatbot(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        #print(data)
+        # print(data)
         cid = data['cid']
         msg = data["message"]
         course = Courses.objects.get(cid=cid)
         material = Materials.objects.all()
         material = serializers.serialize("python", material)[0]
-        post = Posts.objects.filter(cid = course)
-        #post = serializers.serialize("python", post)[0]
+        post = Posts.objects.filter(cid=course)
+        # post = serializers.serialize("python", post)[0]
         #
-        #print(re.search(r"lecturer",msg))
-        if re.search(r"lecturer",msg):
+        # print(re.search(r"lecturer",msg))
+        if re.search(r"lecturer", msg):
             return JsonResponse({"message": course.creatorid.username})
         if re.search(r"material", msg):
             return JsonResponse({"message": material["fields"]['filepath']})
