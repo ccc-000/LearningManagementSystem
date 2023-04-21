@@ -9,7 +9,7 @@ import axios from 'axios';
 import pic from '../img/hydra1.png';
 import '../styles/Assignment.css';
 
-function Quiz () {
+export default function Quiz () {
     const { Header, Content, Footer, Sider } = Layout;
     const { TextArea } = Input;
     const { Meta } = Card;
@@ -20,7 +20,7 @@ function Quiz () {
     const [open, setOpen] = useState(false);
     const openModal = (modalId) => {
         setCurrentModal(modalId);
-        setOpen(true);
+        setOpen(true)
     };
 
     const closeModal = () => {
@@ -159,8 +159,11 @@ function Quiz () {
 
     //Show Quiz Detail
     const [quizDetail, setQuizDetail] = useState([]);
-    const reviewQuiz = () => {
-        openModal('modal2')
+    const [questions, setQuestions] = useState([]);
+    //Open Modal3 only once
+    const [modal3Opened, setModal3Opened] = useState(false);
+
+    const reviewQuiz = (modalId) => {
         axios.post('http://localhost:8000/reviewquiz/', {
             cid: cid,
             qid: localStorage.getItem('qid'),
@@ -169,21 +172,65 @@ function Quiz () {
         .then((response) => {
             setQuizDetail(response.data.quiz);
             console.log(response.data.quiz);
+            if (modalId === 'modal2') {
+            openModal('modal2');
+            } else if (modalId === 'modal3') {
+            openModal('modal3');
+            setModal3Opened(true);
+            }
         })
     };
 
+    useEffect(() => {
+        const computedQuestions = Object.keys(quizDetail)
+            .filter((key) => key.startsWith("q"))
+            .map((key) => quizDetail[key]);
+            setQuestions(computedQuestions);
+        }, [quizDetail]);
+
+    //open modal & get quiz detail
+    const openModalAndReview = (modalId) => {
+        if (!modal3Opened) {
+            setModal3Opened(true);
+            reviewQuiz(modalId);
+          }
+    };
+    
+
     //Submit Quiz for student
-    const StuQuizData = [];
+    const stuQuizData = [];
+    stuQuizData.forEach((stuQuiz) => {
+        const items = stuQuiz.items.map((item) => {
+            return { value: item.value, input: item.input };
+            });
+            stuQuizData.push({
+            answer: stuQuiz.selectedOption,
+            });
+        });
+
+        const stuRadioChange = (index, value) => {
+            const stuQuiz = stuQuizData[index];
+            stuQuiz.selectedOption = value;
+            setQuestionData([...questionData.slice(0, index), stuQuiz, ...questionData.slice(index + 1)]);
+        };
+
+        const stuCheckboxChange = (questionIndex, checkedValues) => {
+            const newData = [...questionData];
+            newData[questionIndex].selectedOption = checkedValues;
+            setQuestionData(newData);
+        };
+    
+        const stuAns = [];
+        stuQuizData.forEach((stuQuiz) => {
+            stuAns.push(stuQuiz.answer);
+        });
 
     const handleSubmit = () => {
         axios.post('http://localhost:8000/attendquiz/', {
             cid: cid,
             qid: localStorage.getItem('qid'),
             uid: localStorage.getItem('uid'),
-            q1: quizData[0],
-            q2: quizData[1],
-            q3: quizData[2],
-            ans: ans.join(' ')
+            ans: stuAns.join(' ')
         })
         .then((response) => {
             if (response.data.status === 200) {
@@ -197,11 +244,15 @@ function Quiz () {
     //Quiz countdown
     const [countdown, setCountdown] = useState(600); // 10 minutes in seconds
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            setCountdown(countdown => countdown - 1);
-        }, 1000);
+        let intervalId;
+        if (open & currentModal === 'modal4') {
+            intervalId = setInterval(() => {
+                setCountdown(countdown => countdown - 1);
+            }, 1000);
+        }   
         return () => clearInterval(intervalId);
-    }, []);
+    }, [open, currentModal]);
+    
     
 
     if (role === 'lecturer') {
@@ -231,10 +282,11 @@ function Quiz () {
                     onCancel={closeModal}
                     footer={[
                     <Button key="back" onClick={closeModal}> Cancel </Button>,
-                    <Button key="create" type="primary" onClick={handleCreate} > Create </Button>,
+                    <Button key="create" type="primary" onClick={handleCreate} > Create </Button>
                     ]}
                 >
                     Time Limit: <Input style={{width:'50px'}}></Input> mins
+                    <h3 style={{color:'blue'}}>Select options to set correct answers.</h3>
                     {questionData.map((question, index) => (
                         <div key={index} style={{ marginBottom: '10px' }}>
                         <span>Q{index + 1}:</span>
@@ -320,44 +372,35 @@ function Quiz () {
                             title={`Quiz ${index+1}`}
                             onCancel={closeModal}
                             footer={[
-                            <Button key="back" onClick={closeModal}> Cancel </Button>,
+                            <Button key="back" onClick={closeModal}> Cancel </Button>
                             ]}>
 
-                            <span>Q1: 1+1=?</span>
-                            <br />
-                            <Radio.Group style={{ marginTop: '10px' }}>
-                            <br />
-                                <Radio value="a">A. 1</Radio>
-                                <Radio value="b">B. 2</Radio>
-                                <Radio value="c">C. 3</Radio>
-                                <Radio value="d">D. 4</Radio>
-                            </Radio.Group>
-                            <br />
-                            <span>Q2: 2+2=?</span>
-                            <br />
-                            <Checkbox.Group style={{ marginTop: '10px' }}>
-                            <br />
-                                <Checkbox value="a">A. 4</Checkbox>
-                                <Checkbox value="b">B. 4</Checkbox>
-                                <Checkbox value="c">C. 5</Checkbox>
-                                <Checkbox value="d">D. 5</Checkbox>
-                            </Checkbox.Group >
-                            <br />
-                            <span>Q3: 3+3=?</span>
-                            <br />
-                            <Checkbox.Group style={{ marginTop: '10px' }}>
-                            <br />
-                                <Checkbox value="a">A. 5</Checkbox>
-                                <Checkbox value="b">B. 5</Checkbox>
-                                <Checkbox value="c">C. 6</Checkbox>
-                                <Checkbox value="d">D. 6</Checkbox>
-                            </Checkbox.Group>
-                            
+                            {questions.map((quiz, index) => (
+                                <div key={index} style={{ marginBottom: '10px' }}>
+                                <h3>Q{index+1}: {quiz.description}</h3>
+                                {quiz.type === 'single' ? (
+                                    <Radio.Group value={quiz.answer}>
+                                    {quiz.options.map((option, i) => (
+                                        <Radio key={i} value={option.value}>
+                                        {option.input}
+                                        </Radio>
+                                    ))}
+                                    </Radio.Group>
+                                ) : (
+                                    <Checkbox.Group value={quiz.answer}>
+                                    {quiz.options.map((option, i) => (
+                                        <Checkbox key={i} value={option.value}>
+                                        {option.input}
+                                        </Checkbox>
+                                    ))}
+                                    </Checkbox.Group>
+                                )}
+                                </div>
+                            ))}                   
                         </Modal>
                     </div>
                 ))}
-            </div>
-            
+            </div>           
             <Navibar />
             <Footer
                 style={{
@@ -370,24 +413,24 @@ function Quiz () {
             </Layout>
             </>
         )
-    } else {
+    } else { //role is student
         return (
             <>
-        <Layout
-        className="site-layout"
-        style={{
-            minHeight: '100vh',
-            marginLeft: 200,
-        }}>
-        <Header style={{padding:'2px 10px'}} >
-            <Link to='/coursemainpage'>
-            <Tooltip title="Back">
-                <Button type='link' shape="circle" icon={<RollbackOutlined />} />
-            </Tooltip>
-            </Link>
-            <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
-        </Header>
-        <div class="container" style={{marginTop: "15px"}}> 
+            <Layout
+            className="site-layout"
+            style={{
+                minHeight: '100vh',
+                marginLeft: 200,
+            }}>
+            <Header style={{padding:'2px 10px'}} >
+                <Link to='/coursemainpage'>
+                <Tooltip title="Back">
+                    <Button type='link' shape="circle" icon={<RollbackOutlined />} />
+                </Tooltip>
+                </Link>
+                <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
+            </Header>
+            <div class="container" style={{marginTop: "15px"}}> 
                 {quizList.map((quiz, index) => (
                     <div key={quiz.qid} class="box">
                         <Card
@@ -402,13 +445,13 @@ function Quiz () {
                                 src={pic}
                             />
                             }
-                            onClick={() => openModal('modal3')}
+                            onClick={() => openModalAndReview('modal3')}
                         >
-                            <Meta
-                            title={`Quiz ${index+1}`}
-                            />
+                        <Meta
+                        title={`Quiz ${index+1}`}
+                        />
                         </Card>
-                        <Button onClick={() => openModal('modal3')} icon={<FundOutlined />} style={{marginTop:'10px'}}>Submit {`Quiz ${index+1}`} </Button>
+                        <Button onClick={() => openModalAndReview('modal3')} icon={<FundOutlined />} style={{marginTop:'10px'}}>Submit {`Quiz ${index+1}`} </Button>
                         <Modal
                         open={currentModal === 'modal3'  && open}
                         id='modal3'
@@ -433,53 +476,48 @@ function Quiz () {
                             ]}>
                             <div>{Math.floor(countdown / 60)}:{countdown % 60 < 10 ? '0' : ''}{countdown % 60}</div>
 
-                            <span>Q1: 1+1=?</span>
-                            <br />
-                            <Radio.Group style={{ marginTop: '10px' }}>
-                            <br />
-                                <Radio value="a">A. 1</Radio>
-                                <Radio value="b">B. 2</Radio>
-                                <Radio value="c">C. 3</Radio>
-                                <Radio value="d">D. 4</Radio>
-                            </Radio.Group>
-                            <br />
-                            <span>Q2: 2+2=?</span>
-                            <br />
-                            <Checkbox.Group style={{ marginTop: '10px' }}>
-                            <br />
-                                <Checkbox value="a">A. 4</Checkbox>
-                                <Checkbox value="b">B. 4</Checkbox>
-                                <Checkbox value="c">C. 5</Checkbox>
-                                <Checkbox value="d">D. 5</Checkbox>
-                            </Checkbox.Group >
-                            <br />
-                            <span>Q3: 3+3=?</span>
-                            <br />
-                            <Checkbox.Group style={{ marginTop: '10px' }}>
-                            <br />
-                                <Checkbox value="a">A. 5</Checkbox>
-                                <Checkbox value="b">B. 5</Checkbox>
-                                <Checkbox value="c">C. 6</Checkbox>
-                                <Checkbox value="d">D. 6</Checkbox>
-                            </Checkbox.Group>
+                            {questions.map((quiz, index) => (
+                                <div key={index} style={{ marginBottom: '10px' }}>
+                                <h3>Q{index+1}: {quiz.description}</h3>
+                                {quiz.type === 'single' ? (
+                                    <Radio.Group 
+                                    value={questionData[index].selectedOption}
+                                    onChange={(e) => stuRadioChange(index, e.target.value)}>
+                                    {quiz.options.map((option, i) => (
+                                        <Radio key={i} value={option.value}>
+                                        {option.input}
+                                        </Radio>
+                                    ))}
+                                    </Radio.Group>
+                                ) : (
+                                    <Checkbox.Group
+                                    value={questionData[index].selectedOption}
+                                    onChange={(checkedValues) => stuCheckboxChange(index, checkedValues)}>
+                                    {quiz.options.map((option, i) => (
+                                        <Checkbox key={i} value={option.value}>
+                                        {option.input}
+                                        </Checkbox>
+                                    ))}
+                                    </Checkbox.Group>
+                                )}
+                                </div>
+                            ))}
                         </Modal>
                     </div>
                 ))}
             </div>
-        <Navibar />
-        <Footer
-            style={{
-                textAlign: 'center',
-            }}
-        >
-            Hydra Learning management system©2023 Created by COMP9900 HYDRA Group
-        </Footer>
+            <Navibar />
+            <Footer
+                style={{
+                    textAlign: 'center',
+                }}
+            >
+                Hydra Learning management system©2023 Created by COMP9900 HYDRA Group
+            </Footer>
 
-        </Layout>
-        </>
-        )
+            </Layout>
+            </>
+            )
+        }
     }
-}
 
-
-export default Quiz;
