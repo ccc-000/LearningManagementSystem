@@ -77,7 +77,7 @@ const ShowCourse = ({uid, role}) => {
           return;
       }
       getCourses();
-      // message.success('Successful!');
+      message.success('Successful!');
     })};
 
   return (

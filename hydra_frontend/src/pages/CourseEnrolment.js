@@ -13,7 +13,7 @@ const CourseEnrolment = () => {
             key: 'coursename',
             sorter: (a, b) => a.coursename.localeCompare(b.coursename),
             render: (text, record) => (
-                <div onClick={() => handleSelect(record)}>
+                <div onClick={() => handleSelect(record.coursename)}>
                     {record.selected ? <Checkbox checked /> : <Checkbox />}
                     {'\n'+text}
                 </div>
@@ -43,17 +43,15 @@ const CourseEnrolment = () => {
     };
 
     const handleSelect = (key) => {
-        console.log('handleSelect', key);
         const index = selectedRows.indexOf(key);
         if (index === -1) {
-        setSelectedRows([...selectedRows, key.coursename]);
+        setSelectedRows([...selectedRows, key]);
         } else {
         setSelectedRows(selectedRows.filter((item) => item !== key));
         }
     };
 
     const handleSubmit = () => {
-        console.log('Enrol courses:', selectedRows);
         const request = {coursename: selectedRows, uid: uid};
         fetch(`http://localhost:8000/enrollcourses/`, {
                 method: 'POST',
@@ -88,7 +86,7 @@ const CourseEnrolment = () => {
                     message.error(jsonRes.error);
                     return;
                 }
-                // message.success('Successful!');
+                message.success('Successful!');
                 setData(jsonRes.courses);
                 setFilteredData(jsonRes.courses);
                 
