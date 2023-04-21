@@ -233,7 +233,7 @@ def enrollcourses(request):
             assessment = Assessments.objects.create(uid=user, cid=course)
             return JsonResponse({'status': 200})
         else:
-            return JsonResponse({"status": 500, "msg": f"The enrollment of {i} failed"})
+            return JsonResponse({"status": 500, "msg": f"The enrollment failed"})
 
 
 
