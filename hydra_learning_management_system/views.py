@@ -379,6 +379,7 @@ def attendquiz(request):
             if ans[i] == rightans[i]:
                 score += 1
         # 存分
+        print(score)
         course = Courses.objects.get(cid=cid)
         user = Users.objects.get(uid=uid)
         assessment = Assessments.objects.get(cid=course, uid=user)
@@ -399,7 +400,7 @@ def reviewquiz(request):
         quiz = Quizzes.objects.get(qid=qid)
         # quiz = json.dumps(quiz)
         quiz = serializers.serialize("python", [quiz])[0]["fields"]
-        print(quiz)
+        #print(quiz)
         return JsonResponse({"quiz": quiz})
 
 
@@ -467,6 +468,7 @@ def markass(request):
         cid = data["cid"]
         aid = data["aid"]
         mark = data["mark"]
+        mark = int(mark)
         user = Users.objects.get(uid=uid)
         course = Courses.objects.get(cid=cid)
         assessment = Assessments.objects.get(uid=user, cid=course)
@@ -488,7 +490,8 @@ def grade(request):
         user = Users.objects.get(uid=uid)
         course = Courses.objects.get(cid=cid)
         grade = Assessments.objects.get(uid=user, cid=course).grade
-        grade = json.dumps(grade)
+        grade = json.loads(grade)
+        print(grade)
     return JsonResponse({"grade": grade})
 
 
