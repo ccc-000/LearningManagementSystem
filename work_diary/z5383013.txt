@@ -5,8 +5,12 @@ Sprint 1
 Sprint 2
 2.1 Modify Course main page which can render different components for different logined role.
 2.2 Modify the navigation bar component, which is distinguished by lecturers and students.
-2.3 Create Assignment and Quiz pages for lecturers and students.
+2.3 Create Assignment and Quiz basic pages for lecturers and students.
 2.4 Accomplish new assignments and new quizzes creation function for lecturers.
 2.5 Accomplish assignments and quizzes submission function for students.
 
 Sprint 3
+3.1 Update assignment and quiz pages so that can show the created items without reload.
+3.2 Create a countdown function of quiz for students so that can limit the submission time.
+3.3 Record all the answers of quiz which selected by students, then post to backend so that the answers can be compared with correct answers.
+3.4  Create a grade page for students to show all the specific scores of each part and the total scores.
