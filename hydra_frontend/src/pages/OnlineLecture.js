@@ -16,10 +16,6 @@ function OnlineLecture() {
 
     const role = localStorage.getItem('role');
 
-    //TODO: get data from backend
-
-    //TODO: 数据库添加创建时间字段
-
     // const [data, setData] = useState([]);
 
     // const jsonToPost = (material_data) => {
