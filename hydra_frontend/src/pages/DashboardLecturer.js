@@ -82,8 +82,7 @@ function DashboardLecturer() {
                 coursedescription: values.coursedescription,
                 gradedistribution: values.gradedistribution,
             }
-            console.log('request', request);
-        // console.log('form data:',JSON.stringify(formData))
+           
             fetch('http://localhost:8000/createcourses/', {
                 method: 'POST',
                 headers: {
@@ -153,7 +152,6 @@ function DashboardLecturer() {
           })
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
             if(data.ava === ''){
               setDefault(avatar);
             }else{
