@@ -44,6 +44,7 @@ const CourseEnrolment = () => {
 
     const handleSelect = (key) => {
         const index = selectedRows.indexOf(key);
+        console.log('index is', index);
         if (index === -1) {
         setSelectedRows([...selectedRows, key]);
         } else {
@@ -52,25 +53,43 @@ const CourseEnrolment = () => {
     };
 
     const handleSubmit = () => {
-        const request = {coursename: selectedRows, uid: uid};
-        fetch(`http://localhost:8000/enrollcourses/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(request),
-            }).then(async(response) => {
-                const jsonRes = await response.json();
-                console.log(jsonRes);
-                if (response.status !== 200) {
-                    message.error(jsonRes.error);
-                    return;
-                }
-                message.success('Successful!');
-                navigate('/dashboard');
+        console.log('selected rows', selectedRows);
+        let request;
+        if (selectedRows.length === 0) {
+            message.error('Please select at least one course!');
+            // setTimeout(() => { 
+            //     window.location.reload();
+            //  }, 1000);
+        }
+        else if (selectedRows.length === 1) {
+            request = {coursename: selectedRows[0], uid: uid};
+            console.log('request is', request);
+            fetch(`http://localhost:8000/enrollcourses/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(request),
+                }).then(async(response) => {
+                    const jsonRes = await response.json();
+                    console.log(jsonRes);
+                    if (response.status !== 200) {
+                        message.error(jsonRes.error);
+                        return;
+                    }
+                    message.success('Successful!');
+                    navigate('/dashboard');
 
-                
-            })
+                    
+                })
+        }
+        else {
+            message.error('You can only select one course once!');
+            // setTimeout(() => { 
+            //     window.location.reload();
+            //  }, 1000);
+        }
+        
     };
     const fetchCourses = () => {
         fetch(`http://localhost:8000/courses/`, {
