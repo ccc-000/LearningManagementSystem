@@ -1,20 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Layout, Tooltip, Space, Table, Tag } from 'antd';
 import Navibar from '../components/Navibar';
 import { RollbackOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const Grade = () => {
     const SectionName = localStorage.getItem('cname') + " —— Grade";
 
+    const [showGrade, setShowGrade] = useState([]);
+    useEffect(() => {
+        axios.post('http://localhost:8000/grade/', {
+            cid: localStorage.getItem('cid'),
+            uid: localStorage.getItem('uid'),
+        })
+        .then((response) => {
+            setShowGrade(response.data.grade);
+            console.log(response.data.grade);
+        })
+    }, []);
+
     const columns = [
         {
             title: 'Item',
             dataIndex: 'item',
             key: 'item',
-            render: (text) => <p>{text}</p>,
         },
         {
             title: 'Grade',
@@ -22,11 +34,14 @@ const Grade = () => {
             key: 'grade',
         },
       ];
+      // {showGrade.map((item) => (
+      //   <div key={}></div>
+      // ))}
       const data = [
         {
             key: '1',
             item: 'Quiz 1',
-            grade: '8/9'
+            grade: '/9'
         },
         {
             key: '2',
@@ -91,7 +106,7 @@ const Grade = () => {
           </Link>
           <h2 style={{display: 'inline-block', marginLeft: '20px', color:'white'}}>{SectionName}</h2>
         </Header>
-        <Table columns={columns} dataSource={data} style={{marginTop:'10px', marginLeft:'10px'}}/>;
+        <Table columns={columns} dataSource={data} style={{marginTop:'10px', marginLeft:'10px'}}/>
 
         <Navibar />   
         <Footer
