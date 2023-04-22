@@ -91,7 +91,7 @@ const Chatbot = () => {
     <>
       <Button style={{border: 'none',
         backgroundColor: '#f1f1f1',
-        padding: '10px', transform: 'scale(1.5)'}} icon={<QuestionCircleOutlined size='300px'/>} onClick={handleModalClick}>
+        padding: '10px', transform: 'scale(1.5)'}} icon={<RobotOutlined size='300px'/>} onClick={handleModalClick}>
        
       </Button>
       <Modal
