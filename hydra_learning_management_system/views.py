@@ -207,6 +207,7 @@ def enrollcourses(request):
         data = json.loads(request.body)
         uid = data['uid']
         coursename = data['coursename']
+        #print(data)
         course = Courses.objects.get(coursename=coursename)
         cid = course.cid
         enrollers = Enrollments.objects.filter(cid=course)
@@ -215,8 +216,10 @@ def enrollcourses(request):
         for i in enrollers:
             tmp = i["fields"]["uid"]
             uidss.append(tmp)
+        uid = int(uid)
+
         if uid in uidss:
-            return JsonResponse({"status": 500, "msg": "You have enrolled"})
+            return JsonResponse({"status": 500, "error": "You have enrolled"})
             # print(uid)
         seat = len(enrollers)
             # enrolllist = course.enrolllist
@@ -234,6 +237,7 @@ def enrollcourses(request):
             return JsonResponse({'status': 200})
         else:
             return JsonResponse({"status": 500, "msg": f"The enrollment failed"})
+        #return JsonResponse({'status':200})
 
 
 

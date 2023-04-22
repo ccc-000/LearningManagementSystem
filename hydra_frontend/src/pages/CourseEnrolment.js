@@ -85,9 +85,9 @@ const CourseEnrolment = () => {
         }
         else {
             message.error('You can only select one course once!');
-            // setTimeout(() => { 
-            //     window.location.reload();
-            //  }, 1000);
+            setTimeout(() => {
+                window.location.reload();
+             }, 1000);
         }
         
     };
