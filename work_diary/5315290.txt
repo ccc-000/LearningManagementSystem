@@ -1,11 +1,21 @@
 Sprint 1
 1.1 establish the user_info table to restore the user information. Done 
 1.2 set the routine for front end program to fetch. Done 
-1.3 
+1.3 implement the interaction of frontend and backend of login and sign up. Done
+1.4 
 Sprint 2
 2.1 establish many database table: courses, quizzes, assignments, assessments, posts, replyments, Done
+2.2 complete the backend tasks of forum and material and quiz and assignments.
+2.3 use the JWT to use tokens to ensure the safety of programming.
 Sprint 3
 4.7
-1. Change the structure of "assessment" table, and rewrite the create assignment funcition
-2. Talk with the teammate who is in charge of courses. And debug about the course functionality.
-3. try to write the token funtionality but failed. It should be done tmr.
+1. Change the structure of "assessment" table, and rewrite the create assignment funcition. Done
+2. Talk with the teammate who is in charge of courses. And debug about the course functionality. Done
+3. try to write the token funtionality but failed. It should be done tmr. Done
+4.8 
+1. establish the live stream table
+2. design the live stream
+4.9
+1. translation function design
+4.10 
+1. material function backend design.
