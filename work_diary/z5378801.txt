@@ -1,3 +1,30 @@
+Demo A Sprint
+1. create front-end pages including:
+    resetpassword
+    sendconfirmmail
+    profile
+    editprofile
+    editavatar
+    enrolmenthistory/coursehistory
+
+Demo B Sprint
+1. create front-end pages including:
+    material
+    forum
+    createforum
+    editforum
+    forumdetail
+2. connect front-end pages with back-end and implement functions:
+    profile: show personal information and enrolment/course history
+    editprofile: show personal information
+    editavatar: show avatar and edit it in database using uid in localStorage
+    material: show material list using mid in localStorage and view materials according to different types
+    forum: show post list using cid in localStorage
+    forumdetail: show post detail using pid
+    createforum: create post in database using uid in localStorage
+
+
+Final Demo Sprint
 4.7
 1. material page: show file name instead of url in file list table
 2. material page: classify the file type in the url link and navigate to different pages
