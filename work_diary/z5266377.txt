@@ -1,7 +1,22 @@
+Sprint 1
+1. Dashboard for students
+2. Dashboard for lecturers
+3. Enrolment functionality for students.
+4. Create functionality for lecturers.
+
+Sprint 2
+1. Logout functionality.
+2. Anouncement in course main page.
+3. Anouncement functionality for materials and lecture.
+
+Sprint 3
+1. Chatbot functionality.
+2. Anouncement for live lectures.
+
 4.7
-1.Add logout for dashboard and course page
-2.Optimise nav bar and link it with profile and avatar
-3.Modify dashboardlecturer in version 3.0
+Add logout for dashboard and course page
+Optimise nav bar and link it with profile and avatar
+Modify dashboardlecturer in version 3.0
  
 4.8
 Create courses success
@@ -14,10 +29,10 @@ Add course enrolment page for students
 Get courses success, enrol courses success
 
 4.15
-Drop courses
+Drop/delete courses success
 
 4.17
-Created announcement functionality for material and lecturer
+Announcement functionality success for material and lecturer and live lecture
 
 4.18
-Chatbot functionality created
+Chatbot functionality success
