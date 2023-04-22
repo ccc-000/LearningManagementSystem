@@ -92,8 +92,11 @@ function DashboardLecturer() {
                 body: JSON.stringify(request),
             }).then(async(response) => {
                 const jsonRes = await response.json();
-                if (response.status !== 200) {
+                if (jsonRes.status !== 200) {
                     message.error(jsonRes.error);
+                    setTimeout(() => {
+                        window.location.reload();
+                     }, 1500);
                     return;
                 }
                 message.success('Successful!');
