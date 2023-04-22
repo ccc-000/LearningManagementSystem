@@ -44,7 +44,6 @@ const CourseEnrolment = () => {
 
     const handleSelect = (key) => {
         const index = selectedRows.indexOf(key);
-        console.log('index is', index);
         if (index === -1) {
         setSelectedRows([...selectedRows, key]);
         } else {
@@ -60,7 +59,6 @@ const CourseEnrolment = () => {
         }
         else if (selectedRows.length === 1) {
             request = {coursename: selectedRows[0], uid: uid};
-            console.log('request is', request);
             fetch(`http://localhost:8000/enrollcourses/`, {
                     method: 'POST',
                     headers: {
@@ -99,7 +97,6 @@ const CourseEnrolment = () => {
             body: JSON.stringify({'uid': uid}),
             }).then(async(response) => {
                 const jsonRes = await response.json();
-                console.log(jsonRes);
                 if (jsonRes.status !== 200) {
                     message.error(jsonRes.error);
                     return;
