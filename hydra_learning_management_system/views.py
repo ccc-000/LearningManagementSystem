@@ -207,7 +207,7 @@ def enrollcourses(request):
         data = json.loads(request.body)
         uid = data['uid']
         coursename = data['coursename']
-        #print(data)
+        # print(data)
         course = Courses.objects.get(coursename=coursename)
         cid = course.cid
         enrollers = Enrollments.objects.filter(cid=course)
@@ -222,14 +222,14 @@ def enrollcourses(request):
             return JsonResponse({"status": 500, "error": "You have already enrolled this course!"})
             # print(uid)
         seat = len(enrollers)
-            # enrolllist = course.enrolllist
-            # enrolllist = json.loads(enrolllist)["enrolllist"]
-            # print(enrolllist)
+        # enrolllist = course.enrolllist
+        # enrolllist = json.loads(enrolllist)["enrolllist"]
+        # print(enrolllist)
         available = MAX_SEAT - seat
         if available > 0:
             enroll_flag = Enrollments.objects.filter(cid=1)
             enroll_flag = serializers.serialize("python", enroll_flag)
-                # print(enroll_flag)
+            # print(enroll_flag)
             course = Courses.objects.get(cid=cid)
             user = Users.objects.get(uid=uid)
             enrollment = Enrollments.objects.create(cid=course, uid=user)
@@ -237,8 +237,7 @@ def enrollcourses(request):
             return JsonResponse({'status': 200})
         else:
             return JsonResponse({"status": 500, "error": f"The enrollment failed"})
-        #return JsonResponse({'status':200})
-
+        # return JsonResponse({'status':200})
 
 
 @csrf_exempt
@@ -303,7 +302,7 @@ def showcourses(request):
             i = i["fields"]
             course.append(i)
         # print(course)
-        return JsonResponse({"courses": course})
+        return JsonResponse({"status": 200, "courses": course})
 
 
 @csrf_exempt
@@ -400,7 +399,7 @@ def reviewquiz(request):
         quiz = Quizzes.objects.get(qid=qid)
         # quiz = json.dumps(quiz)
         quiz = serializers.serialize("python", [quiz])[0]["fields"]
-        #print(quiz)
+        # print(quiz)
         return JsonResponse({"quiz": quiz})
 
 
