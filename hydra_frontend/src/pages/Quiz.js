@@ -198,39 +198,54 @@ export default function Quiz () {
     
 
     //Submit Quiz for student
-    const stuQuizData = [];
-    stuQuizData.forEach((stuQuiz) => {
-        const items = stuQuiz.items.map((item) => {
-            return { value: item.value, input: item.input };
-            });
-            stuQuizData.push({
-            answer: stuQuiz.selectedOption,
-            });
-        });
+    const [stuQuestionData, setStuQuestionData] = useState([
+        {
+        question: '',
+        type: 'single',
+        options: [
+            { label: 'A', value: 'a', input: '' },
+            { label: 'B', value: 'b', input: '' },
+            { label: 'C', value: 'c', input: '' },
+            { label: 'D', value: 'd', input: '' },
+        ],
+        },
+    ]);
 
-        const stuRadioChange = (index, value) => {
-            const stuQuiz = stuQuizData[index];
-            stuQuiz.selectedOption = value;
-            setQuestionData([...questionData.slice(0, index), stuQuiz, ...questionData.slice(index + 1)]);
-        };
 
-        const stuCheckboxChange = (questionIndex, checkedValues) => {
-            const newData = [...questionData];
-            newData[questionIndex].selectedOption = checkedValues;
-            setQuestionData(newData);
+    const stuRadioChange = (index, value) => {
+        const newData = [...stuQuestionData];     
+        if (!newData[index]) {
+          newData[index] = {};
+        }
+      
+        newData[index].selectedOption = value;
+        setStuQuestionData(newData);
+      };
+      
+
+    const stuCheckboxChange = (questionIndex, checkedValues) => {
+        const newData = [...stuQuestionData];      
+        if (!newData[questionIndex]) {
+            newData[questionIndex] = {};
+        }          
+        newData[questionIndex].selectedOption = checkedValues;
+        setStuQuestionData(newData);
         };
-    
-        const stuAns = [];
-        stuQuizData.forEach((stuQuiz) => {
-            stuAns.push(stuQuiz.answer);
-        });
+          
+    const Ans = stuQuestionData.map((question) => {
+        return question.selectedOption;
+      });
+
+    const stuAns = Ans.map(subAns => Array.isArray(subAns) ? subAns.join(' ') : subAns);
+
 
     const handleSubmit = () => {
+        console.log(stuAns);
         axios.post('http://localhost:8000/attendquiz/', {
             cid: cid,
             qid: localStorage.getItem('qid'),
             uid: localStorage.getItem('uid'),
-            ans: stuAns.join(' ')
+            ans: stuAns
         })
         .then((response) => {
             if (response.data.status === 200) {
@@ -375,7 +390,7 @@ export default function Quiz () {
                             <Button key="back" onClick={closeModal}> Cancel </Button>
                             ]}>
 
-                            {questions.map((quiz, index) => (
+                            {questions?.map((quiz, index) => (
                                 <div key={index} style={{ marginBottom: '10px' }}>
                                 <h3>Q{index+1}: {quiz.description}</h3>
                                 {quiz.type === 'single' ? (
@@ -388,7 +403,7 @@ export default function Quiz () {
                                     </Radio.Group>
                                 ) : (
                                     <Checkbox.Group value={quiz.answer}>
-                                    {quiz.options.map((option, i) => (
+                                    {quiz.options?.map((option, i) => (
                                         <Checkbox key={i} value={option.value}>
                                         {option.input}
                                         </Checkbox>
@@ -481,7 +496,7 @@ export default function Quiz () {
                                 <h3>Q{index+1}: {quiz.description}</h3>
                                 {quiz.type === 'single' ? (
                                     <Radio.Group 
-                                    value={questionData[index].selectedOption}
+                                    value={stuQuestionData[index]?.selectedOption}
                                     onChange={(e) => stuRadioChange(index, e.target.value)}>
                                     {quiz.options.map((option, i) => (
                                         <Radio key={i} value={option.value}>
@@ -491,7 +506,7 @@ export default function Quiz () {
                                     </Radio.Group>
                                 ) : (
                                     <Checkbox.Group
-                                    value={questionData[index].selectedOption}
+                                    value={stuQuestionData[index]?.selectedOption}
                                     onChange={(checkedValues) => stuCheckboxChange(index, checkedValues)}>
                                     {quiz.options.map((option, i) => (
                                         <Checkbox key={i} value={option.value}>
