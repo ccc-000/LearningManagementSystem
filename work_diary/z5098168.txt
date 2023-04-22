@@ -1,5 +1,28 @@
+02/03/2023
+1. Fixed the CORS issue.
+2. Designed the login page.
+
+04/03/2023
+1. Fixed authorization issue, the frontend can interact with the backend.
+2. Designed the 'edit user profile' page.
+
 07/04/2023 
 1. Fixed the UI logic of the "create forum" page. 
 2. Complete a function which converts image into Base64 string. 
-3. All data including multimedia(mostly image) into the database. 
+3. Can send all data including multimedia(mostly image) into the database. 
 4. The forum can now sorted by creators'(user) name. 
+
+11/04/2023
+1. The post page can render according to the data.
+2. Implemented the 'edit forum page'.
+
+13/04/2023
+1. Implemented the reply post function.
+2. Fixed minor issue of the post page.
+
+15/04/2023 
+1. Set up a Google account for translation API.
+2. Implemented translation function for forum.
+
+19/04/2023
+1. Implemented the upload function for material page.
