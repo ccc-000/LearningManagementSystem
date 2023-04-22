@@ -368,10 +368,7 @@ def attendquiz(request):
         uid = data['uid']
         cid = data["cid"]
         qid = data['qid']
-        q1 = data["q1"]
-        q2 = data["q2"]
-        q3 = data["q3"]
-        ans = json.dumps({q1, q2, q3})
+        ans = data["ans"]
         rightans = Quizzes.objects.get(qid=qid).ans
         score = 0
         for i in range(len(ans)):
