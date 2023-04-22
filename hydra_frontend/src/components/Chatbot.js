@@ -90,6 +90,7 @@ const Chatbot = () => {
   return (
     <>
       <Button style={{border: 'none',
+        cursor: 'pointer',
         backgroundColor: '#f1f1f1',
         padding: '10px', transform: 'scale(1.5)'}} icon={<RobotOutlined size='300px'/>} onClick={handleModalClick}>
        

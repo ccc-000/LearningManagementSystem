@@ -189,7 +189,7 @@ def createcourses(request):
         for i in courses:
             names.append(i["fields"]["coursename"])
         if coursename in names:
-            return JsonResponse({"status": 403, "msg": "Error: This course has already existed"})
+            return JsonResponse({"status": 403, "error": "Error: This course already exists!"})
         course = Courses.objects.create(coursename=coursename, creatorid=creator,
                                         coursedescription=coursedecription, gradedistribution=gradedistribution)
         enrollment = Enrollments.objects.create(cid=course, uid=creator)
@@ -219,7 +219,7 @@ def enrollcourses(request):
         uid = int(uid)
 
         if uid in uidss:
-            return JsonResponse({"status": 500, "error": "You have enrolled"})
+            return JsonResponse({"status": 500, "error": "You have already enrolled this course!"})
             # print(uid)
         seat = len(enrollers)
             # enrolllist = course.enrolllist
@@ -236,7 +236,7 @@ def enrollcourses(request):
             assessment = Assessments.objects.create(uid=user, cid=course)
             return JsonResponse({'status': 200})
         else:
-            return JsonResponse({"status": 500, "msg": f"The enrollment failed"})
+            return JsonResponse({"status": 500, "error": f"The enrollment failed"})
         #return JsonResponse({'status':200})
 
 

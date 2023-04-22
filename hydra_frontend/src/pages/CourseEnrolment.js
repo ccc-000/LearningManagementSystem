@@ -57,9 +57,6 @@ const CourseEnrolment = () => {
         let request;
         if (selectedRows.length === 0) {
             message.error('Please select at least one course!');
-            // setTimeout(() => { 
-            //     window.location.reload();
-            //  }, 1000);
         }
         else if (selectedRows.length === 1) {
             request = {coursename: selectedRows[0], uid: uid};
@@ -72,13 +69,15 @@ const CourseEnrolment = () => {
                 body: JSON.stringify(request),
                 }).then(async(response) => {
                     const jsonRes = await response.json();
-                    console.log(jsonRes);
-                    if (response.status !== 200) {
+                    console.log('response is', jsonRes);
+                    if (jsonRes.status !== 200) {
                         message.error(jsonRes.error);
                         return;
                     }
-                    message.success('Successful!');
-                    navigate('/dashboard');
+                    else {
+                        message.success('Successful!');
+                        navigate('/dashboard');
+                    }
 
                     
                 })
@@ -87,7 +86,7 @@ const CourseEnrolment = () => {
             message.error('You can only select one course once!');
             setTimeout(() => {
                 window.location.reload();
-             }, 1000);
+             }, 1500);
         }
         
     };
@@ -101,7 +100,7 @@ const CourseEnrolment = () => {
             }).then(async(response) => {
                 const jsonRes = await response.json();
                 console.log(jsonRes);
-                if (response.status !== 200) {
+                if (jsonRes.status !== 200) {
                     message.error(jsonRes.error);
                     return;
                 }
