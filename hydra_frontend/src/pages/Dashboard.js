@@ -31,7 +31,7 @@ function Dashboard() {
     const handleEditAvatar = () => {
         navigate('/editavatar')
     };
-    console.log('dashboard',uid);
+    
 
     useEffect(() => {
         fetch('http://localhost:8000/downloadavatar/', {
@@ -45,7 +45,7 @@ function Dashboard() {
           })
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
+           
             if(data.ava === ''){
               setDefault(avatar);
             }else{
