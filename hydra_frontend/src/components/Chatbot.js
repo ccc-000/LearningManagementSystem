@@ -41,7 +41,7 @@ const Chatbot = () => {
       }, 1000);
      
     }
-    // console.log(messages);
+    
   };
   const handleSubmit = (message) => {
     fetch(`http://localhost:8000/chatbot/`, {
@@ -52,12 +52,10 @@ const Chatbot = () => {
       body: JSON.stringify({'cid': cid, 'message': message}),
     }).then(async(response) => {
         const jsonRes = await response.json();
-        console.log(jsonRes);
         if (response.status !== 200) {
             message.error(jsonRes.error);
             return;
         }
-        console.log('response is',jsonRes);
         let msg = typeMessage({ text: jsonRes.message });
         setMessages((prevMessages) => [
           ...prevMessages,
