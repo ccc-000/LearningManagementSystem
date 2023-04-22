@@ -22,7 +22,7 @@ const Grade = () => {
           setShowGrade(response.data.grade);
           const generatedData = createData(response.data.grade);
           setData(generatedData);
-          console.log(response.data.grade);
+          console.log(response.data.grade.finalexam);
         })
     }, []);
 
@@ -39,32 +39,36 @@ const Grade = () => {
         },
       ];
 
-    function createData(showGrade) {
-      const data = [
-        { key: "1", item: "Quiz 1", grade: `${showGrade.quiz[0] * 3}/9` },
-        { key: "2", item: "Quiz 2", grade: `${showGrade.quiz[1] * 3}/9` },
-        { key: "3", item: "Quiz 3", grade: `${showGrade.quiz[2] * 3}/9` },
-        { key: "4", item: "Assigment 1", grade: `${showGrade.ass[0]}/15` },
-        { key: "5", item: "Assigment 2", grade: `${showGrade.ass[1]}/15` },
-        { key: "6", item: "Assigment 3", grade: `${showGrade.ass[2]}/15` },
-        { key: "7", item: "Final Exam", grade: `${showGrade.finalexam}/28` },
-        { key: "8", item: "Total", grade: `${totalGrade}/100` },
-      ];
-    
-      return data;
-    }
-
-
-      const totalGrade = data.reduce((acc, cur) => {
-        if (cur.grade) {
-          const gradeArr = cur.grade.split('/');
-          const gradeNum = Number(gradeArr[0]);
-          acc += gradeNum;
+      function createData(showGrade) {
+        function formatGrade(value) {
+          return isNaN(value) || value === undefined ? 0 : value;
         }
-        return acc;
-      }, 0);
       
-      // data[data.length - 1].grade = `${totalGrade}/100`;.
+        const data = [
+          { key: "1", item: "Quiz 1", grade: `${formatGrade(showGrade.quiz[0]) * 3}/9` },
+          { key: "2", item: "Quiz 2", grade: `${formatGrade(showGrade.quiz[1]) * 3}/9` },
+          { key: "3", item: "Quiz 3", grade: `${formatGrade(showGrade.quiz[2]) * 3}/9` },
+          { key: "4", item: "Assigment 1", grade: `${formatGrade(showGrade.ass[0])}/15` },
+          { key: "5", item: "Assigment 2", grade: `${formatGrade(showGrade.ass[1])}/15` },
+          { key: "6", item: "Assigment 3", grade: `${formatGrade(showGrade.ass[2])}/15` },
+          { key: "7", item: "Final Exam", grade: `${formatGrade(showGrade.finalexam)}/28` },
+          { key: "8", item: "Total", grade: `0/100` },
+        ];
+      
+        const totalGrade = data.reduce((acc, cur) => {
+          if (cur.grade) {
+            const gradeArr = cur.grade.split("/");
+            const gradeNum = Number(gradeArr[0]);
+            acc += gradeNum;
+          }
+          return acc;
+        }, 0);
+      
+        data[data.length - 1].grade = `${totalGrade}/100`;
+      
+        return data;
+      }
+      
 
     return (
         <Layout
