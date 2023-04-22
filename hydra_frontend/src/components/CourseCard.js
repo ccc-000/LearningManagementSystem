@@ -24,7 +24,7 @@ const ShowCourse = ({uid, role}) => {
     path = 'dropcourses';
     choice = 'Drop course';
   }
-  console.log('show course',uid);
+  
   const navigate = useNavigate();
   const [courseList, setCourseList] = useState([]);
   const handleNavigate = (id, cname, cdes) => {
@@ -37,7 +37,6 @@ const ShowCourse = ({uid, role}) => {
   
   
   const getCourses = () => {
-    console.log('uid should be 4', uid)
     fetch(`http://localhost:8000/${fetchUrl}/`, {
       method: 'POST',
       headers: {
@@ -46,12 +45,10 @@ const ShowCourse = ({uid, role}) => {
       body: JSON.stringify({'uid': uid}),
     }).then(async(response) => {
         const jsonRes = await response.json();
-        console.log(jsonRes);
         if (response.status !== 200) {
             message.error(jsonRes.error);
             return;
         }
-        // message.success('Successful!');
    
         setCourseList(jsonRes.courses);
      
@@ -62,7 +59,6 @@ const ShowCourse = ({uid, role}) => {
   }, []);
 
   const dropCourse =(cid) => {
-    console.log('drop course', cid);
     fetch(`http://localhost:8000/${path}/`, {
       method: 'POST',
       headers: {
@@ -71,7 +67,6 @@ const ShowCourse = ({uid, role}) => {
     body: JSON.stringify({'uid': uid, 'cid': cid}),
     }).then(async(response) => {
       const jsonRes = await response.json();
-      console.log(jsonRes);
       if (response.status !== 200) {
           message.error(jsonRes.error);
           return;
